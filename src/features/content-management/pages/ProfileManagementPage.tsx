@@ -186,6 +186,7 @@ const UserManagementPage: React.FC = () => {
                   <TableHeader>
                     <TableRow>
                       <TableHead>Nombre Completo</TableHead>
+                      <TableHead>Correo Electrónico</TableHead>
                       <TableHead>Cédula</TableHead>
                       <TableHead className="text-right">Acciones</TableHead>
                     </TableRow>
@@ -203,6 +204,7 @@ const UserManagementPage: React.FC = () => {
                             <span>{`${profile.user?.first_name} ${profile.user?.last_name}`}</span>
                           </div>
                         </TableCell>
+                        <TableCell>{profile.user?.email}</TableCell>
                         <TableCell>{profile.national_document}</TableCell>
                         {/* <TableCell>
                           <Badge variant={profile.activo ? "default" : "secondary"}>
@@ -267,6 +269,7 @@ const UserManagementPage: React.FC = () => {
                           </Avatar>
                           <div>
                             <h3 className="font-semibold text-sm">{`${profile.user?.first_name} ${profile.user?.last_name}`}</h3>
+                            <p className="text-xs text-muted-foreground">{profile.user?.email}</p>
                             <p className="text-xs text-muted-foreground">{profile.national_document}</p>
                           </div>
                         </div>
