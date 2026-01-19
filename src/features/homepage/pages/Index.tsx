@@ -2,6 +2,7 @@ import { SearchSection } from "@/features/homepage/components/SearchSection";
 import { FeaturedBooks } from "@/features/content/components/FeaturedBooks";
 import { ServicesSection } from "@/features/homepage/components/ServicesSection";
 import { NewsSection } from "@/features/homepage/components/NewsSection";
+import { UpcomingBookings } from "@/features/homepage/components/UpcomingBookings";
 import { useTranslation } from "react-i18next";
 
 const Index = () => {
@@ -62,6 +63,9 @@ const Index = () => {
 
     {/* Noticias y eventos */}
     <NewsSection />
+
+    {/* Próximos Eventos */}
+    <UpcomingBookings />
 
   </div>;
 };

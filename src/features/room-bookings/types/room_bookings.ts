@@ -1,10 +1,17 @@
+export enum RoomBookingStatus {
+  PENDING = 'PENDING',
+  APPROVED = 'APPROVED',
+  REJECTED = 'REJECTED',
+  CANCELLED = 'CANCELLED'
+}
+
 export type RoomBooking = {
   national_document: string;
   admin_comments: string | null;
   description: string;
   email: string;
   requested_equipment: string | null;
-  status: string;
+  status: RoomBookingStatus;
   event_date: string;
   response_date: string | null;
   end_time: string;
