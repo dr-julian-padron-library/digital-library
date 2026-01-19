@@ -1,85 +1,55 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useMemo } from 'react';
 import { Calendar } from '@/common/components/ui/calendar';
 import { Button } from '@/common/components/ui/button';
 import { Badge } from '@/common/components/ui/badge';
 import { format, isSameDay, isAfter, isBefore, addDays } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { CalendarIcon, InfoIcon } from 'lucide-react';
+import { useGetBlockedSchedulesQuery, useGetRoomBookingsQuery } from '../api/roomBookingsApi';
 
 interface CalendarioDisponibilidadProps {
   fechaSeleccionada?: Date;
   onFechaSeleccionada: (fecha: Date) => void;
 }
 
-export function CalendarioDisponibilidad({ 
-  fechaSeleccionada, 
-  onFechaSeleccionada 
+export function CalendarioDisponibilidad({
+  fechaSeleccionada,
+  onFechaSeleccionada
 }: CalendarioDisponibilidadProps) {
-  const [fechasOcupadas, setFechasOcupadas] = useState<Date[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const { data: solicitudesAprobadas, isLoading: isLoadingSolicitudes } = useGetRoomBookingsQuery({ status: 'aprobada' });
+  const { data: horariosBloquados, isLoading: isLoadingBloqueados } = useGetBlockedSchedulesQuery({});
 
-  useEffect(() => {
-    const cargarFechasOcupadas = async () => {
-      setIsLoading(true);
-      try {
-        // Obtener horarios bloqueados
-        const { data: horariosBloquados, error: errorBloqueados } = await supabase
-          .from('horarios_bloqueados')
-          .select('fecha')
-          .gte('fecha', new Date().toISOString().split('T')[0]);
+  const fechasOcupadas = useMemo(() => {
+    const fechasOcupadasSet = new Set<string>();
 
-        // Obtener solicitudes aprobadas
-        const { data: solicitudesAprobadas, error: errorSolicitudes } = await supabase
-          .from('solicitudes_prestamo_sala')
-          .select('fecha_evento')
-          .eq('estado', 'aprobada')
-          .gte('fecha_evento', new Date().toISOString().split('T')[0]);
+    horariosBloquados?.forEach(horario => {
+      fechasOcupadasSet.add(horario.date);
+    });
 
-        if (errorBloqueados) {
-          console.error('Error al cargar horarios bloqueados:', errorBloqueados);
-        }
-        if (errorSolicitudes) {
-          console.error('Error al cargar solicitudes aprobadas:', errorSolicitudes);
-        }
+    solicitudesAprobadas?.forEach(solicitud => {
+      fechasOcupadasSet.add(solicitud.event_date);
+    });
 
-        // Combinar fechas ocupadas
-        const fechasOcupadasSet = new Set<string>();
-        
-        horariosBloquados?.forEach(horario => {
-          fechasOcupadasSet.add(horario.fecha);
-        });
+    return Array.from(fechasOcupadasSet).map(fecha => new Date(fecha + 'T00:00:00'));
+  }, [horariosBloquados, solicitudesAprobadas]);
 
-        solicitudesAprobadas?.forEach(solicitud => {
-          fechasOcupadasSet.add(solicitud.fecha_evento);
-        });
-
-        const fechasOcupadasArray = Array.from(fechasOcupadasSet).map(fecha => new Date(fecha + 'T00:00:00'));
-        setFechasOcupadas(fechasOcupadasArray);
-      } catch (error) {
-        console.error('Error al cargar fechas ocupadas:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    cargarFechasOcupadas();
-  }, []);
+  const isLoading = isLoadingSolicitudes || isLoadingBloqueados;
 
   const esFechaDisponible = (fecha: Date) => {
     const hoy = new Date();
     hoy.setHours(0, 0, 0, 0);
-    
+
     // No permitir fechas pasadas
     if (isBefore(fecha, hoy)) return false;
-    
+
     // No permitir fechas muy lejanas (máximo 3 meses)
     const limiteMaximo = addDays(hoy, 90);
     if (isAfter(fecha, limiteMaximo)) return false;
-    
+
     // No permitir domingos (día 0)
     if (fecha.getDay() === 0) return false;
-    
+
     // Verificar si la fecha está ocupada
     return !fechasOcupadas.some(fechaOcupada => isSameDay(fecha, fechaOcupada));
   };
@@ -175,9 +145,9 @@ export function CalendarioDisponibilidad({
               <Badge variant="outline" className="bg-green-50 text-green-700 border-green-300">
                 ✓ Disponible
               </Badge>
-              
+
               <div className="mt-4 pt-4 border-t border-biblioteca-light/20">
-                <Button 
+                <Button
                   onClick={() => onFechaSeleccionada(fechaSeleccionada)}
                   className="w-full bg-biblioteca-blue hover:bg-biblioteca-blue/90 text-white"
                 >
