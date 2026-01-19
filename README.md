@@ -1,73 +1,72 @@
-# Welcome to your Lovable project
+# Biblioteca Pública Central Dr. Julián Padrón - Digital Library
 
-## Project info
+Tu acceso digital a la cultura y el conocimiento en Maturín, Venezuela.
 
-**URL**: https://lovable.dev/projects/d5cd7eba-2b37-4ce8-8e17-76ae9fd48f0e
+## What is this project?
+This is the official digital library application for the **Biblioteca Pública Central Dr. Julián Padrón**. It provides a modern interface for users to explore the library's catalog, access books, cultural resources, and library services from anywhere.
 
-## How can I edit this code?
+### Key Features
+- 📚 **Digital Catalog**: Browse and search through the library's vast collection.
+- 🏢 **Sala Management**: Organized content by rooms and genres.
+- 🌓 **Dark Mode**: Support for light and dark themes for better readability.
+- 🌍 **Internationalization**: Multi-language support (ES/EN).
+- 📱 **Responsive Design**: Optimized for both desktop and mobile devices.
 
-There are several ways of editing your application.
+### Tech Stack
+- **Frontend**: React, TypeScript, Vite.
+- **State Management**: Redux Toolkit (RTK Query).
+- **Styling**: Tailwind CSS, shadcn/ui.
+- **Icons**: Lucide React.
+- **Localization**: i18next.
 
-**Use Lovable**
+## Why this project?
+The goal of this digital library is to modernize access to regional culture and literature in Maturín. By digitizing the catalog and providing an online platform, we aim to bridge the gap between the community and the wealth of knowledge preserved in the library.
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/d5cd7eba-2b37-4ce8-8e17-76ae9fd48f0e) and start prompting.
+---
 
-Changes made via Lovable will be committed automatically to this repo.
+## How to use this project
 
-**Use your preferred IDE**
+### Prerequisites
+- Node.js (v18 or higher)
+- npm or yarn
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
+### Installation
 
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
+# Clone the repository
 git clone <YOUR_GIT_URL>
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+# Navigate to the project directory
+cd Digital-Library
 
-# Step 3: Install the necessary dependencies.
-npm i
+# Install dependencies
+npm install
+```
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+### Local Development
+
+To start the development server with auto-reloading:
+
+```sh
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+### Production Build
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+To create an optimized production build:
 
-**Use GitHub Codespaces**
+```sh
+npm run build
+```
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+The output will be in the `dist` folder.
 
-## What technologies are used for this project?
+---
 
-This project is built with:
+## Who is behind this?
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+### Credits
+This project is maintained by the **Biblioteca Pública Central Dr. Julián Padrón** in Maturín, Venezuela.
 
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/d5cd7eba-2b37-4ce8-8e17-76ae9fd48f0e) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+### License
+This project is private and intended for use by the Biblioteca Pública Central Dr. Julián Padrón.
