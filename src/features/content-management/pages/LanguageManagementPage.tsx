@@ -34,12 +34,18 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/common/components/ui/alert-dialog";
-import { Filter, Edit, Trash2, Plus } from "lucide-react";
+import { Filter, Plus, MoreVertical } from "lucide-react";
 import {
     useGetLanguagesQuery,
     useDeleteLanguageMutation,
 } from "@/features/content-management/api/languagesApiSlice";
 import { PaginationComponent } from "@/common/components/ui/pagination";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/common/components/ui/dropdown-menu";
 
 const LanguageManagementPage: React.FC = () => {
     const navigate = useNavigate();
@@ -199,20 +205,28 @@ const LanguageManagementPage: React.FC = () => {
                                             <TableRow key={language.id}>
                                                 <TableCell className="font-medium">{language.name}</TableCell>
                                                 <TableCell className="text-right">
-                                                    <Button
-                                                        variant="ghost"
-                                                        size="sm"
-                                                        onClick={() => handleEdit(language.slug)}
-                                                        className="mr-2"
-                                                    >
-                                                        <Edit className="w-4 h-4" />
-                                                    </Button>
                                                     <AlertDialog>
-                                                        <AlertDialogTrigger asChild>
-                                                            <Button variant="ghost" size="sm" disabled={isDeletingLanguage}>
-                                                                <Trash2 className="w-4 h-4" />
-                                                            </Button>
-                                                        </AlertDialogTrigger>
+                                                        <DropdownMenu>
+                                                            <DropdownMenuTrigger asChild>
+                                                                <Button variant="ghost" className="h-8 w-8 p-0">
+                                                                    <span className="sr-only">Abrir menú</span>
+                                                                    <MoreVertical className="h-4 w-4" />
+                                                                </Button>
+                                                            </DropdownMenuTrigger>
+                                                            <DropdownMenuContent align="end">
+                                                                <DropdownMenuItem onClick={() => handleEdit(language.slug)}>
+                                                                    Ver Detalles
+                                                                </DropdownMenuItem>
+                                                                <DropdownMenuItem onClick={() => handleEdit(language.slug)}>
+                                                                    Editar
+                                                                </DropdownMenuItem>
+                                                                <AlertDialogTrigger asChild>
+                                                                    <DropdownMenuItem className="text-red-600">
+                                                                        Eliminar
+                                                                    </DropdownMenuItem>
+                                                                </AlertDialogTrigger>
+                                                            </DropdownMenuContent>
+                                                        </DropdownMenu>
                                                         <AlertDialogContent>
                                                             <AlertDialogHeader>
                                                                 <AlertDialogTitle>¿Estás absolutamente seguro?</AlertDialogTitle>
@@ -250,20 +264,28 @@ const LanguageManagementPage: React.FC = () => {
                                             <div className="flex justify-between items-start">
                                                 <h3 className="font-semibold text-sm">{language.name}</h3>
                                                 <div className="flex gap-1">
-                                                    <Button variant="ghost" size="sm" onClick={() => handleEdit(language.id)}>
-                                                        <Edit className="h-4 w-4" />
-                                                    </Button>
                                                     <AlertDialog>
-                                                        <AlertDialogTrigger asChild>
-                                                            <Button
-                                                                variant="ghost"
-                                                                size="sm"
-                                                                disabled={isDeletingLanguage}
-                                                                onClick={(e) => e.stopPropagation()}
-                                                            >
-                                                                <Trash2 className="h-4 w-4" />
-                                                            </Button>
-                                                        </AlertDialogTrigger>
+                                                        <DropdownMenu>
+                                                            <DropdownMenuTrigger asChild>
+                                                                <Button variant="ghost" className="h-8 w-8 p-0">
+                                                                    <span className="sr-only">Abrir menú</span>
+                                                                    <MoreVertical className="h-4 w-4" />
+                                                                </Button>
+                                                            </DropdownMenuTrigger>
+                                                            <DropdownMenuContent align="end">
+                                                                <DropdownMenuItem onClick={() => handleEdit(language.id)}>
+                                                                    Ver Detalles
+                                                                </DropdownMenuItem>
+                                                                <DropdownMenuItem onClick={() => handleEdit(language.id)}>
+                                                                    Editar
+                                                                </DropdownMenuItem>
+                                                                <AlertDialogTrigger asChild>
+                                                                    <DropdownMenuItem className="text-red-600">
+                                                                        Eliminar
+                                                                    </DropdownMenuItem>
+                                                                </AlertDialogTrigger>
+                                                            </DropdownMenuContent>
+                                                        </DropdownMenu>
                                                         <AlertDialogContent>
                                                             <AlertDialogHeader>
                                                                 <AlertDialogTitle>¿Estás absolutamente seguro?</AlertDialogTitle>

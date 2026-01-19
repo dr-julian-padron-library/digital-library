@@ -26,6 +26,7 @@ export const defaultProfileFormValues = {
   address: '',
   birth_date: '',
   phone: '',
+  confirm_password: '',
 };
 
 /**
@@ -44,6 +45,7 @@ export const mapProfileToFormValues = (profile: Profile | null | undefined) => {
     last_name: profile.user?.last_name ?? '',
     email: profile.user?.email ?? '',
     password: '',
+    confirm_password: '',
     national_document: profile.national_document ?? '',
     address: profile.address ?? '',
     birth_date: profile.birth_date ?? '',

@@ -34,7 +34,7 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/common/components/ui/alert-dialog";
-import { Filter, Edit, Trash2, Plus } from "lucide-react";
+import { Filter, Plus, MoreVertical } from "lucide-react";
 import {
     useGetGenresQuery,
     useDeleteGenreMutation,
@@ -47,6 +47,12 @@ import {
     SelectValue,
 } from "@/common/components/ui/select";
 import { PaginationComponent } from "@/common/components/ui/pagination";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/common/components/ui/dropdown-menu";
 
 const GenresManagementPage: React.FC = () => {
     const navigate = useNavigate();
@@ -196,20 +202,28 @@ const GenresManagementPage: React.FC = () => {
                                                 <Badge variant="outline">{genre.sala}</Badge>
                                             </TableCell>
                                             <TableCell className="text-right">
-                                                <Button
-                                                    variant="ghost"
-                                                    size="sm"
-                                                    onClick={() => handleEdit(genre.slug)}
-                                                    className="mr-2"
-                                                >
-                                                    <Edit className="w-4 h-4" />
-                                                </Button>
                                                 <AlertDialog>
-                                                    <AlertDialogTrigger asChild>
-                                                        <Button variant="ghost" size="sm" disabled={isDeletingGenre}>
-                                                            <Trash2 className="w-4 h-4" />
-                                                        </Button>
-                                                    </AlertDialogTrigger>
+                                                    <DropdownMenu>
+                                                        <DropdownMenuTrigger asChild>
+                                                            <Button variant="ghost" className="h-8 w-8 p-0">
+                                                                <span className="sr-only">Abrir menú</span>
+                                                                <MoreVertical className="h-4 w-4" />
+                                                            </Button>
+                                                        </DropdownMenuTrigger>
+                                                        <DropdownMenuContent align="end">
+                                                            <DropdownMenuItem onClick={() => handleEdit(genre.slug)}>
+                                                                Ver Detalles
+                                                            </DropdownMenuItem>
+                                                            <DropdownMenuItem onClick={() => handleEdit(genre.slug)}>
+                                                                Editar
+                                                            </DropdownMenuItem>
+                                                            <AlertDialogTrigger asChild>
+                                                                <DropdownMenuItem className="text-red-600">
+                                                                    Eliminar
+                                                                </DropdownMenuItem>
+                                                            </AlertDialogTrigger>
+                                                        </DropdownMenuContent>
+                                                    </DropdownMenu>
                                                     <AlertDialogContent>
                                                         <AlertDialogHeader>
                                                             <AlertDialogTitle>¿Estás absolutamente seguro?</AlertDialogTitle>
