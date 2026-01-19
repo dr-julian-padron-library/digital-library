@@ -53,7 +53,7 @@ export default function ProfilePage() {
           title: "Éxito",
           description: "Perfil creado correctamente",
         });
-        navigate('/content-management/profiles');
+        navigate('/gestion/usuarios');
       }
     } catch (error) {
       toast({

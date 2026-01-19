@@ -40,10 +40,10 @@ export const profileApiSlice = apiSlice.injectEndpoints({
             providesTags: (result, error, id) => [{ type: "Profiles", id }],
         }),
         createProfile: builder.mutation<CreateProfileRequest, { formData: FormData }>({
-            query: (formData) => ({
+            query: ({ formData }) => ({
                 url: "profiles/",
                 method: "POST",
-                formData,
+                body: formData,
             }),
             invalidatesTags: [{ type: "Profiles", id: "LIST" }],
         }),

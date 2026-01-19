@@ -33,12 +33,18 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/common/components/ui/alert-dialog";
-import { Filter, Edit, Trash2, Plus } from "lucide-react";
+import { Filter, Plus, MoreVertical } from "lucide-react";
 import {
   useGetMaterialTypesQuery,
   useDeleteMaterialTypeMutation,
 } from "@/features/content-management/api/materialTypesApiSlice";
 import { PaginationComponent } from "@/common/components/ui/pagination";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/common/components/ui/dropdown-menu";
 
 const MaterialManagementPage: React.FC = () => {
   const navigate = useNavigate();
@@ -190,20 +196,28 @@ const MaterialManagementPage: React.FC = () => {
                       <TableRow key={materialType.id}>
                         <TableCell className="font-medium">{materialType.name}</TableCell>
                         <TableCell className="text-right">
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => handleEdit(materialType.id)}
-                            className="mr-2"
-                          >
-                            <Edit className="w-4 h-4" />
-                          </Button>
                           <AlertDialog>
-                            <AlertDialogTrigger asChild>
-                              <Button variant="ghost" size="sm" disabled={isDeleting}>
-                                <Trash2 className="w-4 h-4" />
-                              </Button>
-                            </AlertDialogTrigger>
+                            <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                <Button variant="ghost" className="h-8 w-8 p-0">
+                                  <span className="sr-only">Abrir menú</span>
+                                  <MoreVertical className="h-4 w-4" />
+                                </Button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent align="end">
+                                <DropdownMenuItem onClick={() => handleEdit(materialType.id)}>
+                                  Ver Detalles
+                                </DropdownMenuItem>
+                                <DropdownMenuItem onClick={() => handleEdit(materialType.id)}>
+                                  Editar
+                                </DropdownMenuItem>
+                                <AlertDialogTrigger asChild>
+                                  <DropdownMenuItem className="text-red-600">
+                                    Eliminar
+                                  </DropdownMenuItem>
+                                </AlertDialogTrigger>
+                              </DropdownMenuContent>
+                            </DropdownMenu>
                             <AlertDialogContent>
                               <AlertDialogHeader>
                                 <AlertDialogTitle>¿Estás absolutamente seguro?</AlertDialogTitle>
@@ -241,20 +255,28 @@ const MaterialManagementPage: React.FC = () => {
                       <div className="flex justify-between items-start">
                         <h3 className="font-semibold text-sm">{materialType.name}</h3>
                         <div className="flex gap-1">
-                          <Button variant="ghost" size="sm" onClick={() => handleEdit(materialType.id)}>
-                            <Edit className="h-4 w-4" />
-                          </Button>
                           <AlertDialog>
-                            <AlertDialogTrigger asChild>
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                disabled={isDeleting}
-                                onClick={(e) => e.stopPropagation()}
-                              >
-                                <Trash2 className="h-4 w-4" />
-                              </Button>
-                            </AlertDialogTrigger>
+                            <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                <Button variant="ghost" className="h-8 w-8 p-0">
+                                  <span className="sr-only">Abrir menú</span>
+                                  <MoreVertical className="h-4 w-4" />
+                                </Button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent align="end">
+                                <DropdownMenuItem onClick={() => handleEdit(materialType.id)}>
+                                  Ver Detalles
+                                </DropdownMenuItem>
+                                <DropdownMenuItem onClick={() => handleEdit(materialType.id)}>
+                                  Editar
+                                </DropdownMenuItem>
+                                <AlertDialogTrigger asChild>
+                                  <DropdownMenuItem className="text-red-600">
+                                    Eliminar
+                                  </DropdownMenuItem>
+                                </AlertDialogTrigger>
+                              </DropdownMenuContent>
+                            </DropdownMenu>
                             <AlertDialogContent>
                               <AlertDialogHeader>
                                 <AlertDialogTitle>¿Estás absolutamente seguro?</AlertDialogTitle>
