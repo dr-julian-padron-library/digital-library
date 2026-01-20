@@ -1,10 +1,11 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/common/components/ui/button';
 import { Badge } from '@/common/components/ui/badge';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { Clock, ArrowLeft, CheckCircle } from 'lucide-react';
+import { useGetBlockedSchedulesQuery, useGetRoomBookingsQuery } from '../api/roomBookingsApi';
 
 interface SelectorHorariosProps {
   fecha: Date;
@@ -28,88 +29,31 @@ export function SelectorHorarios({
   onHorarioSeleccionado,
   onRetroceder
 }: SelectorHorariosProps) {
-  const [franjasHorarias, setFranjasHorarias] = useState<FranjaHoraria[]>([]);
   const [horarioSeleccionado, setHorarioSeleccionado] = useState<{ inicio: string; fin: string } | null>(
     horaInicio && horaFin ? { inicio: horaInicio, fin: horaFin } : null
   );
-  const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    const cargarDisponibilidadHorarios = async () => {
-      setIsLoading(true);
-      try {
-        const fechaStr = fecha.toISOString().split('T')[0];
-        
-        // Consultar horarios bloqueados para esta fecha
-        const { data: horariosBloquados, error: errorBloqueados } = await supabase
-          .from('horarios_bloqueados')
-          .select('hora_inicio, hora_fin')
-          .eq('fecha', fechaStr);
+  const fechaStr = fecha.toISOString().split('T')[0];
 
-        // Consultar solicitudes aprobadas para esta fecha
-        const { data: solicitudesAprobadas, error: errorSolicitudes } = await supabase
-          .from('solicitudes_prestamo_sala')
-          .select('hora_inicio, hora_fin')
-          .eq('fecha_evento', fechaStr)
-          .eq('estado', 'aprobada');
+  const { data: solicitudesAprobadas, isLoading: isLoadingSolicitudes } = useGetRoomBookingsQuery({
+    date: fechaStr,
+    status: 'aprobada'
+  });
 
-        if (errorBloqueados) {
-          console.error('Error al cargar horarios bloqueados:', errorBloqueados);
-        }
-        if (errorSolicitudes) {
-          console.error('Error al cargar solicitudes aprobadas:', errorSolicitudes);
-        }
+  const { data: horariosBloquados, isLoading: isLoadingBloqueados } = useGetBlockedSchedulesQuery({
+    date: fechaStr
+  });
 
-        // Generar franjas horarias de 2 horas cada una
-        const franjas: FranjaHoraria[] = [
-          { inicio: '08:00', fin: '10:00', disponible: true, etiqueta: 'Mañana temprano' },
-          { inicio: '10:00', fin: '12:00', disponible: true, etiqueta: 'Media mañana' },
-          { inicio: '12:00', fin: '14:00', disponible: true, etiqueta: 'Mediodía' },
-          { inicio: '14:00', fin: '16:00', disponible: true, etiqueta: 'Tarde temprana' },
-          { inicio: '16:00', fin: '18:00', disponible: true, etiqueta: 'Tarde' },
-        ];
-
-        // Marcar franjas como ocupadas
-        const horariosOcupados = [
-          ...(horariosBloquados || []),
-          ...(solicitudesAprobadas || [])
-        ];
-
-        franjas.forEach(franja => {
-          const ocupado = horariosOcupados.some(horario => {
-            const inicioFranja = franja.inicio;
-            const finFranja = franja.fin;
-            const inicioOcupado = horario.hora_inicio;
-            const finOcupado = horario.hora_fin;
-
-            // Verificar si hay solapamiento
-            return (inicioFranja < finOcupado && finFranja > inicioOcupado);
-          });
-
-          if (ocupado) {
-            franja.disponible = false;
-          }
-        });
-
-        setFranjasHorarias(franjas);
-      } catch (error) {
-        console.error('Error al cargar disponibilidad de horarios:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    cargarDisponibilidadHorarios();
-  }, [fecha]);
-
-  const seleccionarHorario = (inicio: string, fin: string) => {
-    setHorarioSeleccionado({ inicio, fin });
-  };
+  const isLoading = isLoadingSolicitudes || isLoadingBloqueados;
 
   const confirmarSeleccion = () => {
     if (horarioSeleccionado) {
       onHorarioSeleccionado(horarioSeleccionado.inicio, horarioSeleccionado.fin);
     }
+  };
+
+  const seleccionarHorario = (inicio: string, fin: string) => {
+    setHorarioSeleccionado({ inicio, fin });
   };
 
   if (isLoading) {
@@ -123,6 +67,46 @@ export function SelectorHorarios({
     );
   }
 
+  // Generar franjas horarias
+  const franjas: FranjaHoraria[] = [
+    { inicio: '08:00', fin: '10:00', disponible: true, etiqueta: 'Mañana temprano' },
+    { inicio: '10:00', fin: '12:00', disponible: true, etiqueta: 'Media mañana' },
+    { inicio: '12:00', fin: '14:00', disponible: true, etiqueta: 'Mediodía' },
+    { inicio: '14:00', fin: '16:00', disponible: true, etiqueta: 'Tarde temprana' },
+    { inicio: '16:00', fin: '18:00', disponible: true, etiqueta: 'Tarde' },
+  ];
+
+  // Marcar franjas como ocupadas
+  const horariosOcupados = [
+    ...(horariosBloquados || []),
+    ...(solicitudesAprobadas || [])
+  ];
+
+  franjas.forEach(franja => {
+    const ocupado = horariosOcupados.some(horario => {
+      const inicioFranja = franja.inicio;
+      const finFranja = franja.fin;
+      const inicioOcupado = horario.start_time; // Changed from hora_inicio
+      const finOcupado = horario.end_time;     // Changed from hora_fin
+
+      // Verificar si hay solapamiento
+      return (inicioFranja < finOcupado && finFranja > inicioOcupado);
+    });
+
+    if (ocupado) {
+      franja.disponible = false;
+    }
+  });
+
+  // Check if previously selected time is still available
+  if (horarioSeleccionado) {
+    const selectedFranja = franjas.find(f => f.inicio === horarioSeleccionado.inicio && f.fin === horarioSeleccionado.fin);
+    if (selectedFranja && !selectedFranja.disponible) {
+      // Deselect if it became unavailable
+      // But maybe we shouldn't automatically deselect in render loop, just show as unavailable
+    }
+  }
+
   return (
     <div className="p-6 md:p-8">
       <div className="mb-6">
@@ -134,7 +118,7 @@ export function SelectorHorarios({
           <ArrowLeft size={16} className="mr-2" />
           Cambiar fecha
         </Button>
-        
+
         <div className="text-center mb-6">
           <h3 className="text-xl font-semibold text-biblioteca-blue mb-2">
             Selecciona el horario
@@ -152,14 +136,14 @@ export function SelectorHorarios({
             <Clock size={18} className="mr-2" />
             Horarios Disponibles
           </h4>
-          
+
           <div className="space-y-3">
-            {franjasHorarias.map((franja, index) => (
+            {franjas.map((franja, index) => (
               <div
                 key={index}
                 className={`
                   p-4 rounded-lg border-2 transition-all duration-200 cursor-pointer
-                  ${franja.disponible 
+                  ${franja.disponible
                     ? (horarioSeleccionado?.inicio === franja.inicio && horarioSeleccionado?.fin === franja.fin)
                       ? 'border-biblioteca-blue bg-biblioteca-blue/5 ring-2 ring-biblioteca-gold/30'
                       : 'border-biblioteca-light/30 hover:border-biblioteca-blue/30 hover:bg-biblioteca-light/10'
@@ -174,21 +158,21 @@ export function SelectorHorarios({
                       <div className="text-lg font-semibold text-biblioteca-blue">
                         {franja.inicio} - {franja.fin}
                       </div>
-                      {horarioSeleccionado?.inicio === franja.inicio && 
-                       horarioSeleccionado?.fin === franja.fin && (
-                        <CheckCircle size={20} className="text-biblioteca-gold" />
-                      )}
+                      {horarioSeleccionado?.inicio === franja.inicio &&
+                        horarioSeleccionado?.fin === franja.fin && (
+                          <CheckCircle size={20} className="text-biblioteca-gold" />
+                        )}
                     </div>
                     <div className="text-sm text-biblioteca-gray mt-1">
                       {franja.etiqueta}
                     </div>
                   </div>
-                  
+
                   <div>
-                    <Badge 
+                    <Badge
                       variant={franja.disponible ? "outline" : "destructive"}
                       className={
-                        franja.disponible 
+                        franja.disponible
                           ? "bg-green-50 text-green-700 border-green-300"
                           : "bg-red-100 text-red-700"
                       }
@@ -210,7 +194,7 @@ export function SelectorHorarios({
                 <CheckCircle size={18} className="mr-2" />
                 Horario Seleccionado
               </h4>
-              
+
               <div className="space-y-3 mb-6">
                 <div>
                   <span className="text-sm text-biblioteca-gray">Fecha:</span>
@@ -230,7 +214,7 @@ export function SelectorHorarios({
                 </div>
               </div>
 
-              <Button 
+              <Button
                 onClick={confirmarSeleccion}
                 className="w-full bg-biblioteca-blue hover:bg-biblioteca-blue/90 text-white"
               >
