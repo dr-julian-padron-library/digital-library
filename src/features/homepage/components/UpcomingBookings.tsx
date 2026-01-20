@@ -47,7 +47,7 @@ export function UpcomingBookings() {
                             Actividades programadas en nuestras salas
                         </p>
                     </div>
-                    <Link to="/prestamo/sala">
+                    <Link to="/reservas/salas">
                         <Button variant="outline" className="border-primary text-primary hover:bg-primary hover:text-primary-foreground">
                             Ver calendario
                             <ArrowRight className="ml-2 w-4 h-4" />

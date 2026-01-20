@@ -40,7 +40,7 @@ export const SIDEBAR_ITEMS: MenuItem[] = [
     {
         group: "sidebar.administration",
         title: "sidebar.roomBooking",
-        url: "/prestamo/sala",
+        url: "/reservas/salas",
         icon: Calendar,
         requiresAuth: true,
         capability: Capability.MANAGE_ROOMS
