@@ -1,7 +1,44 @@
 export async function onRequest(context) {
-    try {
-        const { request, env, params } = context;
+    const { request, env, params } = context;
 
+    // --- CORS Configuration ---
+    const origin = request.headers.get("Origin");
+
+    // Whitelist Validation: "The Bouncer List"
+    // We strictly match the origin against the environment variable ALLOWED_ORIGINS (comma-separated).
+    // If no specific match is found, we return "null" to block the browser from reading the response.
+    const allowedOrigins = (env.ALLOWED_ORIGINS || "").split(",").map(url => url.trim());
+    const isAllowed = allowedOrigins.includes(origin);
+
+    const corsHeaders = {
+        "Access-Control-Allow-Origin": isAllowed ? origin : "null",
+        "Access-Control-Allow-Methods": "GET, HEAD, POST, PUT, DELETE, OPTIONS, PATCH",
+        "Access-Control-Allow-Headers": request.headers.get("Access-Control-Request-Headers") || "Content-Type, Authorization, X-Requested-With, CF-Access-Client-Id, CF-Access-Client-Secret",
+        "Access-Control-Allow-Credentials": "true",
+    };
+
+    // --- 1. Handle Preflight (OPTIONS) ---
+    if (request.method === "OPTIONS") {
+        return new Response(null, {
+            status: 200,
+            headers: corsHeaders
+        });
+    }
+
+    // Helper to inject CORS headers into a final response
+    const withCors = (response) => {
+        const newHeaders = new Headers(response.headers);
+        Object.entries(corsHeaders).forEach(([key, value]) => {
+            newHeaders.set(key, value);
+        });
+        return new Response(response.body, {
+            status: response.status,
+            statusText: response.statusText,
+            headers: newHeaders
+        });
+    };
+
+    try {
         // 0. Environment Validation
         if (!env.API_BASE_URL) {
             throw new Error("API_BASE_URL environment variable is missing");
@@ -65,23 +102,24 @@ export async function onRequest(context) {
                     const publicPath = `/api${relativePath.startsWith("/") ? "" : "/"}${relativePath}`;
 
                     // We must create a new response to modify headers efficiently
-                    const newHeaders = new Headers(response.headers);
-                    newHeaders.set("Location", publicPath);
+                    const redirectHeaders = new Headers(response.headers);
+                    redirectHeaders.set("Location", publicPath);
 
-                    return new Response(response.body, {
+                    const redirectResponse = new Response(response.body, {
                         status: response.status,
-                        statusText: response.statusText,
-                        headers: newHeaders
+                        headers: redirectHeaders
                     });
+
+                    return withCors(redirectResponse);
                 }
             }
         }
 
-        return response;
+        return withCors(response);
 
     } catch (err) {
         // Return a JSON error response instead of crashing the worker
-        return new Response(JSON.stringify({
+        const errorResponse = new Response(JSON.stringify({
             error: "Proxy Worker Error",
             message: err.message,
             stack: err.stack,
@@ -92,5 +130,7 @@ export async function onRequest(context) {
                 "Content-Type": "application/json"
             }
         });
+
+        return withCors(errorResponse);
     }
 }
