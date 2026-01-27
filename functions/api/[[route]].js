@@ -43,11 +43,40 @@ export async function onRequest(context) {
             method: method,
             headers: newHeaders,
             body: body,
-            redirect: "follow"
+            redirect: "manual" // CRITICAL: Do not follow redirects automatically. Browsers handle this better, and it avoids "body used" errors.
         });
 
         // 7. Fetch and return
         const response = await fetch(newRequest);
+
+        // 8. Handle Redirects (Rewrite Location header)
+        // If the backend redirects to an internal URL, we must rewrite it to the public proxy URL.
+        const isRedirect = response.status >= 300 && response.status < 400;
+        if (isRedirect) {
+            const location = response.headers.get("Location");
+            if (location) {
+                // If the location matches the internal API_BASE_URL, rewrite it to /api
+                // checking both with and without trailing slash to be safe
+                const cleanBaseUrl = env.API_BASE_URL.replace(/\/$/, "");
+
+                if (location.startsWith(cleanBaseUrl)) {
+                    const relativePath = location.replace(cleanBaseUrl, "");
+                    // Ensure we redirect to the public proxy path
+                    const publicPath = `/api${relativePath.startsWith("/") ? "" : "/"}${relativePath}`;
+
+                    // We must create a new response to modify headers efficiently
+                    const newHeaders = new Headers(response.headers);
+                    newHeaders.set("Location", publicPath);
+
+                    return new Response(response.body, {
+                        status: response.status,
+                        statusText: response.statusText,
+                        headers: newHeaders
+                    });
+                }
+            }
+        }
+
         return response;
 
     } catch (err) {
