@@ -33,12 +33,18 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/common/components/ui/alert-dialog";
-import { Filter, Edit, Trash2, Plus, User } from "lucide-react";
+import { Filter, Plus, User, MoreVertical } from "lucide-react";
 import { useGetProfilesQuery, useDeleteProfileMutation } from "@/features/content-management/api/profilesApiSlice";
 import { PaginationComponent } from "@/common/components/ui/pagination";
 import { Badge } from "@/common/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/common/components/ui/avatar";
 import { Profile } from "@/features/content-management/components/ProfileForm/ProfileFormConfig";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/common/components/ui/dropdown-menu";
 
 const UserManagementPage: React.FC = () => {
   const navigate = useNavigate();
@@ -186,6 +192,7 @@ const UserManagementPage: React.FC = () => {
                   <TableHeader>
                     <TableRow>
                       <TableHead>Nombre Completo</TableHead>
+                      <TableHead>Correo Electrónico</TableHead>
                       <TableHead>Cédula</TableHead>
                       <TableHead className="text-right">Acciones</TableHead>
                     </TableRow>
@@ -203,6 +210,7 @@ const UserManagementPage: React.FC = () => {
                             <span>{`${profile.user?.first_name} ${profile.user?.last_name}`}</span>
                           </div>
                         </TableCell>
+                        <TableCell>{profile.user?.email}</TableCell>
                         <TableCell>{profile.national_document}</TableCell>
                         {/* <TableCell>
                           <Badge variant={profile.activo ? "default" : "secondary"}>
@@ -210,20 +218,28 @@ const UserManagementPage: React.FC = () => {
                           </Badge>
                         </TableCell> */}
                         <TableCell className="text-right">
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => handleEdit(profile.id)}
-                            className="mr-2"
-                          >
-                            <Edit className="w-4 h-4" />
-                          </Button>
                           <AlertDialog>
-                            <AlertDialogTrigger asChild>
-                              <Button variant="ghost" size="sm" disabled={isDeleting}>
-                                <Trash2 className="w-4 h-4" />
-                              </Button>
-                            </AlertDialogTrigger>
+                            <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                <Button variant="ghost" className="h-8 w-8 p-0">
+                                  <span className="sr-only">Abrir menú</span>
+                                  <MoreVertical className="h-4 w-4" />
+                                </Button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent align="end">
+                                <DropdownMenuItem onClick={() => handleEdit(profile.id)}>
+                                  Ver Detalles
+                                </DropdownMenuItem>
+                                <DropdownMenuItem onClick={() => handleEdit(profile.id)}>
+                                  Editar
+                                </DropdownMenuItem>
+                                <AlertDialogTrigger asChild>
+                                  <DropdownMenuItem className="text-red-600">
+                                    Eliminar
+                                  </DropdownMenuItem>
+                                </AlertDialogTrigger>
+                              </DropdownMenuContent>
+                            </DropdownMenu>
                             <AlertDialogContent>
                               <AlertDialogHeader>
                                 <AlertDialogTitle>¿Estás absolutamente seguro?</AlertDialogTitle>
@@ -267,24 +283,33 @@ const UserManagementPage: React.FC = () => {
                           </Avatar>
                           <div>
                             <h3 className="font-semibold text-sm">{`${profile.user?.first_name} ${profile.user?.last_name}`}</h3>
+                            <p className="text-xs text-muted-foreground">{profile.user?.email}</p>
                             <p className="text-xs text-muted-foreground">{profile.national_document}</p>
                           </div>
                         </div>
                         <div className="flex gap-1">
-                          <Button variant="ghost" size="sm" onClick={() => handleEdit(profile.id)}>
-                            <Edit className="h-4 w-4" />
-                          </Button>
                           <AlertDialog>
-                            <AlertDialogTrigger asChild>
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                disabled={isDeleting}
-                                onClick={(e) => e.stopPropagation()}
-                              >
-                                <Trash2 className="h-4 w-4" />
-                              </Button>
-                            </AlertDialogTrigger>
+                            <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                <Button variant="ghost" className="h-8 w-8 p-0">
+                                  <span className="sr-only">Abrir menú</span>
+                                  <MoreVertical className="h-4 w-4" />
+                                </Button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent align="end">
+                                <DropdownMenuItem onClick={() => handleEdit(profile.id)}>
+                                  Ver Detalles
+                                </DropdownMenuItem>
+                                <DropdownMenuItem onClick={() => handleEdit(profile.id)}>
+                                  Editar
+                                </DropdownMenuItem>
+                                <AlertDialogTrigger asChild>
+                                  <DropdownMenuItem className="text-red-600">
+                                    Eliminar
+                                  </DropdownMenuItem>
+                                </AlertDialogTrigger>
+                              </DropdownMenuContent>
+                            </DropdownMenu>
                             <AlertDialogContent>
                               <AlertDialogHeader>
                                 <AlertDialogTitle>¿Estás absolutamente seguro?</AlertDialogTitle>

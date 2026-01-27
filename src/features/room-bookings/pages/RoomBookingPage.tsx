@@ -27,7 +27,6 @@ export interface DatosSolicitud {
 const PrestamoSala = () => {
   const [pasoActual, setPasoActual] = useState<PasoFormulario>('fecha');
   const [datosSolicitud, setDatosSolicitud] = useState<Partial<DatosSolicitud>>({});
-  const [isLoading, setIsLoading] = useState(false);
 
   const actualizarDatos = (nuevosDatos: Partial<DatosSolicitud>) => {
     setDatosSolicitud(prev => ({ ...prev, ...nuevosDatos }));
@@ -100,20 +99,11 @@ const PrestamoSala = () => {
             datosSolicitud={datosSolicitud}
             onDatosActualizados={actualizarDatos}
             onEnviar={async (datos) => {
-              setIsLoading(true);
-              try {
-                // Los datos ya se insertaron en FormularioSolicitud
-                console.log('Solicitud procesada:', datos);
-                await new Promise(resolve => setTimeout(resolve, 1000)); // Simulación
-                setPasoActual('confirmacion');
-              } catch (error) {
-                console.error('Error al procesar solicitud:', error);
-              } finally {
-                setIsLoading(false);
-              }
+              // Loading handled in component, we just accept success
+              setPasoActual('confirmacion');
             }}
             onRetroceder={retrocederPaso}
-            isLoading={isLoading}
+            isLoading={false} // No parent loading state anymore
           />
         );
       case 'confirmacion':
@@ -156,16 +146,16 @@ const PrestamoSala = () => {
           {(['fecha', 'hora', 'datos', 'confirmacion'] as PasoFormulario[]).map((paso, index) => {
             const Icono = getIconoPaso(paso);
             const esActivo = paso === pasoActual;
-            const esCompletado = (['fecha', 'hora', 'datos', 'confirmacion'] as PasoFormulario[]).indexOf(paso) < 
-                               (['fecha', 'hora', 'datos', 'confirmacion'] as PasoFormulario[]).indexOf(pasoActual);
+            const esCompletado = (['fecha', 'hora', 'datos', 'confirmacion'] as PasoFormulario[]).indexOf(paso) <
+              (['fecha', 'hora', 'datos', 'confirmacion'] as PasoFormulario[]).indexOf(pasoActual);
 
             return (
               <div key={paso} className="flex items-center">
                 <div className={`
                   flex items-center justify-center w-10 h-10 rounded-full border-2 transition-all duration-300
-                  ${esActivo ? 'bg-biblioteca-blue border-biblioteca-blue text-white scale-110' : 
+                  ${esActivo ? 'bg-biblioteca-blue border-biblioteca-blue text-white scale-110' :
                     esCompletado ? 'bg-biblioteca-gold border-biblioteca-gold text-biblioteca-blue' :
-                    'bg-white border-gray-300 text-gray-400'}
+                      'bg-white border-gray-300 text-gray-400'}
                 `}>
                   <Icono size={20} />
                 </div>

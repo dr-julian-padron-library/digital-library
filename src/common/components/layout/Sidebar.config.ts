@@ -37,14 +37,14 @@ export const SIDEBAR_ITEMS: MenuItem[] = [
     },
 
     // Administration Group - Requires specific capabilities
-    // {
-    //     group: "sidebar.administration",
-    //     title: "sidebar.roomBooking",
-    //     url: "/prestamo/sala",
-    //     icon: Calendar,
-    //     requiresAuth: true,
-    //     capability: Capability.MANAGE_ROOMS
-    // },
+    {
+        group: "sidebar.administration",
+        title: "sidebar.roomBooking",
+        url: "/reservas/salas",
+        icon: Calendar,
+        requiresAuth: true,
+        capability: Capability.MANAGE_ROOMS
+    },
     {
         group: "sidebar.administration",
         title: "sidebar.contentManagement",

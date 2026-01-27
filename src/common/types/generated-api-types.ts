@@ -4,6 +4,82 @@
  */
 
 export interface paths {
+    "/admin/blocked-schedules/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Admin View:
+         *     - Can list and filter ALL blocked schedules (active or inactive)
+         *     - Can perform bulk restore and bulk soft-delete operations */
+        get: operations["admin_blocked_schedules_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/blocked-schedules/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Admin View:
+         *     - Can list and filter ALL blocked schedules (active or inactive)
+         *     - Can perform bulk restore and bulk soft-delete operations */
+        get: operations["admin_blocked_schedules_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/blocked-schedules/bulk_delete/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Admin View:
+         *     - Can list and filter ALL blocked schedules (active or inactive)
+         *     - Can perform bulk restore and bulk soft-delete operations */
+        post: operations["admin_blocked_schedules_bulk_delete_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/blocked-schedules/bulk_restore/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Admin View:
+         *     - Can list and filter ALL blocked schedules (active or inactive)
+         *     - Can perform bulk restore and bulk soft-delete operations */
+        post: operations["admin_blocked_schedules_bulk_restore_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/auth/google/": {
         parameters: {
             query?: never;
@@ -40,83 +116,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/booking/admin/blocked-schedules/": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** @description Admin View:
-         *     - Can list and filter ALL blocked schedules (active or inactive)
-         *     - Can perform bulk restore and bulk soft-delete operations */
-        get: operations["booking_admin_blocked_schedules_list"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/booking/admin/blocked-schedules/{id}/": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** @description Admin View:
-         *     - Can list and filter ALL blocked schedules (active or inactive)
-         *     - Can perform bulk restore and bulk soft-delete operations */
-        get: operations["booking_admin_blocked_schedules_retrieve"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/booking/admin/blocked-schedules/bulk_delete/": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** @description Admin View:
-         *     - Can list and filter ALL blocked schedules (active or inactive)
-         *     - Can perform bulk restore and bulk soft-delete operations */
-        post: operations["booking_admin_blocked_schedules_bulk_delete_create"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/booking/admin/blocked-schedules/bulk_restore/": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** @description Admin View:
-         *     - Can list and filter ALL blocked schedules (active or inactive)
-         *     - Can perform bulk restore and bulk soft-delete operations */
-        post: operations["booking_admin_blocked_schedules_bulk_restore_create"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/booking/blocked-schedules/": {
+    "/blocked-schedules/": {
         parameters: {
             query?: never;
             header?: never;
@@ -129,7 +129,7 @@ export interface paths {
          *     - Authenticated users can create/update/delete
          *     - Delete = soft delete (mark inactive)
          *     - Restore single schedule if needed */
-        get: operations["booking_blocked_schedules_list"];
+        get: operations["blocked_schedules_list"];
         put?: never;
         /** @description Public/Client View:
          *     - Lists only ACTIVE blocked schedules
@@ -137,14 +137,14 @@ export interface paths {
          *     - Authenticated users can create/update/delete
          *     - Delete = soft delete (mark inactive)
          *     - Restore single schedule if needed */
-        post: operations["booking_blocked_schedules_create"];
+        post: operations["blocked_schedules_create"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/booking/blocked-schedules/{id}/": {
+    "/blocked-schedules/{id}/": {
         parameters: {
             query?: never;
             header?: never;
@@ -157,14 +157,14 @@ export interface paths {
          *     - Authenticated users can create/update/delete
          *     - Delete = soft delete (mark inactive)
          *     - Restore single schedule if needed */
-        get: operations["booking_blocked_schedules_retrieve"];
+        get: operations["blocked_schedules_retrieve"];
         /** @description Public/Client View:
          *     - Lists only ACTIVE blocked schedules
          *     - Public access to list
          *     - Authenticated users can create/update/delete
          *     - Delete = soft delete (mark inactive)
          *     - Restore single schedule if needed */
-        put: operations["booking_blocked_schedules_update"];
+        put: operations["blocked_schedules_update"];
         post?: never;
         /** @description Public/Client View:
          *     - Lists only ACTIVE blocked schedules
@@ -172,7 +172,7 @@ export interface paths {
          *     - Authenticated users can create/update/delete
          *     - Delete = soft delete (mark inactive)
          *     - Restore single schedule if needed */
-        delete: operations["booking_blocked_schedules_destroy"];
+        delete: operations["blocked_schedules_destroy"];
         options?: never;
         head?: never;
         /** @description Public/Client View:
@@ -181,10 +181,10 @@ export interface paths {
          *     - Authenticated users can create/update/delete
          *     - Delete = soft delete (mark inactive)
          *     - Restore single schedule if needed */
-        patch: operations["booking_blocked_schedules_partial_update"];
+        patch: operations["blocked_schedules_partial_update"];
         trace?: never;
     };
-    "/booking/blocked-schedules/{id}/restore/": {
+    "/blocked-schedules/{id}/restore/": {
         parameters: {
             query?: never;
             header?: never;
@@ -199,55 +199,7 @@ export interface paths {
          *     - Authenticated users can create/update/delete
          *     - Delete = soft delete (mark inactive)
          *     - Restore single schedule if needed */
-        post: operations["booking_blocked_schedules_restore_create"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/booking/room-bookings/": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["booking_room_bookings_list"];
-        put?: never;
-        post: operations["booking_room_bookings_create"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/booking/room-bookings/{id}/": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["booking_room_bookings_retrieve"];
-        put: operations["booking_room_bookings_update"];
-        post?: never;
-        delete: operations["booking_room_bookings_destroy"];
-        options?: never;
-        head?: never;
-        patch: operations["booking_room_bookings_partial_update"];
-        trace?: never;
-    };
-    "/booking/room-bookings/{id}/restore/": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["booking_room_bookings_restore_create"];
+        post: operations["blocked_schedules_restore_create"];
         delete?: never;
         options?: never;
         head?: never;
@@ -759,6 +711,102 @@ export interface paths {
         patch: operations["profiles_partial_update"];
         trace?: never;
     };
+    "/room-bookings/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["room_bookings_list"];
+        put?: never;
+        post: operations["room_bookings_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/room-bookings/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["room_bookings_retrieve"];
+        put: operations["room_bookings_update"];
+        post?: never;
+        delete: operations["room_bookings_destroy"];
+        options?: never;
+        head?: never;
+        patch: operations["room_bookings_partial_update"];
+        trace?: never;
+    };
+    "/room-bookings/{id}/approve/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["room_bookings_approve_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/room-bookings/{id}/cancel/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["room_bookings_cancel_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/room-bookings/{id}/reject/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["room_bookings_reject_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/room-bookings/{id}/restore/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["room_bookings_restore_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/signout/": {
         parameters: {
             query?: never;
@@ -849,6 +897,22 @@ export interface paths {
         options?: never;
         head?: never;
         patch: operations["user_partial_update"];
+        trace?: never;
+    };
+    "/user/me/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["user_me_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
         trace?: never;
     };
 }
@@ -1068,7 +1132,7 @@ export interface components {
             start_date: string;
             /** Format: date */
             end_date: string;
-            status?: components["schemas"]["StatusEnum"];
+            status?: components["schemas"]["Status1a7Enum"];
             /** Format: date-time */
             readonly created_at: string;
             /** Format: date-time */
@@ -1083,7 +1147,7 @@ export interface components {
             readonly start_date: string;
             /** Format: date */
             readonly end_date: string;
-            readonly status: components["schemas"]["StatusEnum"];
+            readonly status: components["schemas"]["Status1a7Enum"];
             /** Format: date-time */
             readonly created_at: string;
             /** Format: date-time */
@@ -1095,7 +1159,7 @@ export interface components {
             start_date: string;
             /** Format: date */
             end_date: string;
-            status?: components["schemas"]["StatusEnum"];
+            status?: components["schemas"]["Status1a7Enum"];
         };
         LoginRequest: {
             email: string;
@@ -1486,7 +1550,7 @@ export interface components {
             start_date?: string;
             /** Format: date */
             end_date?: string;
-            status?: components["schemas"]["StatusEnum"];
+            status?: components["schemas"]["Status1a7Enum"];
         };
         /** @description Serializer for the MaterialType model. */
         PatchedMaterialTypeRequest: {
@@ -1533,7 +1597,7 @@ export interface components {
             phone?: string | null;
         };
         PatchedRoomBookingRequest: {
-            request_number?: string;
+            request_number?: string | null;
             /** Format: date */
             event_date?: string;
             /** Format: time */
@@ -1550,7 +1614,7 @@ export interface components {
             /** Format: email */
             email?: string;
             phone?: string;
-            status?: string;
+            status?: components["schemas"]["RoomBookingStatusEnum"];
             /** Format: date-time */
             response_date?: string | null;
             admin_comments?: string;
@@ -1601,7 +1665,7 @@ export interface components {
         RoomBooking: {
             /** Format: uuid */
             readonly id: string;
-            request_number: string;
+            request_number?: string | null;
             /** Format: date */
             event_date: string;
             /** Format: time */
@@ -1618,7 +1682,7 @@ export interface components {
             /** Format: email */
             email: string;
             phone: string;
-            status: string;
+            status?: components["schemas"]["RoomBookingStatusEnum"];
             /** Format: date-time */
             response_date?: string | null;
             admin_comments?: string;
@@ -1629,7 +1693,7 @@ export interface components {
             readonly updated_at: string;
         };
         RoomBookingRequest: {
-            request_number: string;
+            request_number?: string | null;
             /** Format: date */
             event_date: string;
             /** Format: time */
@@ -1646,12 +1710,20 @@ export interface components {
             /** Format: email */
             email: string;
             phone: string;
-            status: string;
+            status?: components["schemas"]["RoomBookingStatusEnum"];
             /** Format: date-time */
             response_date?: string | null;
             admin_comments?: string;
             is_active?: boolean;
         };
+        /**
+         * @description * `PENDING` - Pending
+         *     * `APPROVED` - Approved
+         *     * `REJECTED` - Rejected
+         *     * `CANCELLED` - Cancelled
+         * @enum {string}
+         */
+        RoomBookingStatusEnum: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
         SalaWithGenres: {
             sala: string;
             genres: components["schemas"]["GenreWithBooks"][];
@@ -1681,7 +1753,7 @@ export interface components {
          *     * `Overdue` - Overdue
          * @enum {string}
          */
-        StatusEnum: "Active" | "Returned" | "Overdue";
+        Status1a7Enum: "Active" | "Returned" | "Overdue";
         User: {
             /** Nombre */
             first_name?: string;
@@ -1742,6 +1814,106 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    admin_blocked_schedules_list: {
+        parameters: {
+            query?: {
+                date?: string;
+                /** @description Un número de página dentro del conjunto de resultados paginado. */
+                page?: number;
+                /** @description Número de resultados a devolver por página. */
+                page_size?: number;
+                reason?: string;
+                /** @description Un término de búsqueda. */
+                search?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedBlockedScheduleList"];
+                };
+            };
+        };
+    };
+    admin_blocked_schedules_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Un Cadena UUID que identifique este Blocked Schedule. */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BlockedSchedule"];
+                };
+            };
+        };
+    };
+    admin_blocked_schedules_bulk_delete_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BlockedScheduleRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["BlockedScheduleRequest"];
+                "multipart/form-data": components["schemas"]["BlockedScheduleRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BlockedSchedule"];
+                };
+            };
+        };
+    };
+    admin_blocked_schedules_bulk_restore_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BlockedScheduleRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["BlockedScheduleRequest"];
+                "multipart/form-data": components["schemas"]["BlockedScheduleRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BlockedSchedule"];
+                };
+            };
+        };
+    };
     auth_google_create: {
         parameters: {
             query?: never;
@@ -1767,7 +1939,7 @@ export interface operations {
             };
         };
     };
-    booking_admin_blocked_schedules_list: {
+    blocked_schedules_list: {
         parameters: {
             query?: {
                 date?: string;
@@ -1795,107 +1967,7 @@ export interface operations {
             };
         };
     };
-    booking_admin_blocked_schedules_retrieve: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Un Cadena UUID que identifique este Blocked Schedule. */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["BlockedSchedule"];
-                };
-            };
-        };
-    };
-    booking_admin_blocked_schedules_bulk_delete_create: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["BlockedScheduleRequest"];
-                "application/x-www-form-urlencoded": components["schemas"]["BlockedScheduleRequest"];
-                "multipart/form-data": components["schemas"]["BlockedScheduleRequest"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["BlockedSchedule"];
-                };
-            };
-        };
-    };
-    booking_admin_blocked_schedules_bulk_restore_create: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["BlockedScheduleRequest"];
-                "application/x-www-form-urlencoded": components["schemas"]["BlockedScheduleRequest"];
-                "multipart/form-data": components["schemas"]["BlockedScheduleRequest"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["BlockedSchedule"];
-                };
-            };
-        };
-    };
-    booking_blocked_schedules_list: {
-        parameters: {
-            query?: {
-                date?: string;
-                /** @description Un número de página dentro del conjunto de resultados paginado. */
-                page?: number;
-                /** @description Número de resultados a devolver por página. */
-                page_size?: number;
-                reason?: string;
-                /** @description Un término de búsqueda. */
-                search?: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PaginatedBlockedScheduleList"];
-                };
-            };
-        };
-    };
-    booking_blocked_schedules_create: {
+    blocked_schedules_create: {
         parameters: {
             query?: never;
             header?: never;
@@ -1920,7 +1992,7 @@ export interface operations {
             };
         };
     };
-    booking_blocked_schedules_retrieve: {
+    blocked_schedules_retrieve: {
         parameters: {
             query?: never;
             header?: never;
@@ -1942,7 +2014,7 @@ export interface operations {
             };
         };
     };
-    booking_blocked_schedules_update: {
+    blocked_schedules_update: {
         parameters: {
             query?: never;
             header?: never;
@@ -1970,7 +2042,7 @@ export interface operations {
             };
         };
     };
-    booking_blocked_schedules_destroy: {
+    blocked_schedules_destroy: {
         parameters: {
             query?: never;
             header?: never;
@@ -1991,7 +2063,7 @@ export interface operations {
             };
         };
     };
-    booking_blocked_schedules_partial_update: {
+    blocked_schedules_partial_update: {
         parameters: {
             query?: never;
             header?: never;
@@ -2019,7 +2091,7 @@ export interface operations {
             };
         };
     };
-    booking_blocked_schedules_restore_create: {
+    blocked_schedules_restore_create: {
         parameters: {
             query?: never;
             header?: never;
@@ -2043,187 +2115,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["BlockedSchedule"];
-                };
-            };
-        };
-    };
-    booking_room_bookings_list: {
-        parameters: {
-            query?: {
-                event_date?: string;
-                event_type?: string;
-                /** @description Un número de página dentro del conjunto de resultados paginado. */
-                page?: number;
-                /** @description Número de resultados a devolver por página. */
-                page_size?: number;
-                /** @description Un término de búsqueda. */
-                search?: string;
-                status?: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PaginatedRoomBookingList"];
-                };
-            };
-        };
-    };
-    booking_room_bookings_create: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["RoomBookingRequest"];
-                "application/x-www-form-urlencoded": components["schemas"]["RoomBookingRequest"];
-                "multipart/form-data": components["schemas"]["RoomBookingRequest"];
-            };
-        };
-        responses: {
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["RoomBooking"];
-                };
-            };
-        };
-    };
-    booking_room_bookings_retrieve: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Un Cadena UUID que identifique este Room Booking. */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["RoomBooking"];
-                };
-            };
-        };
-    };
-    booking_room_bookings_update: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Un Cadena UUID que identifique este Room Booking. */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["RoomBookingRequest"];
-                "application/x-www-form-urlencoded": components["schemas"]["RoomBookingRequest"];
-                "multipart/form-data": components["schemas"]["RoomBookingRequest"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["RoomBooking"];
-                };
-            };
-        };
-    };
-    booking_room_bookings_destroy: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Un Cadena UUID que identifique este Room Booking. */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description No response body */
-            204: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    booking_room_bookings_partial_update: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Un Cadena UUID que identifique este Room Booking. */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: {
-            content: {
-                "application/json": components["schemas"]["PatchedRoomBookingRequest"];
-                "application/x-www-form-urlencoded": components["schemas"]["PatchedRoomBookingRequest"];
-                "multipart/form-data": components["schemas"]["PatchedRoomBookingRequest"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["RoomBooking"];
-                };
-            };
-        };
-    };
-    booking_room_bookings_restore_create: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Un Cadena UUID que identifique este Room Booking. */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["RoomBookingRequest"];
-                "application/x-www-form-urlencoded": components["schemas"]["RoomBookingRequest"];
-                "multipart/form-data": components["schemas"]["RoomBookingRequest"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["RoomBooking"];
                 };
             };
         };
@@ -3671,6 +3562,275 @@ export interface operations {
             };
         };
     };
+    room_bookings_list: {
+        parameters: {
+            query?: {
+                event_date?: string;
+                event_type?: string;
+                /** @description Un número de página dentro del conjunto de resultados paginado. */
+                page?: number;
+                /** @description Número de resultados a devolver por página. */
+                page_size?: number;
+                /** @description Un término de búsqueda. */
+                search?: string;
+                /** @description * `PENDING` - Pending
+                 *     * `APPROVED` - Approved
+                 *     * `REJECTED` - Rejected
+                 *     * `CANCELLED` - Cancelled */
+                status?: "APPROVED" | "CANCELLED" | "PENDING" | "REJECTED";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedRoomBookingList"];
+                };
+            };
+        };
+    };
+    room_bookings_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RoomBookingRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["RoomBookingRequest"];
+                "multipart/form-data": components["schemas"]["RoomBookingRequest"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RoomBooking"];
+                };
+            };
+        };
+    };
+    room_bookings_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Un Cadena UUID que identifique este Room Booking. */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RoomBooking"];
+                };
+            };
+        };
+    };
+    room_bookings_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Un Cadena UUID que identifique este Room Booking. */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RoomBookingRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["RoomBookingRequest"];
+                "multipart/form-data": components["schemas"]["RoomBookingRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RoomBooking"];
+                };
+            };
+        };
+    };
+    room_bookings_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Un Cadena UUID que identifique este Room Booking. */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    room_bookings_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Un Cadena UUID que identifique este Room Booking. */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedRoomBookingRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedRoomBookingRequest"];
+                "multipart/form-data": components["schemas"]["PatchedRoomBookingRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RoomBooking"];
+                };
+            };
+        };
+    };
+    room_bookings_approve_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Un Cadena UUID que identifique este Room Booking. */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RoomBookingRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["RoomBookingRequest"];
+                "multipart/form-data": components["schemas"]["RoomBookingRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RoomBooking"];
+                };
+            };
+        };
+    };
+    room_bookings_cancel_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Un Cadena UUID que identifique este Room Booking. */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RoomBookingRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["RoomBookingRequest"];
+                "multipart/form-data": components["schemas"]["RoomBookingRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RoomBooking"];
+                };
+            };
+        };
+    };
+    room_bookings_reject_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Un Cadena UUID que identifique este Room Booking. */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RoomBookingRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["RoomBookingRequest"];
+                "multipart/form-data": components["schemas"]["RoomBookingRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RoomBooking"];
+                };
+            };
+        };
+    };
+    room_bookings_restore_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Un Cadena UUID que identifique este Room Booking. */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RoomBookingRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["RoomBookingRequest"];
+                "multipart/form-data": components["schemas"]["RoomBookingRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RoomBooking"];
+                };
+            };
+        };
+    };
     signout_create: {
         parameters: {
             query?: never;
@@ -3888,6 +4048,25 @@ export interface operations {
                 "multipart/form-data": components["schemas"]["PatchedMinimalProfileRequest"];
             };
         };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MinimalProfile"];
+                };
+            };
+        };
+    };
+    user_me_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
                 headers: {
