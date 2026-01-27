@@ -3,8 +3,8 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/app/store';
 import {
   MenuItem, Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent,
-  SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem,
-  SidebarMenuDropdown, SidebarMenuDropdownItem
+  SidebarMenuDropdown, SidebarMenuDropdownItem, useSidebar,
+  SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem
 } from "@/common/components/ui/sidebar";
 
 
@@ -21,6 +21,13 @@ export function AppSidebar() {
   const { t } = useTranslation();
   const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
   const userRole = useSelector((state: RootState) => state.auth.userRole);
+  const { isMobile, setOpenMobile } = useSidebar();
+
+  const handleMobileClose = () => {
+    if (isMobile) {
+      setOpenMobile(false);
+    }
+  };
 
   // Filter items based on authentication and capability
   const visibleItems = SIDEBAR_ITEMS.filter(item => {
@@ -81,7 +88,11 @@ export function AppSidebar() {
                       >
                         {item.children.map(child => (
                           <SidebarMenuDropdownItem key={child.title}>
-                            <Link to={child.url} className="flex items-center gap-3 w-full h-full">
+                            <Link
+                              to={child.url}
+                              className="flex items-center gap-3 w-full h-full"
+                              onClick={handleMobileClose}
+                            >
                               <child.icon size={18} />
                               <span>{t(child.title)}</span>
                             </Link>
@@ -94,7 +105,11 @@ export function AppSidebar() {
                           asChild
                           className="text-white hover:bg-biblioteca-blue/50 hover:text-biblioteca-gold transition-colors duration-200"
                         >
-                          <Link to={item.url} className="flex items-center gap-3">
+                          <Link
+                            to={item.url}
+                            className="flex items-center gap-3"
+                            onClick={handleMobileClose}
+                          >
                             <item.icon size={18} />
                             <span>{t(item.title)}</span>
                           </Link>

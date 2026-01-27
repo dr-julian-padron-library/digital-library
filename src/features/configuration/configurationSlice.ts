@@ -13,7 +13,7 @@ interface ConfigurationState {
 
 const initialState: ConfigurationState = {
     interfaceColor: "#003366",
-    theme: "light",
+    theme: "auto",
     fontSize: 16,
     dyslexic: false,
     language: "es",

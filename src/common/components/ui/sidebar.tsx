@@ -452,7 +452,7 @@ const SidebarGroupLabel = React.forwardRef<
       ref={ref}
       data-sidebar="group-label"
       className={cn(
-        "duration-200 flex h-8 shrink-0 items-center rounded-md px-2 text-xs font-medium text-sidebar-foreground/70 outline-none ring-sidebar-ring transition-[margin,opa] ease-linear focus-visible:ring-2 [&>svg]:size-4 [&>svg]:shrink-0",
+        "duration-200 flex h-8 shrink-0 items-center rounded-md px-2 text-sm md:text-xs font-medium text-sidebar-foreground/70 outline-none ring-sidebar-ring transition-[margin,opa] ease-linear focus-visible:ring-2 [&>svg]:size-4 [&>svg]:shrink-0",
         "group-data-[collapsible=icon]:-mt-8 group-data-[collapsible=icon]:opacity-0",
         className
       )}
@@ -534,9 +534,9 @@ const sidebarMenuButtonVariants = cva(
           "bg-background shadow-[0_0_0_1px_hsl(var(--sidebar-border))] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground hover:shadow-[0_0_0_1px_hsl(var(--sidebar-accent))]",
       },
       size: {
-        default: "h-8 text-sm",
+        default: "h-8 text-base md:text-sm",
         sm: "h-7 text-xs",
-        lg: "h-12 text-sm group-data-[collapsible=icon]:!p-0",
+        lg: "h-12 text-base md:text-sm group-data-[collapsible=icon]:!p-0",
       },
     },
     defaultVariants: {
@@ -801,7 +801,7 @@ const SidebarMenuDropdown = React.forwardRef<
     >
       <summary
         className={cn(
-          "flex w-full cursor-pointer items-center gap-2 overflow-hidden rounded-md p-2 text-sm text-white outline-none ring-sidebar-ring transition-[width,padding] hover:bg-biblioteca-blue/50 hover:text-biblioteca-gold focus-visible:ring-2",
+          "flex w-full cursor-pointer items-center gap-2 overflow-hidden rounded-md p-2 text-base md:text-sm text-white outline-none ring-sidebar-ring transition-[width,padding] hover:bg-biblioteca-blue/50 hover:text-biblioteca-gold focus-visible:ring-2",
           "[&::-webkit-details-marker]:hidden",
         )}
       >
@@ -839,7 +839,7 @@ const SidebarMenuDropdownItem = React.forwardRef<
       ref={ref}
       data-sidebar="menu-dropdown-item"
       className={cn(
-        "relative flex h-8 items-center rounded-md text-sm transition-colors duration-200",
+        "relative flex h-8 items-center rounded-md text-base md:text-sm transition-colors duration-200",
         className
       )}
       {...props}

@@ -60,12 +60,12 @@ export const SIDEBAR_ITEMS: MenuItem[] = [
             { title: "sidebar.authors", url: "/gestion/autores", icon: User, requiresAuth: true, capability: Capability.MANAGE_CONTENT },
         ]
     },
-    {
-        group: "sidebar.administration",
-        title: "sidebar.userManagement",
-        url: "/gestion/usuarios",
-        icon: Users,
-        requiresAuth: true,
-        capability: Capability.MANAGE_USERS
-    },
+    // {
+    //     group: "sidebar.administration",
+    //     title: "sidebar.userManagement",
+    //     url: "/gestion/usuarios",
+    //     icon: Users,
+    //     requiresAuth: true,
+    //     capability: Capability.MANAGE_USERS
+    // },
 ];

@@ -12,7 +12,7 @@ export const AppHeader = () => {
         <SidebarTrigger className="text-foreground hover:text-interface" />
       </div>
 
-      <p className="font-display text-xs md:text-sm uppercase tracking-widest text-muted-foreground text-center truncate px-2">
+      <p className="hidden md:block font-display text-xs md:text-sm uppercase tracking-widest text-muted-foreground text-center truncate px-2">
         {t('header.title')}
       </p>
 
