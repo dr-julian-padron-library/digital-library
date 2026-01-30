@@ -179,7 +179,7 @@ export function FormularioSolicitud({
         <Button
           variant="ghost"
           onClick={onRetroceder}
-          className="text-biblioteca-blue hover:bg-biblioteca-light/20 mb-4"
+          className="text-primary hover:bg-muted/20 mb-4"
           disabled={isLoading}
         >
           <ArrowLeft size={16} className="mr-2" />
@@ -194,7 +194,7 @@ export function FormularioSolicitud({
             {/* Datos Personales */}
             <Card>
               <CardContent className="p-6">
-                <h3 className="text-lg font-semibold text-biblioteca-blue mb-4 flex items-center">
+                <h3 className="text-lg font-semibold text-primary mb-4 flex items-center">
                   <User size={20} className="mr-2" />
                   Datos Personales
                 </h3>
@@ -207,11 +207,11 @@ export function FormularioSolicitud({
                       value={datosSolicitud.nombreCompleto || ''}
                       onChange={(e) => actualizarCampo('nombreCompleto', e.target.value)}
                       placeholder="Tu nombre completo"
-                      className={errores.nombreCompleto ? 'border-red-300 focus:border-red-500' : ''}
+                      className={errores.nombreCompleto ? 'border-destructive focus:border-destructive' : ''}
                       disabled={isLoading}
                     />
                     {errores.nombreCompleto && (
-                      <p className="text-red-500 text-sm mt-1">{errores.nombreCompleto}</p>
+                      <p className="text-destructive text-sm mt-1">{errores.nombreCompleto}</p>
                     )}
                   </div>
 
@@ -222,11 +222,11 @@ export function FormularioSolicitud({
                       value={datosSolicitud.cedula || ''}
                       onChange={(e) => actualizarCampo('cedula', e.target.value.toUpperCase())}
                       placeholder="V12345678 o E12345678"
-                      className={errores.cedula ? 'border-red-300 focus:border-red-500' : ''}
+                      className={errores.cedula ? 'border-destructive focus:border-destructive' : ''}
                       disabled={isLoading}
                     />
                     {errores.cedula && (
-                      <p className="text-red-500 text-sm mt-1">{errores.cedula}</p>
+                      <p className="text-destructive text-sm mt-1">{errores.cedula}</p>
                     )}
                   </div>
 
@@ -238,11 +238,11 @@ export function FormularioSolicitud({
                       value={datosSolicitud.email || ''}
                       onChange={(e) => actualizarCampo('email', e.target.value)}
                       placeholder="tu@email.com"
-                      className={errores.email ? 'border-red-300 focus:border-red-500' : ''}
+                      className={errores.email ? 'border-destructive focus:border-destructive' : ''}
                       disabled={isLoading}
                     />
                     {errores.email && (
-                      <p className="text-red-500 text-sm mt-1">{errores.email}</p>
+                      <p className="text-destructive text-sm mt-1">{errores.email}</p>
                     )}
                   </div>
 
@@ -253,11 +253,11 @@ export function FormularioSolicitud({
                       value={datosSolicitud.telefono || ''}
                       onChange={(e) => actualizarCampo('telefono', e.target.value)}
                       placeholder="04121234567"
-                      className={errores.telefono ? 'border-red-300 focus:border-red-500' : ''}
+                      className={errores.telefono ? 'border-destructive focus:border-destructive' : ''}
                       disabled={isLoading}
                     />
                     {errores.telefono && (
-                      <p className="text-red-500 text-sm mt-1">{errores.telefono}</p>
+                      <p className="text-destructive text-sm mt-1">{errores.telefono}</p>
                     )}
                   </div>
                 </div>
@@ -267,7 +267,7 @@ export function FormularioSolicitud({
             {/* Detalles del Evento */}
             <Card>
               <CardContent className="p-6">
-                <h3 className="text-lg font-semibold text-biblioteca-blue mb-4 flex items-center">
+                <h3 className="text-lg font-semibold text-primary mb-4 flex items-center">
                   <FileText size={20} className="mr-2" />
                   Detalles del Evento
                 </h3>
@@ -281,7 +281,7 @@ export function FormularioSolicitud({
                         onValueChange={(valor) => actualizarCampo('tipoEvento', valor)}
                         disabled={isLoading}
                       >
-                        <SelectTrigger className={errores.tipoEvento ? 'border-red-300 focus:border-red-500' : ''}>
+                        <SelectTrigger className={errores.tipoEvento ? 'border-destructive focus:border-destructive' : ''}>
                           <SelectValue placeholder="Selecciona el tipo" />
                         </SelectTrigger>
                         <SelectContent>
@@ -295,7 +295,7 @@ export function FormularioSolicitud({
                         </SelectContent>
                       </Select>
                       {errores.tipoEvento && (
-                        <p className="text-red-500 text-sm mt-1">{errores.tipoEvento}</p>
+                        <p className="text-destructive text-sm mt-1">{errores.tipoEvento}</p>
                       )}
                     </div>
 
@@ -309,11 +309,11 @@ export function FormularioSolicitud({
                         value={datosSolicitud.numeroParticipantes || ''}
                         onChange={(e) => actualizarCampo('numeroParticipantes', parseInt(e.target.value))}
                         placeholder="Ej: 25"
-                        className={errores.numeroParticipantes ? 'border-red-300 focus:border-red-500' : ''}
+                        className={errores.numeroParticipantes ? 'border-destructive focus:border-destructive' : ''}
                         disabled={isLoading}
                       />
                       {errores.numeroParticipantes && (
-                        <p className="text-red-500 text-sm mt-1">{errores.numeroParticipantes}</p>
+                        <p className="text-destructive text-sm mt-1">{errores.numeroParticipantes}</p>
                       )}
                     </div>
                   </div>
@@ -326,11 +326,11 @@ export function FormularioSolicitud({
                       onChange={(e) => actualizarCampo('descripcion', e.target.value)}
                       placeholder="Describe brevemente el propósito y actividades del evento..."
                       rows={4}
-                      className={errores.descripcion ? 'border-red-300 focus:border-red-500' : ''}
+                      className={errores.descripcion ? 'border-destructive focus:border-destructive' : ''}
                       disabled={isLoading}
                     />
                     {errores.descripcion && (
-                      <p className="text-red-500 text-sm mt-1">{errores.descripcion}</p>
+                      <p className="text-destructive text-sm mt-1">{errores.descripcion}</p>
                     )}
                   </div>
 
@@ -367,12 +367,12 @@ export function FormularioSolicitud({
 
             <Button
               type="submit"
-              className="w-full bg-biblioteca-blue hover:bg-biblioteca-blue/90 text-white py-3 text-lg"
+              className="w-full py-3 text-lg"
               disabled={isLoading}
             >
               {isLoading ? (
                 <>
-                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-primary-foreground mr-2"></div>
                   Enviando solicitud...
                 </>
               ) : (
@@ -386,15 +386,15 @@ export function FormularioSolicitud({
         <div className="lg:col-span-1">
           <Card className="sticky top-4">
             <CardContent className="p-6">
-              <h3 className="text-lg font-semibold text-biblioteca-blue mb-4">
+              <h3 className="text-lg font-semibold text-primary mb-4">
                 Resumen de Reserva
               </h3>
 
               <div className="space-y-4">
                 <div className="flex items-center space-x-3">
-                  <Calendar size={16} className="text-biblioteca-gold" />
+                  <Calendar size={16} className="text-primary" />
                   <div>
-                    <p className="text-sm text-biblioteca-gray">Fecha</p>
+                    <p className="text-sm text-muted-foreground">Fecha</p>
                     <p className="font-medium">
                       {datosSolicitud.fecha && format(datosSolicitud.fecha, "d 'de' MMMM 'de' yyyy", { locale: es })}
                     </p>
@@ -402,9 +402,9 @@ export function FormularioSolicitud({
                 </div>
 
                 <div className="flex items-center space-x-3">
-                  <Clock size={16} className="text-biblioteca-gold" />
+                  <Clock size={16} className="text-primary" />
                   <div>
-                    <p className="text-sm text-biblioteca-gray">Horario</p>
+                    <p className="text-sm text-muted-foreground">Horario</p>
                     <p className="font-medium">
                       {datosSolicitud.horaInicio} - {datosSolicitud.horaFin}
                     </p>
@@ -413,9 +413,9 @@ export function FormularioSolicitud({
 
                 {datosSolicitud.numeroParticipantes && (
                   <div className="flex items-center space-x-3">
-                    <Users size={16} className="text-biblioteca-gold" />
+                    <Users size={16} className="text-primary" />
                     <div>
-                      <p className="text-sm text-biblioteca-gray">Participantes</p>
+                      <p className="text-sm text-muted-foreground">Participantes</p>
                       <p className="font-medium">{datosSolicitud.numeroParticipantes} personas</p>
                     </div>
                   </div>
@@ -423,16 +423,16 @@ export function FormularioSolicitud({
 
                 {datosSolicitud.tipoEvento && (
                   <div>
-                    <p className="text-sm text-biblioteca-gray mb-1">Tipo de Evento</p>
-                    <Badge variant="outline" className="bg-biblioteca-light/20 capitalize">
+                    <p className="text-sm text-muted-foreground mb-1">Tipo de Evento</p>
+                    <Badge variant="outline" className="bg-muted/20 capitalize">
                       {datosSolicitud.tipoEvento.replace('-', ' ')}
                     </Badge>
                   </div>
                 )}
               </div>
 
-              <div className="mt-6 pt-4 border-t border-biblioteca-light/20">
-                <p className="text-xs text-biblioteca-gray">
+              <div className="mt-6 pt-4 border-t border-border">
+                <p className="text-xs text-muted-foreground">
                   * Recibirás confirmación por email en un plazo máximo de 24 horas
                 </p>
               </div>
