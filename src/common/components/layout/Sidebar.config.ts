@@ -35,15 +35,26 @@ export const SIDEBAR_ITEMS: MenuItem[] = [
         icon: Clock,
         requiresAuth: false
     },
+    {
+        group: "sidebar.navigation",
+        title: "sidebar.reserveRoom",
+        url: "/reservas/salas",
+        icon: Calendar,
+        requiresAuth: true
+    },
 
     // Administration Group - Requires specific capabilities
     {
         group: "sidebar.administration",
         title: "sidebar.roomBooking",
-        url: "/reservas/salas",
+        url: "",
         icon: Calendar,
         requiresAuth: true,
-        capability: Capability.MANAGE_ROOMS
+        capability: Capability.MANAGE_ROOMS,
+        children: [
+            { title: "sidebar.reserveRoom", url: "/reservas/salas", icon: Calendar, requiresAuth: true, capability: Capability.MANAGE_ROOMS },
+            { title: "sidebar.reserveRoomManagement", url: "/gestion/reservas-salas", icon: Calendar, requiresAuth: true, capability: Capability.MANAGE_ROOMS },
+        ]
     },
     {
         group: "sidebar.administration",

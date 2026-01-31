@@ -4,13 +4,23 @@ import { BlockedSchedules } from '../types/blocked_schedules';
 
 export const roomBookingsApiSlice = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
-        getRoomBookings: builder.query<RoomBooking[], { date?: string; status?: string }>({
+        getRoomBookings: builder.query<
+            { count: number; next?: string; previous?: string; results: RoomBooking[] },
+            {
+                page?: number;
+                page_size?: number;
+                search?: string;
+                ordering?: string;
+                status?: string;
+                event_date?: string;
+                event_type?: string;
+            }
+        >({
             query: (params) => ({
                 url: '/room-bookings/',
                 method: 'GET',
                 params,
             }),
-            transformResponse: (response: { results: RoomBooking[] }) => response.results,
             providesTags: ['RoomBookings' as any],
         }),
         getBlockedSchedules: builder.query<BlockedSchedules[], { date?: string }>({
@@ -54,6 +64,20 @@ export const roomBookingsApiSlice = apiSlice.injectEndpoints({
             }),
             invalidatesTags: ['RoomBookings' as any],
         }),
+        deleteRoomBooking: builder.mutation<void, string>({
+            query: (id) => ({
+                url: `/room-bookings/${id}/`,
+                method: 'DELETE',
+            }),
+            invalidatesTags: ['RoomBookings' as any],
+        }),
+        restoreRoomBooking: builder.mutation<RoomBooking, string>({
+            query: (id) => ({
+                url: `/room-bookings/${id}/restore/`,
+                method: 'POST',
+            }),
+            invalidatesTags: ['RoomBookings' as any],
+        }),
     }),
 });
 
@@ -64,4 +88,6 @@ export const {
     useApproveBookingMutation,
     useCancelBookingMutation,
     useRejectBookingMutation,
+    useDeleteRoomBookingMutation,
+    useRestoreRoomBookingMutation,
 } = roomBookingsApiSlice;
