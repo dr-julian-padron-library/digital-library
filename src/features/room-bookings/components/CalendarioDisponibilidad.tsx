@@ -62,10 +62,10 @@ export function CalendarioDisponibilidad({
   };
 
   const modifiersClassNames = {
-    ocupada: 'bg-red-100 text-red-800 hover:bg-red-200 line-through',
-    disponible: 'bg-green-50 text-green-800 hover:bg-green-100 cursor-pointer',
-    seleccionada: 'bg-biblioteca-blue text-white hover:bg-biblioteca-blue/80 ring-2 ring-biblioteca-gold',
-    domingo: 'bg-gray-100 text-gray-400 cursor-not-allowed'
+    ocupada: 'bg-destructive/10 text-destructive hover:bg-destructive/20 line-through',
+    disponible: 'bg-card text-foreground hover:bg-accent/10 border border-input cursor-pointer',
+    seleccionada: 'bg-primary text-primary-foreground hover:bg-primary/90 ring-2 ring-ring',
+    domingo: 'bg-muted text-muted-foreground cursor-not-allowed'
   };
 
   return (
@@ -74,17 +74,17 @@ export function CalendarioDisponibilidad({
         {/* Calendario */}
         <div className="space-y-4">
           <div className="text-center">
-            <h3 className="text-lg font-semibold text-biblioteca-blue mb-2">
+            <h3 className="text-lg font-semibold text-primary mb-2">
               Selecciona una fecha disponible
             </h3>
-            <p className="text-biblioteca-gray text-sm">
+            <p className="text-muted-foreground text-sm">
               Puedes reservar con hasta 3 meses de anticipación
             </p>
           </div>
 
           {isLoading ? (
-            <div className="flex items-center justify-center h-80 bg-biblioteca-light/20 rounded-lg">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-biblioteca-blue"></div>
+            <div className="flex items-center justify-center h-80 bg-muted/20 rounded-lg">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
             </div>
           ) : (
             <Calendar
@@ -99,7 +99,7 @@ export function CalendarioDisponibilidad({
               modifiers={modifiers}
               modifiersClassNames={modifiersClassNames}
               disabled={(fecha) => !esFechaDisponible(fecha)}
-              className="mx-auto border border-biblioteca-light/30 rounded-lg p-4 bg-white"
+              className="mx-auto border border-border rounded-lg p-4 bg-card"
             />
           )}
         </div>
@@ -107,49 +107,49 @@ export function CalendarioDisponibilidad({
         {/* Panel de información */}
         <div className="space-y-6">
           {/* Leyenda */}
-          <div className="bg-biblioteca-light/10 rounded-lg p-4">
-            <h4 className="font-semibold text-biblioteca-blue mb-3 flex items-center">
+          <div className="bg-muted/10 rounded-lg p-4">
+            <h4 className="font-semibold text-primary mb-3 flex items-center">
               <InfoIcon size={18} className="mr-2" />
               Disponibilidad
             </h4>
             <div className="space-y-2">
               <div className="flex items-center">
-                <div className="w-4 h-4 bg-green-100 border border-green-300 rounded mr-3"></div>
-                <span className="text-sm text-biblioteca-gray">Fecha disponible</span>
+                <div className="w-4 h-4 bg-card border border-input rounded mr-3"></div>
+                <span className="text-sm text-muted-foreground">Fecha disponible</span>
               </div>
               <div className="flex items-center">
-                <div className="w-4 h-4 bg-red-100 border border-red-300 rounded mr-3"></div>
-                <span className="text-sm text-biblioteca-gray">Fecha ocupada</span>
+                <div className="w-4 h-4 bg-destructive/10 border border-destructive/30 rounded mr-3"></div>
+                <span className="text-sm text-muted-foreground">Fecha ocupada</span>
               </div>
               <div className="flex items-center">
-                <div className="w-4 h-4 bg-biblioteca-blue rounded mr-3"></div>
-                <span className="text-sm text-biblioteca-gray">Fecha seleccionada</span>
+                <div className="w-4 h-4 bg-primary rounded mr-3"></div>
+                <span className="text-sm text-muted-foreground">Fecha seleccionada</span>
               </div>
               <div className="flex items-center">
-                <div className="w-4 h-4 bg-gray-100 border border-gray-300 rounded mr-3"></div>
-                <span className="text-sm text-biblioteca-gray">Domingos (cerrado)</span>
+                <div className="w-4 h-4 bg-muted border border-border rounded mr-3"></div>
+                <span className="text-sm text-muted-foreground">Domingos (cerrado)</span>
               </div>
             </div>
           </div>
 
           {/* Información de la fecha seleccionada */}
           {fechaSeleccionada && (
-            <div className="bg-white border border-biblioteca-gold/30 rounded-lg p-4 animate-fade-in">
-              <h4 className="font-semibold text-biblioteca-blue mb-2 flex items-center">
+            <div className="bg-card border border-border rounded-lg p-4 animate-fade-in shadow-sm">
+              <h4 className="font-semibold text-primary mb-2 flex items-center">
                 <CalendarIcon size={18} className="mr-2" />
                 Fecha Seleccionada
               </h4>
-              <p className="text-lg font-medium text-biblioteca-gray mb-3">
+              <p className="text-lg font-medium text-muted-foreground mb-3">
                 {format(fechaSeleccionada, "EEEE, d 'de' MMMM 'de' yyyy", { locale: es })}
               </p>
-              <Badge variant="outline" className="bg-green-50 text-green-700 border-green-300">
+              <Badge variant="outline" className="bg-green-500/10 text-green-600 border-green-500/30">
                 ✓ Disponible
               </Badge>
 
-              <div className="mt-4 pt-4 border-t border-biblioteca-light/20">
+              <div className="mt-4 pt-4 border-t border-border">
                 <Button
                   onClick={() => onFechaSeleccionada(fechaSeleccionada)}
-                  className="w-full bg-biblioteca-blue hover:bg-biblioteca-blue/90 text-white"
+                  className="w-full"
                 >
                   Continuar con esta fecha
                 </Button>
@@ -158,11 +158,11 @@ export function CalendarioDisponibilidad({
           )}
 
           {/* Información adicional */}
-          <div className="bg-biblioteca-gold/10 rounded-lg p-4">
-            <h4 className="font-semibold text-biblioteca-blue mb-2">
+          <div className="bg-accent/10 rounded-lg p-4">
+            <h4 className="font-semibold text-primary mb-2">
               Información Importante
             </h4>
-            <ul className="text-sm text-biblioteca-gray space-y-1">
+            <ul className="text-sm text-muted-foreground space-y-1">
               <li>• Horario disponible: 8:00 AM - 6:00 PM</li>
               <li>• Capacidad máxima: 50 personas</li>
               <li>• Solicitud mínima: 2 días de anticipación</li>

@@ -124,17 +124,17 @@ const PrestamoSala = () => {
   const IconoPaso = getIconoPaso(pasoActual);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-biblioteca-light via-white to-biblioteca-light/30">
+    <div className="min-h-screen bg-background">
       {/* Hero Section */}
-      <div className="bg-biblioteca-blue text-white py-12">
+      <div className="bg-primary text-primary-foreground py-12">
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-5xl font-display font-bold mb-4">
             Préstamo de Sala
           </h1>
-          <p className="text-xl md:text-2xl text-biblioteca-gold/90 mb-2">
+          <p className="text-xl md:text-2xl text-accent mb-2">
             Solicita el uso de nuestras instalaciones
           </p>
-          <p className="text-biblioteca-light">
+          <p className="text-primary-foreground/80">
             Reserva espacios para eventos, reuniones y actividades académicas
           </p>
         </div>
@@ -153,16 +153,16 @@ const PrestamoSala = () => {
               <div key={paso} className="flex items-center">
                 <div className={`
                   flex items-center justify-center w-10 h-10 rounded-full border-2 transition-all duration-300
-                  ${esActivo ? 'bg-biblioteca-blue border-biblioteca-blue text-white scale-110' :
-                    esCompletado ? 'bg-biblioteca-gold border-biblioteca-gold text-biblioteca-blue' :
-                      'bg-white border-gray-300 text-gray-400'}
+                  ${esActivo ? 'bg-primary border-primary text-primary-foreground scale-110' :
+                    esCompletado ? 'bg-accent border-accent text-accent-foreground' :
+                      'bg-card border-border text-muted-foreground'}
                 `}>
                   <Icono size={20} />
                 </div>
                 {index < 3 && (
                   <div className={`
                     w-8 md:w-16 h-0.5 mx-2 transition-colors duration-300
-                    ${esCompletado ? 'bg-biblioteca-gold' : 'bg-gray-300'}
+                    ${esCompletado ? 'bg-accent' : 'bg-border'}
                   `} />
                 )}
               </div>
@@ -173,9 +173,9 @@ const PrestamoSala = () => {
 
       {/* Contenido Principal */}
       <div className="container mx-auto px-4 pb-12">
-        <Card className="max-w-4xl mx-auto shadow-2xl border-0 overflow-hidden">
-          <CardHeader className="bg-white border-b border-biblioteca-light/20">
-            <CardTitle className="flex items-center text-2xl text-biblioteca-blue">
+        <Card className="max-w-4xl mx-auto shadow-2xl border-border overflow-hidden bg-card">
+          <CardHeader className="bg-card border-b border-border">
+            <CardTitle className="flex items-center text-2xl text-primary">
               <IconoPaso className="mr-3" size={28} />
               {getTituloPaso(pasoActual)}
             </CardTitle>

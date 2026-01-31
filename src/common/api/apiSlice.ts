@@ -17,9 +17,16 @@ import { RootState } from '@/app/store';
  * @returns The result of the fetchBaseQuery call.
  */
 const baseQuery = fetchBaseQuery({
-    baseUrl: import.meta.env.VITE_API_URL,
+    baseUrl: '/api',
     credentials: 'include',
-    prepareHeaders: (headers) => {
+    prepareHeaders: (headers, { getState, endpoint }) => {
+        const token = (getState() as RootState).auth.accessToken;
+
+        if (headers.has('X-Skip-Auth')) {
+            headers.delete('X-Skip-Auth');
+        } else if (token) {
+            headers.set('Authorization', `Bearer ${token}`);
+        }
         const csrfToken = getCookie('csrftoken');
         if (csrfToken) {
             headers.set('X-CSRFToken', csrfToken);
@@ -38,12 +45,22 @@ const baseQueryWithReauth: BaseQueryFn<
     if (result.error && result.error.status === 401) {
         // Attempt to refresh the token
         const refreshResult = await baseQuery(
-            { url: 'token/refresh/', method: 'POST' },
+            {
+                url: 'token/refresh/',
+                method: 'POST',
+                headers: { 'X-Skip-Auth': 'true' }
+            },
             api,
             extraOptions,
         );
 
         if (refreshResult.data) {
+            // Check if backend returned a new access token (Hybrid approach)
+            const data = refreshResult.data as { access?: string };
+            if (data.access) {
+                api.dispatch({ type: 'auth/setAccessToken', payload: data.access });
+            }
+
             // If refresh is successful, retry the original query
             result = await baseQuery(args, api, extraOptions);
         } else {

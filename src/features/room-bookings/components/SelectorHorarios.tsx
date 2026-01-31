@@ -113,17 +113,17 @@ export function SelectorHorarios({
         <Button
           variant="ghost"
           onClick={onRetroceder}
-          className="text-biblioteca-blue hover:bg-biblioteca-light/20 mb-4"
+          className="text-primary hover:bg-muted/20 mb-4"
         >
           <ArrowLeft size={16} className="mr-2" />
           Cambiar fecha
         </Button>
 
         <div className="text-center mb-6">
-          <h3 className="text-xl font-semibold text-biblioteca-blue mb-2">
+          <h3 className="text-xl font-semibold text-primary mb-2">
             Selecciona el horario
           </h3>
-          <p className="text-biblioteca-gray">
+          <p className="text-muted-foreground">
             Para el {format(fecha, "EEEE, d 'de' MMMM 'de' yyyy", { locale: es })}
           </p>
         </div>
@@ -132,7 +132,7 @@ export function SelectorHorarios({
       <div className="grid md:grid-cols-2 gap-8">
         {/* Lista de horarios */}
         <div className="space-y-4">
-          <h4 className="font-medium text-biblioteca-blue mb-4 flex items-center">
+          <h4 className="font-medium text-primary mb-4 flex items-center">
             <Clock size={18} className="mr-2" />
             Horarios Disponibles
           </h4>
@@ -145,9 +145,9 @@ export function SelectorHorarios({
                   p-4 rounded-lg border-2 transition-all duration-200 cursor-pointer
                   ${franja.disponible
                     ? (horarioSeleccionado?.inicio === franja.inicio && horarioSeleccionado?.fin === franja.fin)
-                      ? 'border-biblioteca-blue bg-biblioteca-blue/5 ring-2 ring-biblioteca-gold/30'
-                      : 'border-biblioteca-light/30 hover:border-biblioteca-blue/30 hover:bg-biblioteca-light/10'
-                    : 'border-red-200 bg-red-50 cursor-not-allowed opacity-60'
+                      ? 'border-primary bg-primary/5 ring-2 ring-primary/30'
+                      : 'border-border hover:border-primary/30 hover:bg-muted/10'
+                    : 'border-destructive/30 bg-destructive/10 cursor-not-allowed opacity-60'
                   }
                 `}
                 onClick={() => franja.disponible && seleccionarHorario(franja.inicio, franja.fin)}
@@ -155,15 +155,15 @@ export function SelectorHorarios({
                 <div className="flex items-center justify-between">
                   <div>
                     <div className="flex items-center space-x-3">
-                      <div className="text-lg font-semibold text-biblioteca-blue">
+                      <div className="text-lg font-semibold text-primary">
                         {franja.inicio} - {franja.fin}
                       </div>
                       {horarioSeleccionado?.inicio === franja.inicio &&
                         horarioSeleccionado?.fin === franja.fin && (
-                          <CheckCircle size={20} className="text-biblioteca-gold" />
+                          <CheckCircle size={20} className="text-primary" />
                         )}
                     </div>
-                    <div className="text-sm text-biblioteca-gray mt-1">
+                    <div className="text-sm text-muted-foreground mt-1">
                       {franja.etiqueta}
                     </div>
                   </div>
@@ -173,8 +173,8 @@ export function SelectorHorarios({
                       variant={franja.disponible ? "outline" : "destructive"}
                       className={
                         franja.disponible
-                          ? "bg-green-50 text-green-700 border-green-300"
-                          : "bg-red-100 text-red-700"
+                          ? "bg-green-500/10 text-green-600 border-green-500/30"
+                          : "bg-destructive/10 text-destructive border-transparent"
                       }
                     >
                       {franja.disponible ? 'Disponible' : 'Ocupado'}
@@ -189,34 +189,34 @@ export function SelectorHorarios({
         {/* Panel de confirmación */}
         <div className="space-y-6">
           {horarioSeleccionado && (
-            <div className="bg-white border border-biblioteca-gold/30 rounded-lg p-6 animate-fade-in">
-              <h4 className="font-semibold text-biblioteca-blue mb-4 flex items-center">
+            <div className="bg-card border border-border rounded-lg p-6 animate-fade-in shadow-sm">
+              <h4 className="font-semibold text-primary mb-4 flex items-center">
                 <CheckCircle size={18} className="mr-2" />
                 Horario Seleccionado
               </h4>
 
               <div className="space-y-3 mb-6">
                 <div>
-                  <span className="text-sm text-biblioteca-gray">Fecha:</span>
-                  <p className="font-medium text-biblioteca-blue">
+                  <span className="text-sm text-muted-foreground">Fecha:</span>
+                  <p className="font-medium text-primary">
                     {format(fecha, "EEEE, d 'de' MMMM", { locale: es })}
                   </p>
                 </div>
                 <div>
-                  <span className="text-sm text-biblioteca-gray">Horario:</span>
-                  <p className="font-medium text-biblioteca-blue text-xl">
+                  <span className="text-sm text-muted-foreground">Horario:</span>
+                  <p className="font-medium text-primary text-xl">
                     {horarioSeleccionado.inicio} - {horarioSeleccionado.fin}
                   </p>
                 </div>
                 <div>
-                  <span className="text-sm text-biblioteca-gray">Duración:</span>
-                  <p className="font-medium text-biblioteca-blue">2 horas</p>
+                  <span className="text-sm text-muted-foreground">Duración:</span>
+                  <p className="font-medium text-primary">2 horas</p>
                 </div>
               </div>
 
               <Button
                 onClick={confirmarSeleccion}
-                className="w-full bg-biblioteca-blue hover:bg-biblioteca-blue/90 text-white"
+                className="w-full"
               >
                 Continuar con este horario
               </Button>
@@ -224,11 +224,11 @@ export function SelectorHorarios({
           )}
 
           {/* Información adicional */}
-          <div className="bg-biblioteca-light/10 rounded-lg p-4">
-            <h4 className="font-semibold text-biblioteca-blue mb-3">
+          <div className="bg-muted/10 rounded-lg p-4">
+            <h4 className="font-semibold text-primary mb-3">
               Información del Préstamo
             </h4>
-            <ul className="text-sm text-biblioteca-gray space-y-2">
+            <ul className="text-sm text-muted-foreground space-y-2">
               <li>• <strong>Capacidad:</strong> Hasta 50 personas</li>
               <li>• <strong>Incluye:</strong> Mesas, sillas, proyector</li>
               <li>• <strong>Servicios adicionales:</strong> Disponibles bajo solicitud</li>
@@ -237,9 +237,9 @@ export function SelectorHorarios({
           </div>
 
           {!horarioSeleccionado && (
-            <div className="text-center p-6 bg-biblioteca-gold/5 rounded-lg">
-              <Clock size={32} className="mx-auto text-biblioteca-gold mb-3" />
-              <p className="text-biblioteca-gray">
+            <div className="text-center p-6 bg-accent/10 rounded-lg">
+              <Clock size={32} className="mx-auto text-accent mb-3" />
+              <p className="text-muted-foreground">
                 Selecciona un horario disponible para continuar
               </p>
             </div>

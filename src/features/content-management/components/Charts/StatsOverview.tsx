@@ -73,7 +73,7 @@ export const StatsOverview = () => {
       description: "Actualmente"
     },
     {
-      title: "Préstamos de Sala",
+      title: "Solicitudes de Sala",
       value: stats?.prestamoRequests || 0,
       icon: TrendingUp,
       change: "+15%",
