@@ -8,6 +8,7 @@ interface AuthState {
   userRole: AppRole | null;
   user: AuthUserResponse | null;
   profile: UserProfileResponse | null;
+  accessToken: string | null;
   error: string | null;
 }
 
@@ -16,6 +17,7 @@ const initialState: AuthState = {
   userRole: null,
   user: null,
   profile: null,
+  accessToken: null,
   error: null,
 };
 
@@ -44,11 +46,15 @@ const authSlice = createSlice({
     setProfile: (state, action: PayloadAction<UserProfileResponse | null>) => {
       state.profile = action.payload;
     },
+    setAccessToken: (state, action: PayloadAction<string | null>) => {
+      state.accessToken = action.payload;
+    },
     clearIsAuthenticated: (state) => {
       state.isAuthenticated = false;
       state.userRole = null;
       state.user = null;
       state.profile = null;
+      state.accessToken = null;
       state.error = null;
     },
   },
@@ -95,10 +101,20 @@ const authSlice = createSlice({
       })
       .addMatcher(authApiSlice.endpoints.getUserProfile.matchFulfilled, (state, action) => {
         state.profile = action.payload;
-        // We do not merge profile.user into state.user to preserve auth state source of truth.
+        // On reload, state.user is null. We must set isAuthenticated = true.
+        // We also populate state.user with available data to prevent null errors, 
+        // though groups/roles might be missing until a proper re-auth/refresh cycle if needed.
+        if (!state.user) {
+          state.user = {
+            ...action.payload.user,
+            groups: [], // Profile doesn't return groups, so we default to empty.
+          };
+        }
+        state.isAuthenticated = true;
+        state.error = null;
       });
   },
 });
 
-export const { setIsAuthenticated, setUserRole, setUser, setProfile, clearIsAuthenticated } = authSlice.actions;
+export const { setIsAuthenticated, setUserRole, setUser, setProfile, setAccessToken, clearIsAuthenticated } = authSlice.actions;
 export default authSlice.reducer;
