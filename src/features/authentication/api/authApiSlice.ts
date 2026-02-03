@@ -58,7 +58,16 @@ export const authApiSlice = apiSlice.injectEndpoints({
             },
         }),
         getUserProfile: builder.query<UserProfileResponse, void>({
-            query: () => 'user/me',
+            query: () => 'user/me/',
+            providesTags: ['User'],
+        }),
+        updateUserProfile: builder.mutation<UserProfileResponse, FormData>({
+            query: (payload) => ({
+                url: 'user/me/',
+                method: 'PATCH',
+                body: payload,
+            }),
+            invalidatesTags: ['User'],
         }),
     }),
     overrideExisting: false,
@@ -69,5 +78,6 @@ export const {
     useSignUpMutation,
     useSignOutMutation,
     useGetUserProfileQuery,
-    useLazyGetUserProfileQuery
+    useLazyGetUserProfileQuery,
+    useUpdateUserProfileMutation
 } = authApiSlice;

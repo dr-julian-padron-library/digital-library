@@ -5,7 +5,8 @@ import { ManagementLayout } from "@/common/components/layout/ManagementLayout";
 // Features
 import Index from "@/features/homepage/pages/Index";
 import HistoriaPage from "@/features/homepage/pages/HistoryPage";
-import DetallesUsuario from "@/features/users/pages/UserDetailsPage";
+import UserDetailsPage from "@/features/users/pages/UserDetailsPage";
+import UserEditPage from "@/features/users/pages/UserEditPage";
 
 // Content
 import RoomsPage from "@/features/content/pages/RoomsPage";
@@ -43,7 +44,8 @@ export const router = createBrowserRouter([
         children: [
             { index: true, element: <Index /> },
             { path: "historia", element: <HistoriaPage /> },
-            { path: "usuario/me", element: <DetallesUsuario /> },
+            { path: "perfil/", element: <UserDetailsPage /> },
+            { path: "perfil/editar", element: <UserEditPage /> },
 
             // Catalog
             {

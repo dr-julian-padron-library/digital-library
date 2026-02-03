@@ -14,6 +14,7 @@ import { ArrowLeft, User, Mail, Phone, Hash, Calendar, Clock, Users, FileText } 
 import { DatosSolicitud } from '@/features/room-bookings/pages/RoomBookingPage';
 import { useToast } from '@/common/hooks/use-toast';
 import { useCreateRoomBookingMutation } from '../api/roomBookingsApi';
+import { CedulaInput } from '@/common/components/ui/cedula-input';
 
 interface FormularioSolicitudProps {
   datosSolicitud: Partial<DatosSolicitud>;
@@ -217,11 +218,11 @@ export function FormularioSolicitud({
 
                   <div>
                     <Label htmlFor="cedula">Cédula de Identidad *</Label>
-                    <Input
+                    <CedulaInput
                       id="cedula"
                       value={datosSolicitud.cedula || ''}
-                      onChange={(e) => actualizarCampo('cedula', e.target.value.toUpperCase())}
-                      placeholder="V12345678 o E12345678"
+                      onChange={(valor) => actualizarCampo('cedula', valor)}
+                      placeholder="12345678"
                       className={errores.cedula ? 'border-destructive focus:border-destructive' : ''}
                       disabled={isLoading}
                     />
