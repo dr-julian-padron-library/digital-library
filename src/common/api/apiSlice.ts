@@ -17,7 +17,7 @@ import { RootState } from '@/app/store';
  * @returns The result of the fetchBaseQuery call.
  */
 const baseQuery = fetchBaseQuery({
-    baseUrl: import.meta.env.DEV ? '/api' : import.meta.env.VITE_API_URL,
+    baseUrl: import.meta.env.PROD ? import.meta.env.VITE_API_URL : '/api',
     credentials: 'include',
     prepareHeaders: (headers, { getState, endpoint }) => {
         const token = (getState() as RootState).auth.accessToken;
