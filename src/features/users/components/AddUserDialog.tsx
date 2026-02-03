@@ -1,10 +1,12 @@
-import { useState, useId } from "react"; 
+import { useState, useId } from "react";
 import { Button } from "@/common/components/ui/button";
 import { Input } from "@/common/components/ui/input";
 import { Label } from "@/common/components/ui/label";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/common/components/ui/dialog";
 import { UserPlus } from "lucide-react";
 import { useToast } from "@/common/hooks/use-toast";
+import { CedulaInput } from "@/common/components/ui/cedula-input";
+import { useCreateProfileMutation } from "@/features/content-management/api/profilesApiSlice";
 
 interface AddUserDialogProps {
   onUserAdded: () => void;
@@ -12,104 +14,72 @@ interface AddUserDialogProps {
 
 export function AddUserDialog({ onUserAdded }: AddUserDialogProps) {
   const [open, setOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
-    nombre_completo: '',
-    cedula: '',
+    first_name: '',
+    last_name: '',
+    national_document: '',
     email: '',
     password: '',
-    telefono: '',
-    edad: '',
-    direccion: '',
-    ocupacion: '',
+    phone: '',
+    birth_date: '',
+    address: '',
   });
   const { toast } = useToast();
+  const [createProfile, { isLoading }] = useCreateProfileMutation();
 
   const dialogTitleId = useId();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!formData.email || !formData.password) {
+    if (!formData.email || !formData.password || !formData.first_name || !formData.last_name) {
       toast({
         title: "Error",
-        description: "Por favor complete email y contraseña",
+        description: "Por favor complete los campos obligatorios",
         variant: "destructive",
       });
       return;
     }
 
-    setLoading(true);
-
     try {
-      // First create the auth user
-      const { data: authData, error: authError } = await supabase.auth.admin.createUser({
-        email: formData.email,
-        password: formData.password,
-        email_confirm: true,
-        user_metadata: {
-          nombre_completo: formData.nombre_completo,
-        }
+      const data = new FormData();
+      data.append('email', formData.email);
+      data.append('password', formData.password);
+      data.append('first_name', formData.first_name);
+      data.append('last_name', formData.last_name);
+
+      if (formData.national_document) data.append('national_document', formData.national_document);
+      if (formData.phone) data.append('phone', formData.phone);
+      if (formData.birth_date) data.append('birth_date', formData.birth_date);
+      if (formData.address) data.append('address', formData.address);
+
+      await createProfile({ formData: data }).unwrap();
+
+      toast({
+        title: "Éxito",
+        description: "Usuario creado correctamente",
       });
 
-      if (authError) throw authError;
+      setFormData({
+        first_name: '',
+        last_name: '',
+        national_document: '',
+        email: '',
+        password: '',
+        phone: '',
+        birth_date: '',
+        address: '',
+      });
+      setOpen(false);
+      onUserAdded();
 
-      if (authData.user) {
-        // Then create the profile
-        const { error: profileError } = await supabase
-          .from('profiles')
-          .insert({
-            id: authData.user.id,
-            nombre_completo: formData.nombre_completo,
-            cedula: formData.cedula,
-            email: formData.email,
-            telefono: formData.telefono || null,
-            edad: formData.edad ? parseInt(formData.edad) : null,
-            direccion: formData.direccion || null,
-            ocupacion: formData.ocupacion || null,
-          });
-
-        if (profileError) throw profileError;
-
-        // Create default user role
-        const { error: roleError } = await supabase
-          .from('user_roles')
-          .insert({
-            user_id: authData.user.id,
-            role: 'usuario',
-          });
-
-        if (roleError) {
-          console.warn('Warning: Could not assign default role:', roleError);
-        }
-
-        toast({
-          title: "Éxito",
-          description: "Usuario creado correctamente",
-        });
-
-        setFormData({
-          nombre_completo: '',
-          cedula: '',
-          email: '',
-          password: '',
-          telefono: '',
-          edad: '',
-          direccion: '',
-          ocupacion: '',
-        });
-        setOpen(false);
-        onUserAdded();
-      }
     } catch (error: any) {
       console.error('Error creating user:', error);
       toast({
         title: "Error",
-        description: error.message || "No se pudo crear el usuario",
+        description: error?.data?.detail || error.message || "No se pudo crear el usuario",
         variant: "destructive",
       });
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -133,7 +103,7 @@ export function AddUserDialog({ onUserAdded }: AddUserDialogProps) {
           {/* Apply the unique ID to the DialogTitle */}
           <DialogTitle id={dialogTitleId}>Añadir Usuario</DialogTitle>
           <DialogDescription>
-            Complete la información del nuevo usuario. Solo email y contraseña son obligatorios.
+            Complete la información del nuevo usuario.
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4 mt-4">
@@ -163,63 +133,65 @@ export function AddUserDialog({ onUserAdded }: AddUserDialogProps) {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="nombre_completo">Nombre Completo</Label>
+              <Label htmlFor="first_name">Nombre *</Label>
               <Input
-                id="nombre_completo"
-                value={formData.nombre_completo}
-                onChange={(e) => handleInputChange('nombre_completo', e.target.value)}
-                placeholder="Ingrese el nombre completo"
+                id="first_name"
+                value={formData.first_name}
+                onChange={(e) => handleInputChange('first_name', e.target.value)}
+                placeholder="Ingrese el nombre"
+                required
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="cedula">Cédula</Label>
+              <Label htmlFor="last_name">Apellido *</Label>
               <Input
-                id="cedula"
-                value={formData.cedula}
-                onChange={(e) => handleInputChange('cedula', e.target.value)}
+                id="last_name"
+                value={formData.last_name}
+                onChange={(e) => handleInputChange('last_name', e.target.value)}
+                placeholder="Ingrese el apellido"
+                required
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="national_document">Cédula</Label>
+              <CedulaInput
+                id="national_document"
+                value={formData.national_document}
+                onChange={(valor) => handleInputChange('national_document', valor)}
                 placeholder="Ingrese la cédula"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="telefono">Teléfono</Label>
+              <Label htmlFor="phone">Teléfono</Label>
               <Input
-                id="telefono"
-                value={formData.telefono}
-                onChange={(e) => handleInputChange('telefono', e.target.value)}
+                id="phone"
+                value={formData.phone}
+                onChange={(e) => handleInputChange('phone', e.target.value)}
                 placeholder="Ingrese el teléfono"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="edad">Edad</Label>
+              <Label htmlFor="birth_date">Fecha de Nacimiento</Label>
               <Input
-                id="edad"
-                type="number"
-                value={formData.edad}
-                onChange={(e) => handleInputChange('edad', e.target.value)}
-                placeholder="Ingrese la edad"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="ocupacion">Ocupación</Label>
-              <Input
-                id="ocupacion"
-                value={formData.ocupacion}
-                onChange={(e) => handleInputChange('ocupacion', e.target.value)}
-                placeholder="Ingrese la ocupación"
+                id="birth_date"
+                type="date"
+                value={formData.birth_date}
+                onChange={(e) => handleInputChange('birth_date', e.target.value)}
+                placeholder="Ingrese la fecha de nacimiento"
               />
             </div>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="direccion">Dirección</Label>
+            <Label htmlFor="address">Dirección</Label>
             <Input
-              id="direccion"
-              value={formData.direccion}
-              onChange={(e) => handleInputChange('direccion', e.target.value)}
+              id="address"
+              value={formData.address}
+              onChange={(e) => handleInputChange('address', e.target.value)}
               placeholder="Ingrese la dirección"
             />
           </div>
@@ -229,16 +201,16 @@ export function AddUserDialog({ onUserAdded }: AddUserDialogProps) {
               type="button"
               variant="outline"
               onClick={() => setOpen(false)}
-              disabled={loading}
+              disabled={isLoading}
             >
               Cancelar
             </Button>
             <Button
               type="submit"
-              disabled={loading}
+              disabled={isLoading}
               className="bg-primary fg-primary-foreground hover:bg-primary/90"
             >
-              {loading ? "Creando..." : "Crear Usuario"}
+              {isLoading ? "Creando..." : "Crear Usuario"}
             </Button>
           </div>
         </form>

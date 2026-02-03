@@ -5,7 +5,8 @@ import { ManagementLayout } from "@/common/components/layout/ManagementLayout";
 // Features
 import Index from "@/features/homepage/pages/Index";
 import HistoriaPage from "@/features/homepage/pages/HistoryPage";
-import DetallesUsuario from "@/features/users/pages/UserDetailsPage";
+import UserDetailsPage from "@/features/users/pages/UserDetailsPage";
+import UserEditPage from "@/features/users/pages/UserEditPage";
 
 // Content
 import RoomsPage from "@/features/content/pages/RoomsPage";
@@ -32,6 +33,7 @@ import ProfileManagementPage from "@/features/content-management/pages/ProfileMa
 import ProfileFormPage from "@/features/content-management/pages/ProfileFormPage";
 import Estadisticas from "@/features/content-management/pages/StatisticsDashboardPage";
 import RoomBookingManagementPage from "@/features/room-bookings/pages/RoomBookingManagementPage";
+import FastCheckoutPage from "@/features/loans/pages/FastCheckoutPage";
 
 import NotFound from "@/pages/NotFound";
 
@@ -43,7 +45,8 @@ export const router = createBrowserRouter([
         children: [
             { index: true, element: <Index /> },
             { path: "historia", element: <HistoriaPage /> },
-            { path: "usuario/me", element: <DetallesUsuario /> },
+            { path: "perfil/", element: <UserDetailsPage /> },
+            { path: "perfil/editar", element: <UserEditPage /> },
 
             // Catalog
             {
@@ -99,6 +102,7 @@ export const router = createBrowserRouter([
 
             { path: "estadisticas", element: <Estadisticas /> },
             { path: "reservas-salas", element: <RoomBookingManagementPage /> },
+            { path: "prestamo-rapido", element: <FastCheckoutPage /> },
         ]
     },
     { path: "*", element: <NotFound /> }

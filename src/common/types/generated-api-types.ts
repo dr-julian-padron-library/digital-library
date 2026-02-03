@@ -11,9 +11,11 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** @description Admin View:
+        /**
+         * @description Admin View:
          *     - Can list and filter ALL blocked schedules (active or inactive)
-         *     - Can perform bulk restore and bulk soft-delete operations */
+         *     - Can perform bulk restore and bulk soft-delete operations
+         */
         get: operations["admin_blocked_schedules_list"];
         put?: never;
         post?: never;
@@ -30,9 +32,11 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** @description Admin View:
+        /**
+         * @description Admin View:
          *     - Can list and filter ALL blocked schedules (active or inactive)
-         *     - Can perform bulk restore and bulk soft-delete operations */
+         *     - Can perform bulk restore and bulk soft-delete operations
+         */
         get: operations["admin_blocked_schedules_retrieve"];
         put?: never;
         post?: never;
@@ -51,9 +55,11 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** @description Admin View:
+        /**
+         * @description Admin View:
          *     - Can list and filter ALL blocked schedules (active or inactive)
-         *     - Can perform bulk restore and bulk soft-delete operations */
+         *     - Can perform bulk restore and bulk soft-delete operations
+         */
         post: operations["admin_blocked_schedules_bulk_delete_create"];
         delete?: never;
         options?: never;
@@ -70,9 +76,11 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** @description Admin View:
+        /**
+         * @description Admin View:
          *     - Can list and filter ALL blocked schedules (active or inactive)
-         *     - Can perform bulk restore and bulk soft-delete operations */
+         *     - Can perform bulk restore and bulk soft-delete operations
+         */
         post: operations["admin_blocked_schedules_bulk_restore_create"];
         delete?: never;
         options?: never;
@@ -89,7 +97,8 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** @description class used for social authentications
+        /**
+         * @description class used for social authentications
          *     example usage for facebook with access_token
          *     -------------
          *     from allauth.socialaccount.providers.facebook.views import FacebookOAuth2Adapter
@@ -108,7 +117,8 @@ export interface paths {
          *         adapter_class = FacebookOAuth2Adapter
          *         client_class = OAuth2Client
          *         callback_url = 'localhost:8000'
-         *     ------------- */
+         *     -------------
+         */
         post: operations["auth_google_create"];
         delete?: never;
         options?: never;
@@ -123,20 +133,24 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** @description Public/Client View:
+        /**
+         * @description Public/Client View:
          *     - Lists only ACTIVE blocked schedules
          *     - Public access to list
          *     - Authenticated users can create/update/delete
          *     - Delete = soft delete (mark inactive)
-         *     - Restore single schedule if needed */
+         *     - Restore single schedule if needed
+         */
         get: operations["blocked_schedules_list"];
         put?: never;
-        /** @description Public/Client View:
+        /**
+         * @description Public/Client View:
          *     - Lists only ACTIVE blocked schedules
          *     - Public access to list
          *     - Authenticated users can create/update/delete
          *     - Delete = soft delete (mark inactive)
-         *     - Restore single schedule if needed */
+         *     - Restore single schedule if needed
+         */
         post: operations["blocked_schedules_create"];
         delete?: never;
         options?: never;
@@ -151,36 +165,44 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** @description Public/Client View:
+        /**
+         * @description Public/Client View:
          *     - Lists only ACTIVE blocked schedules
          *     - Public access to list
          *     - Authenticated users can create/update/delete
          *     - Delete = soft delete (mark inactive)
-         *     - Restore single schedule if needed */
+         *     - Restore single schedule if needed
+         */
         get: operations["blocked_schedules_retrieve"];
-        /** @description Public/Client View:
+        /**
+         * @description Public/Client View:
          *     - Lists only ACTIVE blocked schedules
          *     - Public access to list
          *     - Authenticated users can create/update/delete
          *     - Delete = soft delete (mark inactive)
-         *     - Restore single schedule if needed */
+         *     - Restore single schedule if needed
+         */
         put: operations["blocked_schedules_update"];
         post?: never;
-        /** @description Public/Client View:
+        /**
+         * @description Public/Client View:
          *     - Lists only ACTIVE blocked schedules
          *     - Public access to list
          *     - Authenticated users can create/update/delete
          *     - Delete = soft delete (mark inactive)
-         *     - Restore single schedule if needed */
+         *     - Restore single schedule if needed
+         */
         delete: operations["blocked_schedules_destroy"];
         options?: never;
         head?: never;
-        /** @description Public/Client View:
+        /**
+         * @description Public/Client View:
          *     - Lists only ACTIVE blocked schedules
          *     - Public access to list
          *     - Authenticated users can create/update/delete
          *     - Delete = soft delete (mark inactive)
-         *     - Restore single schedule if needed */
+         *     - Restore single schedule if needed
+         */
         patch: operations["blocked_schedules_partial_update"];
         trace?: never;
     };
@@ -193,12 +215,14 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** @description Public/Client View:
+        /**
+         * @description Public/Client View:
          *     - Lists only ACTIVE blocked schedules
          *     - Public access to list
          *     - Authenticated users can create/update/delete
          *     - Delete = soft delete (mark inactive)
-         *     - Restore single schedule if needed */
+         *     - Restore single schedule if needed
+         */
         post: operations["blocked_schedules_restore_create"];
         delete?: never;
         options?: never;
@@ -213,16 +237,20 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** @description A ViewSet for managing authors.
+        /**
+         * @description A ViewSet for managing authors.
          *     - list: List and search for authors.
          *     - retrieve: Get detailed information for a single author by slug.
-         *     - create, update, destroy: For authenticated users with write permissions. */
+         *     - create, update, destroy: For authenticated users with write permissions.
+         */
         get: operations["library_authors_list"];
         put?: never;
-        /** @description A ViewSet for managing authors.
+        /**
+         * @description A ViewSet for managing authors.
          *     - list: List and search for authors.
          *     - retrieve: Get detailed information for a single author by slug.
-         *     - create, update, destroy: For authenticated users with write permissions. */
+         *     - create, update, destroy: For authenticated users with write permissions.
+         */
         post: operations["library_authors_create"];
         delete?: never;
         options?: never;
@@ -237,29 +265,92 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** @description A ViewSet for managing authors.
+        /**
+         * @description A ViewSet for managing authors.
          *     - list: List and search for authors.
          *     - retrieve: Get detailed information for a single author by slug.
-         *     - create, update, destroy: For authenticated users with write permissions. */
+         *     - create, update, destroy: For authenticated users with write permissions.
+         */
         get: operations["library_authors_retrieve"];
-        /** @description A ViewSet for managing authors.
+        /**
+         * @description A ViewSet for managing authors.
          *     - list: List and search for authors.
          *     - retrieve: Get detailed information for a single author by slug.
-         *     - create, update, destroy: For authenticated users with write permissions. */
+         *     - create, update, destroy: For authenticated users with write permissions.
+         */
         put: operations["library_authors_update"];
         post?: never;
-        /** @description A ViewSet for managing authors.
+        /**
+         * @description A ViewSet for managing authors.
          *     - list: List and search for authors.
          *     - retrieve: Get detailed information for a single author by slug.
-         *     - create, update, destroy: For authenticated users with write permissions. */
+         *     - create, update, destroy: For authenticated users with write permissions.
+         */
         delete: operations["library_authors_destroy"];
         options?: never;
         head?: never;
-        /** @description A ViewSet for managing authors.
+        /**
+         * @description A ViewSet for managing authors.
          *     - list: List and search for authors.
          *     - retrieve: Get detailed information for a single author by slug.
-         *     - create, update, destroy: For authenticated users with write permissions. */
+         *     - create, update, destroy: For authenticated users with write permissions.
+         */
         patch: operations["library_authors_partial_update"];
+        trace?: never;
+    };
+    "/library/book-reservations/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description A ViewSet for managing book reservations. */
+        get: operations["library_book_reservations_list"];
+        put?: never;
+        /** @description A ViewSet for managing book reservations. */
+        post: operations["library_book_reservations_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/library/book-reservations/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description A ViewSet for managing book reservations. */
+        get: operations["library_book_reservations_retrieve"];
+        /** @description A ViewSet for managing book reservations. */
+        put: operations["library_book_reservations_update"];
+        post?: never;
+        /** @description A ViewSet for managing book reservations. */
+        delete: operations["library_book_reservations_destroy"];
+        options?: never;
+        head?: never;
+        /** @description A ViewSet for managing book reservations. */
+        patch: operations["library_book_reservations_partial_update"];
+        trace?: never;
+    };
+    "/library/book-reservations/{id}/fulfill/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Fulfill a reservation, converting it to a ReadingSession. */
+        post: operations["library_book_reservations_fulfill_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
         trace?: never;
     };
     "/library/books/": {
@@ -269,16 +360,20 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** @description A ViewSet for managing books.
+        /**
+         * @description A ViewSet for managing books.
          *     - list: List and search for books.
          *     - retrieve: Get detailed information for a single book.
-         *     - create, update, destroy: For authenticated users with write permissions. */
+         *     - create, update, destroy: For authenticated users with write permissions.
+         */
         get: operations["library_books_list"];
         put?: never;
-        /** @description A ViewSet for managing books.
+        /**
+         * @description A ViewSet for managing books.
          *     - list: List and search for books.
          *     - retrieve: Get detailed information for a single book.
-         *     - create, update, destroy: For authenticated users with write permissions. */
+         *     - create, update, destroy: For authenticated users with write permissions.
+         */
         post: operations["library_books_create"];
         delete?: never;
         options?: never;
@@ -293,29 +388,88 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** @description A ViewSet for managing books.
+        /**
+         * @description A ViewSet for managing books.
          *     - list: List and search for books.
          *     - retrieve: Get detailed information for a single book.
-         *     - create, update, destroy: For authenticated users with write permissions. */
+         *     - create, update, destroy: For authenticated users with write permissions.
+         */
         get: operations["library_books_retrieve"];
-        /** @description A ViewSet for managing books.
+        /**
+         * @description A ViewSet for managing books.
          *     - list: List and search for books.
          *     - retrieve: Get detailed information for a single book.
-         *     - create, update, destroy: For authenticated users with write permissions. */
+         *     - create, update, destroy: For authenticated users with write permissions.
+         */
         put: operations["library_books_update"];
         post?: never;
-        /** @description A ViewSet for managing books.
+        /**
+         * @description A ViewSet for managing books.
          *     - list: List and search for books.
          *     - retrieve: Get detailed information for a single book.
-         *     - create, update, destroy: For authenticated users with write permissions. */
+         *     - create, update, destroy: For authenticated users with write permissions.
+         */
         delete: operations["library_books_destroy"];
         options?: never;
         head?: never;
-        /** @description A ViewSet for managing books.
+        /**
+         * @description A ViewSet for managing books.
          *     - list: List and search for books.
          *     - retrieve: Get detailed information for a single book.
-         *     - create, update, destroy: For authenticated users with write permissions. */
+         *     - create, update, destroy: For authenticated users with write permissions.
+         */
         patch: operations["library_books_partial_update"];
+        trace?: never;
+    };
+    "/library/books/{slug}/recalculate_cota/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Forces recalculation of the Cota Bibliografica, resetting manual lock. */
+        post: operations["library_books_recalculate_cota_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/library/books/{slug}/upload_finalize/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Finalize upload and trigger processing. */
+        post: operations["library_books_upload_finalize_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/library/books/upload_init/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Initialize direct-to-S3 upload for Books (PDF). */
+        post: operations["library_books_upload_init_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
         trace?: never;
     };
     "/library/genres/": {
@@ -437,73 +591,6 @@ export interface paths {
         patch: operations["library_languages_partial_update"];
         trace?: never;
     };
-    "/library/loans/": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** @description A ViewSet for managing loans.
-         *     - Admins can view all loans.
-         *     - Regular users can only view their own loans. */
-        get: operations["library_loans_list"];
-        put?: never;
-        /** @description A ViewSet for managing loans.
-         *     - Admins can view all loans.
-         *     - Regular users can only view their own loans. */
-        post: operations["library_loans_create"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/library/loans/{id}/": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** @description A ViewSet for managing loans.
-         *     - Admins can view all loans.
-         *     - Regular users can only view their own loans. */
-        get: operations["library_loans_retrieve"];
-        /** @description A ViewSet for managing loans.
-         *     - Admins can view all loans.
-         *     - Regular users can only view their own loans. */
-        put: operations["library_loans_update"];
-        post?: never;
-        /** @description A ViewSet for managing loans.
-         *     - Admins can view all loans.
-         *     - Regular users can only view their own loans. */
-        delete: operations["library_loans_destroy"];
-        options?: never;
-        head?: never;
-        /** @description A ViewSet for managing loans.
-         *     - Admins can view all loans.
-         *     - Regular users can only view their own loans. */
-        patch: operations["library_loans_partial_update"];
-        trace?: never;
-    };
-    "/library/loans/history_admin/": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** @description Retrieves a complete loan history (for admins only). */
-        get: operations["library_loans_history_admin_retrieve"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/library/material-types/": {
         parameters: {
             query?: never;
@@ -542,6 +629,105 @@ export interface paths {
         patch: operations["library_material_types_partial_update"];
         trace?: never;
     };
+    "/library/reading-sessions/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description A ViewSet for managing reading sessions (formerly loans).
+         *     - Admins can view all sessions.
+         *     - Regular users can only view their own sessions.
+         */
+        get: operations["library_reading_sessions_list"];
+        put?: never;
+        /**
+         * @description A ViewSet for managing reading sessions (formerly loans).
+         *     - Admins can view all sessions.
+         *     - Regular users can only view their own sessions.
+         */
+        post: operations["library_reading_sessions_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/library/reading-sessions/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description A ViewSet for managing reading sessions (formerly loans).
+         *     - Admins can view all sessions.
+         *     - Regular users can only view their own sessions.
+         */
+        get: operations["library_reading_sessions_retrieve"];
+        /**
+         * @description A ViewSet for managing reading sessions (formerly loans).
+         *     - Admins can view all sessions.
+         *     - Regular users can only view their own sessions.
+         */
+        put: operations["library_reading_sessions_update"];
+        post?: never;
+        /**
+         * @description A ViewSet for managing reading sessions (formerly loans).
+         *     - Admins can view all sessions.
+         *     - Regular users can only view their own sessions.
+         */
+        delete: operations["library_reading_sessions_destroy"];
+        options?: never;
+        head?: never;
+        /**
+         * @description A ViewSet for managing reading sessions (formerly loans).
+         *     - Admins can view all sessions.
+         *     - Regular users can only view their own sessions.
+         */
+        patch: operations["library_reading_sessions_partial_update"];
+        trace?: never;
+    };
+    "/library/reading-sessions/{id}/return/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Mark a session as returned via Service. */
+        post: operations["library_reading_sessions_return_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/library/reading-sessions/fast_checkout/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * @description Fast checkout endpoint for librarians.
+         *     Expects: { "user_id": <int>, "cota": <str> }
+         */
+        post: operations["library_reading_sessions_fast_checkout_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/library/videos/": {
         parameters: {
             query?: never;
@@ -578,6 +764,40 @@ export interface paths {
         head?: never;
         /** @description A ViewSet for viewing and editing video instances. */
         patch: operations["library_videos_partial_update"];
+        trace?: never;
+    };
+    "/library/videos/{slug}/upload_finalize/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Finalize upload and trigger processing. */
+        post: operations["library_videos_upload_finalize_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/library/videos/upload_init/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Initialize direct-to-S3 upload. */
+        post: operations["library_videos_upload_init_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
         trace?: never;
     };
     "/login/": {
@@ -629,9 +849,11 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** @description An Api View which provides a method to request a password reset token based on an e-mail address
+        /**
+         * @description An Api View which provides a method to request a password reset token based on an e-mail address
          *
-         *     Sends a signal reset_password_token_created when a reset token was created */
+         *     Sends a signal reset_password_token_created when a reset token was created
+         */
         post: operations["password_reset_create"];
         delete?: never;
         options?: never;
@@ -912,7 +1134,7 @@ export interface paths {
         delete?: never;
         options?: never;
         head?: never;
-        patch?: never;
+        patch: operations["user_me_partial_update"];
         trace?: never;
     };
 }
@@ -925,7 +1147,9 @@ export interface components {
             last_name: string;
             /** Format: email */
             email: string;
-            readonly groups: string;
+            readonly groups: string[];
+            readonly access: string;
+            readonly refresh: string;
         };
         /** @description Serializer for the Author model. */
         Author: {
@@ -972,15 +1196,17 @@ export interface components {
             is_permanent?: boolean;
             is_active?: boolean;
         };
-        /** @description Full serializer for CRUD operations on a book.
+        /**
+         * @description Full serializer for CRUD operations on a book.
          *     Expects material_type slug on input,
-         *     returns full material_type_detail on output. */
+         *     returns full material_type_detail on output.
+         */
         Book: {
             /** Format: uuid */
             readonly id: string;
             readonly slug: string;
             title: string;
-            isbn?: string;
+            isbn?: string | null;
             /** Format: date */
             publication_date?: string | null;
             pages?: number | null;
@@ -998,6 +1224,16 @@ export interface components {
              * @description Upload a PDF file for the digital version.
              */
             digital_file?: string | null;
+            /** @description DDC Class Number (e.g., 863) */
+            class_number?: string;
+            /** @description Cutter Number (e.g., G166) */
+            cutter_number?: string;
+            /** @description Work Mark (e.g., d) */
+            work_mark?: string;
+            /** @description Full Cota Bibliografica (Autogenerated) */
+            cota?: string | null;
+            /** @description If True, auto-generation is skipped. */
+            cota_is_manual?: boolean;
             readonly authors_detail: components["schemas"]["MinimalAuthor"][];
             readonly genres_detail: components["schemas"]["MinimalGenre"][];
             readonly material_type_detail: components["schemas"]["MinimalMaterialType"];
@@ -1007,12 +1243,14 @@ export interface components {
             /** Format: date-time */
             readonly updated_at: string;
         };
-        /** @description Full serializer for CRUD operations on a book.
+        /**
+         * @description Full serializer for CRUD operations on a book.
          *     Expects material_type slug on input,
-         *     returns full material_type_detail on output. */
+         *     returns full material_type_detail on output.
+         */
         BookRequest: {
             title: string;
-            isbn?: string;
+            isbn?: string | null;
             /** Format: date */
             publication_date?: string | null;
             pages?: number | null;
@@ -1033,7 +1271,58 @@ export interface components {
             genres?: string[];
             material_type?: string | null;
             language?: string;
+            /** @description DDC Class Number (e.g., 863) */
+            class_number?: string;
+            /** @description Cutter Number (e.g., G166) */
+            cutter_number?: string;
+            /** @description Work Mark (e.g., d) */
+            work_mark?: string;
+            /** @description Full Cota Bibliografica (Autogenerated) */
+            cota?: string | null;
+            /** @description If True, auto-generation is skipped. */
+            cota_is_manual?: boolean;
         };
+        BookReservation: {
+            /** Format: uuid */
+            readonly id: string;
+            readonly user: number;
+            /** Format: uuid */
+            book: string;
+            readonly book_details: components["schemas"]["MinimalBook"];
+            status?: components["schemas"]["BookReservationStatusEnum"];
+            /** Format: date */
+            readonly reservation_date: string;
+            /** Format: date-time */
+            readonly expiration_date: string | null;
+            /** Format: date-time */
+            readonly created_at: string;
+            readonly cota: string;
+            readonly class_number: string;
+            readonly cutter_number: string;
+            readonly work_mark: string;
+        };
+        BookReservationRequest: {
+            /** Format: uuid */
+            book: string;
+            status?: components["schemas"]["BookReservationStatusEnum"];
+        };
+        /**
+         * @description * `PENDING` - Pending
+         *     * `CONFIRMED` - Confirmed (On Hold)
+         *     * `FULFILLED` - Fulfilled (Session Started)
+         *     * `CANCELLED` - Cancelled
+         *     * `EXPIRED` - Expired
+         * @enum {string}
+         */
+        BookReservationStatusEnum: "PENDING" | "CONFIRMED" | "FULFILLED" | "CANCELLED" | "EXPIRED";
+        /**
+         * @description * `PENDING` - Pending
+         *     * `APPROVED` - Approved
+         *     * `REJECTED` - Rejected
+         *     * `CANCELLED` - Cancelled
+         * @enum {string}
+         */
+        BookingStatusEnum: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
         /** @description A serializer for creating or updating a new Profile and its associated User. */
         CreateProfile: {
             /** Documento nacional */
@@ -1121,46 +1410,6 @@ export interface components {
             name: string;
             slug?: string;
         };
-        /** @description Serializer for a loan, showing only essential IDs and dates. */
-        Loan: {
-            /** Format: uuid */
-            readonly id: string;
-            readonly user: number;
-            /** Format: uuid */
-            readonly book: string;
-            /** Format: date */
-            start_date: string;
-            /** Format: date */
-            end_date: string;
-            status?: components["schemas"]["Status1a7Enum"];
-            /** Format: date-time */
-            readonly created_at: string;
-            /** Format: date-time */
-            readonly updated_at: string;
-        };
-        /** @description Detailed serializer for a loan.
-         *     Embeds the full book details for a comprehensive view of the loan. */
-        LoanDetail: {
-            readonly user: string;
-            readonly book: components["schemas"]["MinimalBook"];
-            /** Format: date */
-            readonly start_date: string;
-            /** Format: date */
-            readonly end_date: string;
-            readonly status: components["schemas"]["Status1a7Enum"];
-            /** Format: date-time */
-            readonly created_at: string;
-            /** Format: date-time */
-            readonly updated_at: string;
-        };
-        /** @description Serializer for a loan, showing only essential IDs and dates. */
-        LoanRequest: {
-            /** Format: date */
-            start_date: string;
-            /** Format: date */
-            end_date: string;
-            status?: components["schemas"]["Status1a7Enum"];
-        };
         LoginRequest: {
             email: string;
             password: string;
@@ -1189,9 +1438,11 @@ export interface components {
             name: string;
             slug?: string;
         };
-        /** @description Minimal serializer for listing books.
+        /**
+         * @description Minimal serializer for listing books.
          *     Uses material_type slug for write,
-         *     but returns full material_type_detail on read. */
+         *     but returns full material_type_detail on read.
+         */
         MinimalBook: {
             /** Format: uuid */
             readonly id: string;
@@ -1208,6 +1459,43 @@ export interface components {
             publication_date?: string | null;
             readonly material_type_detail: components["schemas"]["MinimalMaterialType"];
             readonly authors: components["schemas"]["MinimalAuthor"][];
+            /** @description DDC Class Number (e.g., 863) */
+            class_number?: string;
+            /** @description Cutter Number (e.g., G166) */
+            cutter_number?: string;
+            /** @description Work Mark (e.g., d) */
+            work_mark?: string;
+            /** @description Full Cota Bibliografica (Autogenerated) */
+            cota?: string | null;
+            /** @description If True, auto-generation is skipped. */
+            cota_is_manual?: boolean;
+        };
+        /**
+         * @description Minimal serializer for listing books.
+         *     Uses material_type slug for write,
+         *     but returns full material_type_detail on read.
+         */
+        MinimalBookRequest: {
+            title: string;
+            /**
+             * Format: binary
+             * @description Upload book cover (PNG format only)
+             */
+            cover?: string | null;
+            quantity_in_stock?: number;
+            /** Format: date */
+            publication_date?: string | null;
+            material_type?: string | null;
+            /** @description DDC Class Number (e.g., 863) */
+            class_number?: string;
+            /** @description Cutter Number (e.g., G166) */
+            cutter_number?: string;
+            /** @description Work Mark (e.g., d) */
+            work_mark?: string;
+            /** @description Full Cota Bibliografica (Autogenerated) */
+            cota?: string | null;
+            /** @description If True, auto-generation is skipped. */
+            cota_is_manual?: boolean;
         };
         /** @description Minimal serializer for dropdowns or lightweight lists. */
         MinimalGenre: {
@@ -1283,8 +1571,10 @@ export interface components {
             /** Teléfono */
             phone?: string | null;
         };
-        /** @description Minimal serializer for listing videos.
-         *     Shows only essential information. */
+        /**
+         * @description Minimal serializer for listing videos.
+         *     Shows only essential information.
+         */
         MinimalVideo: {
             /** Format: uuid */
             readonly id: string;
@@ -1305,8 +1595,10 @@ export interface components {
             readonly genres_detail: components["schemas"]["MinimalGenre"][];
             readonly material_type_detail: components["schemas"]["MinimalMaterialType"];
         };
-        /** @description Minimal serializer for listing videos.
-         *     Shows only essential information. */
+        /**
+         * @description Minimal serializer for listing videos.
+         *     Shows only essential information.
+         */
         MinimalVideoRequest: {
             title: string;
             director?: string;
@@ -1333,7 +1625,7 @@ export interface components {
             previous?: string | null;
             results: components["schemas"]["BlockedSchedule"][];
         };
-        PaginatedLoanDetailList: {
+        PaginatedBookReservationList: {
             /** @example 123 */
             count: number;
             /**
@@ -1346,7 +1638,7 @@ export interface components {
              * @example http://api.example.org/accounts/?page=2
              */
             previous?: string | null;
-            results: components["schemas"]["LoanDetail"][];
+            results: components["schemas"]["BookReservation"][];
         };
         PaginatedMinimalAuthorList: {
             /** @example 123 */
@@ -1453,6 +1745,21 @@ export interface components {
             previous?: string | null;
             results: components["schemas"]["MinimalVideo"][];
         };
+        PaginatedReadingSessionDetailList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["ReadingSessionDetail"][];
+        };
         PaginatedRoomBookingList: {
             /** @example 123 */
             count: number;
@@ -1503,12 +1810,14 @@ export interface components {
             is_permanent?: boolean;
             is_active?: boolean;
         };
-        /** @description Full serializer for CRUD operations on a book.
+        /**
+         * @description Full serializer for CRUD operations on a book.
          *     Expects material_type slug on input,
-         *     returns full material_type_detail on output. */
+         *     returns full material_type_detail on output.
+         */
         PatchedBookRequest: {
             title?: string;
-            isbn?: string;
+            isbn?: string | null;
             /** Format: date */
             publication_date?: string | null;
             pages?: number | null;
@@ -1529,6 +1838,21 @@ export interface components {
             genres?: string[];
             material_type?: string | null;
             language?: string;
+            /** @description DDC Class Number (e.g., 863) */
+            class_number?: string;
+            /** @description Cutter Number (e.g., G166) */
+            cutter_number?: string;
+            /** @description Work Mark (e.g., d) */
+            work_mark?: string;
+            /** @description Full Cota Bibliografica (Autogenerated) */
+            cota?: string | null;
+            /** @description If True, auto-generation is skipped. */
+            cota_is_manual?: boolean;
+        };
+        PatchedBookReservationRequest: {
+            /** Format: uuid */
+            book?: string;
+            status?: components["schemas"]["BookReservationStatusEnum"];
         };
         /** @description Full serializer for Genre model. */
         PatchedGenreRequest: {
@@ -1543,14 +1867,6 @@ export interface components {
         PatchedLanguageRequest: {
             name?: string;
             slug?: string;
-        };
-        /** @description Serializer for a loan, showing only essential IDs and dates. */
-        PatchedLoanRequest: {
-            /** Format: date */
-            start_date?: string;
-            /** Format: date */
-            end_date?: string;
-            status?: components["schemas"]["Status1a7Enum"];
         };
         /** @description Serializer for the MaterialType model. */
         PatchedMaterialTypeRequest: {
@@ -1570,8 +1886,10 @@ export interface components {
             /** Teléfono */
             phone?: string | null;
         };
-        /** @description Minimal serializer for listing videos.
-         *     Shows only essential information. */
+        /**
+         * @description Minimal serializer for listing videos.
+         *     Shows only essential information.
+         */
         PatchedMinimalVideoRequest: {
             title?: string;
             director?: string;
@@ -1596,6 +1914,14 @@ export interface components {
             /** Teléfono */
             phone?: string | null;
         };
+        /** @description Serializer for a reading session, showing only essential IDs and dates. */
+        PatchedReadingSessionRequest: {
+            /** Format: date-time */
+            start_date?: string;
+            /** Format: date-time */
+            end_date?: string;
+            status?: components["schemas"]["Status1a7Enum"];
+        };
         PatchedRoomBookingRequest: {
             request_number?: string | null;
             /** Format: date */
@@ -1614,7 +1940,7 @@ export interface components {
             /** Format: email */
             email?: string;
             phone?: string;
-            status?: components["schemas"]["RoomBookingStatusEnum"];
+            status?: components["schemas"]["BookingStatusEnum"];
             /** Format: date-time */
             response_date?: string | null;
             admin_comments?: string;
@@ -1656,6 +1982,48 @@ export interface components {
             /** Teléfono */
             phone?: string | null;
         };
+        /** @description Serializer for a reading session, showing only essential IDs and dates. */
+        ReadingSession: {
+            /** Format: uuid */
+            readonly id: string;
+            readonly user: number;
+            /** Format: uuid */
+            readonly book: string;
+            /** Format: date-time */
+            start_date?: string;
+            /** Format: date-time */
+            end_date: string;
+            status?: components["schemas"]["Status1a7Enum"];
+            /** Format: date-time */
+            readonly created_at: string;
+            /** Format: date-time */
+            readonly updated_at: string;
+        };
+        /**
+         * @description Detailed serializer for a reading session.
+         *     Embeds the full book details for a comprehensive view of the session.
+         */
+        ReadingSessionDetail: {
+            readonly user: string;
+            readonly book: components["schemas"]["MinimalBook"];
+            /** Format: date-time */
+            readonly start_date: string;
+            /** Format: date-time */
+            readonly end_date: string;
+            readonly status: components["schemas"]["Status1a7Enum"];
+            /** Format: date-time */
+            readonly created_at: string;
+            /** Format: date-time */
+            readonly updated_at: string;
+        };
+        /** @description Serializer for a reading session, showing only essential IDs and dates. */
+        ReadingSessionRequest: {
+            /** Format: date-time */
+            start_date?: string;
+            /** Format: date-time */
+            end_date: string;
+            status?: components["schemas"]["Status1a7Enum"];
+        };
         ResetToken: {
             token: string;
         };
@@ -1682,7 +2050,7 @@ export interface components {
             /** Format: email */
             email: string;
             phone: string;
-            status?: components["schemas"]["RoomBookingStatusEnum"];
+            status?: components["schemas"]["BookingStatusEnum"];
             /** Format: date-time */
             response_date?: string | null;
             admin_comments?: string;
@@ -1710,20 +2078,12 @@ export interface components {
             /** Format: email */
             email: string;
             phone: string;
-            status?: components["schemas"]["RoomBookingStatusEnum"];
+            status?: components["schemas"]["BookingStatusEnum"];
             /** Format: date-time */
             response_date?: string | null;
             admin_comments?: string;
             is_active?: boolean;
         };
-        /**
-         * @description * `PENDING` - Pending
-         *     * `APPROVED` - Approved
-         *     * `REJECTED` - Rejected
-         *     * `CANCELLED` - Cancelled
-         * @enum {string}
-         */
-        RoomBookingStatusEnum: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
         SalaWithGenres: {
             sala: string;
             genres: components["schemas"]["GenreWithBooks"][];
@@ -2266,6 +2626,186 @@ export interface operations {
             };
         };
     };
+    library_book_reservations_list: {
+        parameters: {
+            query?: {
+                /** @description Qué campo usar para ordenar los resultados. */
+                ordering?: string;
+                /** @description Un número de página dentro del conjunto de resultados paginado. */
+                page?: number;
+                /** @description Número de resultados a devolver por página. */
+                page_size?: number;
+                /** @description Un término de búsqueda. */
+                search?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedBookReservationList"];
+                };
+            };
+        };
+    };
+    library_book_reservations_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BookReservationRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["BookReservationRequest"];
+                "multipart/form-data": components["schemas"]["BookReservationRequest"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BookReservation"];
+                };
+            };
+        };
+    };
+    library_book_reservations_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Un Cadena UUID que identifique este book reservation. */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BookReservation"];
+                };
+            };
+        };
+    };
+    library_book_reservations_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Un Cadena UUID que identifique este book reservation. */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BookReservationRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["BookReservationRequest"];
+                "multipart/form-data": components["schemas"]["BookReservationRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BookReservation"];
+                };
+            };
+        };
+    };
+    library_book_reservations_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Un Cadena UUID que identifique este book reservation. */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    library_book_reservations_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Un Cadena UUID que identifique este book reservation. */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedBookReservationRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedBookReservationRequest"];
+                "multipart/form-data": components["schemas"]["PatchedBookReservationRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BookReservation"];
+                };
+            };
+        };
+    };
+    library_book_reservations_fulfill_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Un Cadena UUID que identifique este book reservation. */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BookReservationRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["BookReservationRequest"];
+                "multipart/form-data": components["schemas"]["BookReservationRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BookReservation"];
+                };
+            };
+        };
+    };
     library_books_list: {
         parameters: {
             query?: {
@@ -2396,6 +2936,79 @@ export interface operations {
         requestBody?: {
             content: {
                 "multipart/form-data": components["schemas"]["PatchedBookRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Book"];
+                };
+            };
+        };
+    };
+    library_books_recalculate_cota_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["BookRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Book"];
+                };
+            };
+        };
+    };
+    library_books_upload_finalize_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["BookRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Book"];
+                };
+            };
+        };
+    };
+    library_books_upload_init_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["BookRequest"];
             };
         };
         responses: {
@@ -2784,181 +3397,6 @@ export interface operations {
             };
         };
     };
-    library_loans_list: {
-        parameters: {
-            query?: {
-                book?: string;
-                /** @description Qué campo usar para ordenar los resultados. */
-                ordering?: string;
-                /** @description Un número de página dentro del conjunto de resultados paginado. */
-                page?: number;
-                /** @description Número de resultados a devolver por página. */
-                page_size?: number;
-                /** @description * `Active` - Activo
-                 *     * `Returned` - Returned
-                 *     * `Overdue` - Overdue */
-                status?: "Active" | "Overdue" | "Returned";
-                user?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PaginatedLoanDetailList"];
-                };
-            };
-        };
-    };
-    library_loans_create: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["LoanRequest"];
-                "application/x-www-form-urlencoded": components["schemas"]["LoanRequest"];
-                "multipart/form-data": components["schemas"]["LoanRequest"];
-            };
-        };
-        responses: {
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Loan"];
-                };
-            };
-        };
-    };
-    library_loans_retrieve: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Un Cadena UUID que identifique este loan. */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["LoanDetail"];
-                };
-            };
-        };
-    };
-    library_loans_update: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Un Cadena UUID que identifique este loan. */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["LoanRequest"];
-                "application/x-www-form-urlencoded": components["schemas"]["LoanRequest"];
-                "multipart/form-data": components["schemas"]["LoanRequest"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Loan"];
-                };
-            };
-        };
-    };
-    library_loans_destroy: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Un Cadena UUID que identifique este loan. */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description No response body */
-            204: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    library_loans_partial_update: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Un Cadena UUID que identifique este loan. */
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: {
-            content: {
-                "application/json": components["schemas"]["PatchedLoanRequest"];
-                "application/x-www-form-urlencoded": components["schemas"]["PatchedLoanRequest"];
-                "multipart/form-data": components["schemas"]["PatchedLoanRequest"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Loan"];
-                };
-            };
-        };
-    };
-    library_loans_history_admin_retrieve: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Loan"];
-                };
-            };
-        };
-    };
     library_material_types_list: {
         parameters: {
             query?: {
@@ -3107,6 +3545,217 @@ export interface operations {
             };
         };
     };
+    library_reading_sessions_list: {
+        parameters: {
+            query?: {
+                book?: string;
+                /** @description Qué campo usar para ordenar los resultados. */
+                ordering?: string;
+                /** @description Un número de página dentro del conjunto de resultados paginado. */
+                page?: number;
+                /** @description Número de resultados a devolver por página. */
+                page_size?: number;
+                /**
+                 * @description * `Active` - Activo
+                 *     * `Returned` - Returned
+                 *     * `Overdue` - Overdue
+                 */
+                status?: "Active" | "Overdue" | "Returned";
+                user?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedReadingSessionDetailList"];
+                };
+            };
+        };
+    };
+    library_reading_sessions_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReadingSessionRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["ReadingSessionRequest"];
+                "multipart/form-data": components["schemas"]["ReadingSessionRequest"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReadingSession"];
+                };
+            };
+        };
+    };
+    library_reading_sessions_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Un Cadena UUID que identifique este reading session. */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReadingSessionDetail"];
+                };
+            };
+        };
+    };
+    library_reading_sessions_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Un Cadena UUID que identifique este reading session. */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReadingSessionRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["ReadingSessionRequest"];
+                "multipart/form-data": components["schemas"]["ReadingSessionRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReadingSession"];
+                };
+            };
+        };
+    };
+    library_reading_sessions_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Un Cadena UUID que identifique este reading session. */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    library_reading_sessions_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Un Cadena UUID que identifique este reading session. */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedReadingSessionRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedReadingSessionRequest"];
+                "multipart/form-data": components["schemas"]["PatchedReadingSessionRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReadingSession"];
+                };
+            };
+        };
+    };
+    library_reading_sessions_return_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Un Cadena UUID que identifique este reading session. */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReadingSessionRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["ReadingSessionRequest"];
+                "multipart/form-data": components["schemas"]["ReadingSessionRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReadingSession"];
+                };
+            };
+        };
+    };
+    library_reading_sessions_fast_checkout_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReadingSessionRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["ReadingSessionRequest"];
+                "multipart/form-data": components["schemas"]["ReadingSessionRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReadingSession"];
+                };
+            };
+        };
+    };
     library_videos_list: {
         parameters: {
             query?: {
@@ -3242,6 +3891,58 @@ export interface operations {
                 "multipart/form-data": components["schemas"]["PatchedMinimalVideoRequest"];
                 "application/x-www-form-urlencoded": components["schemas"]["PatchedMinimalVideoRequest"];
                 "application/json": components["schemas"]["PatchedMinimalVideoRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MinimalVideo"];
+                };
+            };
+        };
+    };
+    library_videos_upload_finalize_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["MinimalVideoRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["MinimalVideoRequest"];
+                "application/json": components["schemas"]["MinimalVideoRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MinimalVideo"];
+                };
+            };
+        };
+    };
+    library_videos_upload_init_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["MinimalVideoRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["MinimalVideoRequest"];
+                "application/json": components["schemas"]["MinimalVideoRequest"];
             };
         };
         responses: {
@@ -3573,10 +4274,12 @@ export interface operations {
                 page_size?: number;
                 /** @description Un término de búsqueda. */
                 search?: string;
-                /** @description * `PENDING` - Pending
+                /**
+                 * @description * `PENDING` - Pending
                  *     * `APPROVED` - Approved
                  *     * `REJECTED` - Rejected
-                 *     * `CANCELLED` - Cancelled */
+                 *     * `CANCELLED` - Cancelled
+                 */
                 status?: "APPROVED" | "CANCELLED" | "PENDING" | "REJECTED";
             };
             header?: never;
@@ -4067,6 +4770,31 @@ export interface operations {
             cookie?: never;
         };
         requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MinimalProfile"];
+                };
+            };
+        };
+    };
+    user_me_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedMinimalProfileRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedMinimalProfileRequest"];
+                "multipart/form-data": components["schemas"]["PatchedMinimalProfileRequest"];
+            };
+        };
         responses: {
             200: {
                 headers: {

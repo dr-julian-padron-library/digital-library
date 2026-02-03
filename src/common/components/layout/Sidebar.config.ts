@@ -7,7 +7,7 @@
 
 import {
     Home, BookOpen, Clock, Calendar, Book, LibraryBig, Users,
-    BookType, Languages, ScrollText, User
+    BookType, Languages, ScrollText, User, Zap
 } from "lucide-react";
 import { Capability } from '@/features/authentication/types/user_roles';
 import type { MenuItem } from "@/common/components/ui/sidebar";
@@ -44,6 +44,14 @@ export const SIDEBAR_ITEMS: MenuItem[] = [
     },
 
     // Administration Group - Requires specific capabilities
+        {
+        group: "sidebar.administration",
+        title: "sidebar.fastCheckout",
+        url: "/gestion/prestamo-rapido",
+        icon: Zap,
+        requiresAuth: true,
+        capability: Capability.MANAGE_LOANS,
+    },
     {
         group: "sidebar.administration",
         title: "sidebar.roomBooking",

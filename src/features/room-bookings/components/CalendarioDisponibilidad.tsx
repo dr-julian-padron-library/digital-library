@@ -17,7 +17,7 @@ export function CalendarioDisponibilidad({
   fechaSeleccionada,
   onFechaSeleccionada
 }: CalendarioDisponibilidadProps) {
-  const { data: solicitudesAprobadas, isLoading: isLoadingSolicitudes } = useGetRoomBookingsQuery({ status: 'aprobada' });
+  const { data: solicitudesAprobadas, isLoading: isLoadingSolicitudes } = useGetRoomBookingsQuery({ status: 'APPROVED' });
   const { data: horariosBloquados, isLoading: isLoadingBloqueados } = useGetBlockedSchedulesQuery({});
 
   const fechasOcupadas = useMemo(() => {
@@ -27,7 +27,7 @@ export function CalendarioDisponibilidad({
       fechasOcupadasSet.add(horario.date);
     });
 
-    solicitudesAprobadas?.forEach(solicitud => {
+    solicitudesAprobadas?.results.forEach(solicitud => {
       fechasOcupadasSet.add(solicitud.event_date);
     });
 

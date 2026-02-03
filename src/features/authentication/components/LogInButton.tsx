@@ -51,7 +51,7 @@ export function UserProfile() {
             {displayName}
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => navigate("/usuario/me")}>
+          <DropdownMenuItem onClick={() => navigate("/perfil/")}>
             <User className="mr-2 h-4 w-4" />
             <span>Perfil</span>
           </DropdownMenuItem>

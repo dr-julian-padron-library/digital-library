@@ -1,13 +1,13 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/common/components/ui/card";
 import { Badge } from "@/common/components/ui/badge";
-import { 
-  Table, 
-  TableBody, 
-  TableCell, 
-  TableHead, 
-  TableHeader, 
-  TableRow 
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow
 } from "@/common/components/ui/table";
 import { useQuery } from "@tanstack/react-query";
 import { Calendar, Clock, User, BookOpen } from "lucide-react";
@@ -54,12 +54,12 @@ export const RecentActivity = () => {
 
   const getStatusBadge = (estado: string) => {
     const statusMap = {
-      'pendiente': { label: 'Pendiente', variant: 'secondary' as const },
-      'aprobada': { label: 'Aprobada', variant: 'default' as const },
-      'rechazada': { label: 'Rechazada', variant: 'destructive' as const },
-      'cancelada': { label: 'Cancelada', variant: 'outline' as const }
+      'PENDING': { label: 'Pendiente', variant: 'secondary' as const },
+      'APPROVED': { label: 'Aprobada', variant: 'default' as const },
+      'REJECTED': { label: 'Rechazada', variant: 'destructive' as const },
+      'CANCELLED': { label: 'Cancelada', variant: 'outline' as const }
     };
-    
+
     return statusMap[estado as keyof typeof statusMap] || { label: estado, variant: 'secondary' as const };
   };
 
@@ -91,7 +91,7 @@ export const RecentActivity = () => {
                     <p className="font-medium text-sm">{request.event_type}</p>
                     <p className="text-xs text-gray-600">{request.full_name}</p>
                     <p className="text-xs text-gray-500">
-                      {new Date(request.event_date).toLocaleDateString('es-ES')} • 
+                      {new Date(request.event_date).toLocaleDateString('es-ES')} •
                       {request.start_time} - {request.end_time}
                     </p>
                   </div>

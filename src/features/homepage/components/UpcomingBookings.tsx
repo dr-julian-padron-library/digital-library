@@ -15,14 +15,14 @@ export function UpcomingBookings() {
     const today = new Date().toISOString().split('T')[0];
 
     // Fetch only approved bookings from today onwards
-    const { data: bookings, isLoading } = useGetRoomBookingsQuery({
+    const { data: bookingsData, isLoading } = useGetRoomBookingsQuery({
         status: RoomBookingStatus.APPROVED,
-        date: today
+        event_date: today
     });
 
     // Process bookings: sort by date and time, take top 3
-    const upcomingEvents = bookings
-        ? [...bookings]
+    const upcomingEvents = bookingsData?.results
+        ? [...bookingsData.results]
             .sort((a, b) => {
                 const dateA = new Date(`${a.event_date}T${a.start_time}`);
                 const dateB = new Date(`${b.event_date}T${b.start_time}`);

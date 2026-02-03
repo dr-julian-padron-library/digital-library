@@ -24,6 +24,7 @@ export interface UserProfileResponse {
     address: string | null;
     birth_date: string | null;
     phone: string | null;
+    id: string;
 }
 
 export const authApiSlice = apiSlice.injectEndpoints({
@@ -58,7 +59,16 @@ export const authApiSlice = apiSlice.injectEndpoints({
             },
         }),
         getUserProfile: builder.query<UserProfileResponse, void>({
-            query: () => 'user/me',
+            query: () => 'user/me/',
+            providesTags: ['User'],
+        }),
+        updateUserProfile: builder.mutation<UserProfileResponse, FormData>({
+            query: (payload) => ({
+                url: 'user/me/',
+                method: 'PATCH',
+                body: payload,
+            }),
+            invalidatesTags: ['User'],
         }),
     }),
     overrideExisting: false,
@@ -69,5 +79,6 @@ export const {
     useSignUpMutation,
     useSignOutMutation,
     useGetUserProfileQuery,
-    useLazyGetUserProfileQuery
+    useLazyGetUserProfileQuery,
+    useUpdateUserProfileMutation
 } = authApiSlice;
