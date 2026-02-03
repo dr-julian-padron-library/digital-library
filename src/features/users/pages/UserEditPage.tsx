@@ -144,14 +144,14 @@ export default function UserEditPage() {
     const hasNationalDocument = !!profile?.national_document;
 
     return (
-        <div className="container mx-auto py-6 space-y-6 max-w-2xl">
+        <div className="container mx-auto py-6 space-y-6">
             <ReturnButton />
 
             <div className="flex items-center gap-4">
                 <h1 className="text-3xl font-bold text-biblioteca-blue">Editar Perfil</h1>
             </div>
 
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+            <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <Card>
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2">
@@ -338,7 +338,7 @@ export default function UserEditPage() {
                     </CardContent>
                 </Card>
 
-                <div className="flex justify-end gap-4">
+                <div className="flex justify-end gap-4 lg:col-span-2">
                     <Button
                         type="button"
                         variant="ghost"

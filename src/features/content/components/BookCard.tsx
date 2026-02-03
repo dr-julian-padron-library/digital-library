@@ -9,7 +9,7 @@ interface MinimalBookCardProps {
 
 export function BookCard({ book }: MinimalBookCardProps) {
   return (
-    <Link to={`/libro/${book.slug}`} className="group relative block w-full h-full">
+    <Link to={`/libros/${book.slug}`} className="group relative block w-full h-full">
       {/* Book Cover */}
       <div className="relative aspect-[3/4] overflow-hidden rounded-lg shadow-md transition-shadow duration-300 group-hover:shadow-lg">
         <img

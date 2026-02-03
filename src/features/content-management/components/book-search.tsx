@@ -33,14 +33,14 @@ export const useBookSearch = () => {
     const handleSearch = () => {
         const resultToRedirect = highlightedIndex !== null ? filteredResults[highlightedIndex] : filteredResults[0];
         if (resultToRedirect) {
-            navigate(`/libro/${resultToRedirect.slug}`);
+            navigate(`/libros/${resultToRedirect.slug}`);
         }
         setFilteredResults([]);
         setHighlightedIndex(null);
     };
 
     const handleSuggestionClick = (item: any) => {
-        navigate(`/libro/${item.slug}`);
+        navigate(`/libros/${item.slug}`);
         setSearchQuery("");
         setFilteredResults([]);
     };

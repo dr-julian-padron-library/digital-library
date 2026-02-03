@@ -17,6 +17,9 @@ export const defaultBookFormValues = {
   genres: [] as string[],
   material_type: '',
   language: '',
+  class_number: '',
+  cutter_number: '',
+  work_mark: '',
 };
 
 export type BookFormData = typeof defaultBookFormValues;
@@ -29,17 +32,20 @@ export const mapBookToFormValues = (book: Book | null | undefined): BookFormData
   return {
     title: book.title ?? '',
     isbn: book.isbn ?? '',
-    publication_date: book.publication_date ?? undefined,
+    publication_date: book.publication_date ?? null,
     pages: book.pages ?? undefined,
-    quantity_in_stock: book.quantity_in_stock ?? undefined,
-    available_copies: book.quantity_in_stock ?? undefined,
+    quantity_in_stock: book.quantity_in_stock ?? 0,
+    available_copies: book.available_copies ?? 0,
     publisher: book.publisher ?? '',
     description: book.description ?? '',
-    cover: book.cover ?? undefined,
-    digital_file: book.digital_file ?? undefined,
+    cover: book.cover ?? null,
+    digital_file: book.digital_file ?? null,
     authors: book.authors_detail.map(a => a.name) ?? [],
     genres: book.genres_detail.map(g => g.label) ?? [],
     material_type: book.material_type_detail?.name ?? '',
     language: book.language_detail?.name ?? '',
+    class_number: book.class_number ?? '',
+    cutter_number: book.cutter_number ?? '',
+    work_mark: book.work_mark ?? '',
   };
 };

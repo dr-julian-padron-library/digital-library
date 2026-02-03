@@ -143,6 +143,11 @@ export function BookForm({ initialData, onSubmit, onCancel, isSubmitting }: Book
         formData.append('digital_file', '');
       }
 
+      // Append classification fields
+      if (data.class_number) formData.append('class_number', data.class_number);
+      if (data.cutter_number) formData.append('cutter_number', data.cutter_number);
+      if (data.work_mark) formData.append('work_mark', data.work_mark);
+
       // Log FormData contents for debugging
       console.log(languageResults);
       console.log("FormData contents before submission:");
@@ -433,8 +438,32 @@ export function BookForm({ initialData, onSubmit, onCancel, isSubmitting }: Book
 
                 {/* ISBN */}
                 <div className="space-y-2">
-                  <Label htmlFor="isbn">ISBN *</Label>
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="isbn">ISBN (Opcional)</Label>
+                  </div>
                   <Input id="isbn" {...register('isbn')} placeholder="978-0-123456-78-9" />
+                </div>
+
+                {/* Classification Fields */}
+                <div className="space-y-2 col-span-1 md:col-span-2">
+                  <Label className="text-biblioteca-blue">Catalogación (Opcional)</Label>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 border p-4 rounded-md bg-gray-50/50">
+                    <div className="space-y-2">
+                      <Label htmlFor="class_number" className="text-xs text-muted-foreground">Número de Clasificación (*)</Label>
+                      <Input id="class_number" {...register('class_number')} placeholder="e.g. 863" />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="cutter_number" className="text-xs text-muted-foreground">Número Cutter (*)</Label>
+                      <Input id="cutter_number" {...register('cutter_number')} placeholder="e.g. G166" />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="work_mark" className="text-xs text-muted-foreground">Marca de Libro (*)</Label>
+                      <Input id="work_mark" {...register('work_mark')} placeholder="e.g. d" />
+                    </div>
+                    <div className="col-span-1 md:col-span-3 text-xs text-muted-foreground italic">
+                      (*) Estos campos son necesarios para la generación automática de la Cota.
+                    </div>
+                  </div>
                 </div>
 
                 {/* Tipo de Material */}
