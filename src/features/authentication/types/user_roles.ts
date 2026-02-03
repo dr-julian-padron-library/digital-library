@@ -11,11 +11,12 @@ export enum Capability {
   MANAGE_ROOMS = 'MANAGE_ROOMS',
   MANAGE_USERS = 'MANAGE_USERS',
   MANAGE_CONTENT = 'MANAGE_CONTENT',
+  MANAGE_LOANS = 'MANAGE_LOANS',
 }
 
 export const ROLE_PERMISSIONS: Record<AppRole, Capability[]> = {
   ADMIN: Object.values(Capability),
-  LIBRARIAN: [Capability.VIEW_ROOMS, Capability.MANAGE_ROOMS, Capability.MANAGE_CONTENT],
+  LIBRARIAN: [Capability.VIEW_ROOMS, Capability.MANAGE_ROOMS, Capability.MANAGE_CONTENT, Capability.MANAGE_LOANS],
   USER: [Capability.VIEW_ROOMS],
 };
 

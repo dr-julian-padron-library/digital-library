@@ -24,6 +24,7 @@ export interface UserProfileResponse {
     address: string | null;
     birth_date: string | null;
     phone: string | null;
+    id: string;
 }
 
 export const authApiSlice = apiSlice.injectEndpoints({

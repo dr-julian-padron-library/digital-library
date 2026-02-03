@@ -178,13 +178,13 @@ export default function DetallesUsuario() {
               {hasRequiredFields ? (
                 <div className="bg-white p-4 rounded-xl shadow-sm border border-border/50">
                   <QRCodeSVG
-                    value={String(profile.national_document)}
+                    value={String(profile.id)}
                     size={200}
                     level="H"
                     className="h-auto w-full max-w-[200px]"
                   />
                   <p className="mt-4 text-xs text-center text-muted-foreground font-mono">
-                    ID: {profile.national_document}
+                    ID: {profile.id}
                   </p>
                 </div>
               ) : (

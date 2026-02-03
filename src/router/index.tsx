@@ -33,6 +33,7 @@ import ProfileManagementPage from "@/features/content-management/pages/ProfileMa
 import ProfileFormPage from "@/features/content-management/pages/ProfileFormPage";
 import Estadisticas from "@/features/content-management/pages/StatisticsDashboardPage";
 import RoomBookingManagementPage from "@/features/room-bookings/pages/RoomBookingManagementPage";
+import FastCheckoutPage from "@/features/loans/pages/FastCheckoutPage";
 
 import NotFound from "@/pages/NotFound";
 
@@ -101,6 +102,7 @@ export const router = createBrowserRouter([
 
             { path: "estadisticas", element: <Estadisticas /> },
             { path: "reservas-salas", element: <RoomBookingManagementPage /> },
+            { path: "prestamo-rapido", element: <FastCheckoutPage /> },
         ]
     },
     { path: "*", element: <NotFound /> }
