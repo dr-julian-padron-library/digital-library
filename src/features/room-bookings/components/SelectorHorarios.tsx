@@ -36,8 +36,8 @@ export function SelectorHorarios({
   const fechaStr = fecha.toISOString().split('T')[0];
 
   const { data: solicitudesAprobadas, isLoading: isLoadingSolicitudes } = useGetRoomBookingsQuery({
-    date: fechaStr,
-    status: 'aprobada'
+    event_date: fechaStr,
+    status: 'APPROVED'
   });
 
   const { data: horariosBloquados, isLoading: isLoadingBloqueados } = useGetBlockedSchedulesQuery({
@@ -79,7 +79,7 @@ export function SelectorHorarios({
   // Marcar franjas como ocupadas
   const horariosOcupados = [
     ...(horariosBloquados || []),
-    ...(solicitudesAprobadas || [])
+    ...(solicitudesAprobadas?.results || [])
   ];
 
   franjas.forEach(franja => {
