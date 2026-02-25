@@ -17,6 +17,7 @@ import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { useGetMaterialTypesQuery } from '@/features/content-management/api/materialTypesApiSlice';
 import { useGetGenresQuery } from '@/features/content-management/api/genresApiSlice';
+import { useTranslation } from 'react-i18next';
 
 interface VideoFormProps {
   initialData?: Video;
@@ -27,6 +28,7 @@ interface VideoFormProps {
 
 export function VideoForm({ initialData, onSubmit, onCancel, isSubmitting }: VideoFormProps) {
   const { toast } = useToast();
+  const { t } = useTranslation();
   const { data: materialTypes } = useGetMaterialTypesQuery();
   const { data: genresData } = useGetGenresQuery({ page_size: 1000 });
 
@@ -44,12 +46,12 @@ export function VideoForm({ initialData, onSubmit, onCancel, isSubmitting }: Vid
     try {
       const videoData = {
         ...data,
-        release_date: data.release_date ? new Date(data.release_date).toISOString().split('T')[0] : undefined,
+        release_date: data.release_date ? new Date(data.release_date).toISOString().split('videoForm.T')[0] : undefined,
       };
 
       onSubmit(videoData as any);
     } catch (error) {
-      toast({ title: 'Error', description: `Error al procesar video.`, variant: 'destructive' });
+      toast({ title: 'Error', description: t("videoForm.errorProcessing"), variant: 'destructive' });
     }
   };
 
@@ -67,7 +69,7 @@ export function VideoForm({ initialData, onSubmit, onCancel, isSubmitting }: Vid
           <Card>
             <CardHeader>
               <CardTitle className="text-sm font-medium text-biblioteca-blue">
-                Portada del Video
+                {t("videoForm.videoCover")}
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -75,7 +77,7 @@ export function VideoForm({ initialData, onSubmit, onCancel, isSubmitting }: Vid
                 {watchedCover ? (
                   <img
                     src={watchedCover}
-                    alt="Vista previa"
+                    alt={t("videoForm.preview")}
                     className="w-full h-full object-cover"
                     onError={(e) => {
                       e.currentTarget.src = 'https://images.unsplash.com/photo-1543002588-bfa74002ed7e?w=300&h=400&fit=crop';
@@ -96,15 +98,15 @@ export function VideoForm({ initialData, onSubmit, onCancel, isSubmitting }: Vid
           {/* Basic Information */}
           <Card>
             <CardHeader>
-              <CardTitle className="text-biblioteca-blue">Información Básica</CardTitle>
+              <CardTitle className="text-biblioteca-blue">{t("videoForm.basicInfo")}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="title">Nombre (Título) *</Label>
+                  <Label htmlFor="title">{t("videoForm.titleLabel")}</Label>
                   <Input
                     id="title"
-                    {...register('title', { required: 'El título es requerido' })}
+                    {...register('title', { required: t("videoForm.titleRequired") })}
                     className={errors.title ? 'border-red-500' : ''}
                   />
                   {errors.title?.message && (
@@ -113,16 +115,16 @@ export function VideoForm({ initialData, onSubmit, onCancel, isSubmitting }: Vid
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="director">Director</Label>
+                  <Label htmlFor="director">{t("videoForm.directorLabel")}</Label>
                   <Input
                     id="director"
                     {...register('director')}
-                    placeholder="Director del video"
+                    placeholder={t("videoForm.directorPlaceholder")}
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="material_type">Tipo de Material</Label>
+                  <Label htmlFor="material_type">{t("videoForm.materialTypeLabel")}</Label>
                   <Controller
                     name="material_type"
                     control={control}
@@ -132,7 +134,7 @@ export function VideoForm({ initialData, onSubmit, onCancel, isSubmitting }: Vid
                         defaultValue={field.value}
                       >
                         <SelectTrigger className={errors.material_type ? 'border-red-500' : ''}>
-                          <SelectValue placeholder="Selecciona un tipo" />
+                          <SelectValue placeholder={t("videoForm.selectType")} />
                         </SelectTrigger>
                         <SelectContent>
                           {materialTypes?.map(type => (
@@ -148,7 +150,7 @@ export function VideoForm({ initialData, onSubmit, onCancel, isSubmitting }: Vid
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="genres">Género</Label>
+                  <Label htmlFor="genres">{t("videoForm.genreLabel")}</Label>
                   <Controller
                     name="genres"
                     control={control}
@@ -158,7 +160,7 @@ export function VideoForm({ initialData, onSubmit, onCancel, isSubmitting }: Vid
                         defaultValue={field.value[0]}
                       >
                         <SelectTrigger className={errors.genres ? 'border-red-500' : ''}>
-                          <SelectValue placeholder="Seleccionar género" />
+                          <SelectValue placeholder={t("videoForm.selectGenre")} />
                         </SelectTrigger>
                         <SelectContent>
                           {genresData?.results.map((genre) => (
@@ -180,17 +182,17 @@ export function VideoForm({ initialData, onSubmit, onCancel, isSubmitting }: Vid
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="description">Descripción</Label>
+                <Label htmlFor="description">{t("videoForm.descriptionLabel")}</Label>
                 <Textarea
                   id="description"
                   {...register('description')}
                   rows={3}
-                  placeholder="Breve descripción del video..."
+                  placeholder={t("videoForm.descriptionPlaceholder")}
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="cover">URL de la Portada</Label>
+                <Label htmlFor="cover">{t("videoForm.coverUrlLabel")}</Label>
                 <Input
                   id="cover"
                   {...register('cover')}
@@ -199,7 +201,7 @@ export function VideoForm({ initialData, onSubmit, onCancel, isSubmitting }: Vid
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="video_file">URL del Archivo de Video</Label>
+                <Label htmlFor="video_file">{t("videoForm.videoUrlLabel")}</Label>
                 <Input
                   id="video_file"
                   {...register('video_file')}
@@ -212,12 +214,12 @@ export function VideoForm({ initialData, onSubmit, onCancel, isSubmitting }: Vid
           {/* Details */}
           <Card>
             <CardHeader>
-              <CardTitle className="text-biblioteca-blue">Detalles del Video</CardTitle>
+              <CardTitle className="text-biblioteca-blue">{t("videoForm.videoDetails")}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="release_date">Fecha de Lanzamiento</Label>
+                  <Label htmlFor="release_date">{t("videoForm.releaseDateLabel")}</Label>
                   <Controller
                     name="release_date"
                     control={control}
@@ -237,7 +239,7 @@ export function VideoForm({ initialData, onSubmit, onCancel, isSubmitting }: Vid
                             {value ? (
                               format(new Date(value), 'PPP', { locale: es })
                             ) : (
-                              <span>Elige una fecha</span>
+                              <span>{t("videoForm.chooseDate")}</span>
                             )}
                           </Button>
                         </PopoverTrigger>
@@ -266,11 +268,11 @@ export function VideoForm({ initialData, onSubmit, onCancel, isSubmitting }: Vid
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="duration">Duración (min)</Label>
+                  <Label htmlFor="duration">{t("videoForm.durationLabel")}</Label>
                   <Input
                     id="duration"
                     {...register('duration')}
-                    placeholder="Ej: 90"
+                    placeholder={t("videoForm.durationPlaceholder")}
                   />
                 </div>
               </div>
@@ -289,7 +291,7 @@ export function VideoForm({ initialData, onSubmit, onCancel, isSubmitting }: Vid
           disabled={isSubmitting}
         >
           <X className="w-4 h-4 mr-2" />
-          Cancelar
+          {t("videoForm.cancel")}
         </Button>
         <Button
           type="submit"
@@ -297,7 +299,7 @@ export function VideoForm({ initialData, onSubmit, onCancel, isSubmitting }: Vid
           disabled={isSubmitting}
         >
           <Save className="w-4 h-4 mr-2" />
-          {isEditMode ? 'Actualizar' : 'Guardar'} Video
+          {isEditMode ? t("videoForm.updateVideo") : t("videoForm.saveVideo")}
         </Button>
       </div>
     </form>

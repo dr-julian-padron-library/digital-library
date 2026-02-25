@@ -3,6 +3,7 @@ import { useLogInMutation, useSignUpMutation } from "@/features/authentication/a
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { useToast } from "@/common/components/ui/use-toast";
 import { LogIn, Eye, EyeOff, Mail, Lock, User, CheckCircle2, XCircle } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { cn } from "@/common/lib/utils";
 import {
   Dialog,
@@ -45,6 +46,7 @@ const extractErrorMessage = (errorData: unknown, fallback: string) => {
 };
 
 export function LoginDialog({ open, onOpenChange }: LoginDialogProps) {
+  const { t } = useTranslation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -87,8 +89,8 @@ export function LoginDialog({ open, onOpenChange }: LoginDialogProps) {
   useEffect(() => {
     if (isLoginSuccess) {
       toast({
-        title: "Sesión iniciada",
-        description: "Bienvenido de vuelta",
+        title: t("login.sessionStarted", "Sesión iniciada"),
+        description: t("login.welcomeBack", "Bienvenido de vuelta"),
       });
       resetAndClose();
     }
@@ -97,8 +99,8 @@ export function LoginDialog({ open, onOpenChange }: LoginDialogProps) {
   useEffect(() => {
     if (isSignUpSuccess) {
       toast({
-        title: "Registro exitoso",
-        description: "Sesión iniciada automáticamente",
+        title: t("login.registrationSuccess", "Registro exitoso"),
+        description: t("login.sessionStartedAuto", "Sesión iniciada automáticamente"),
       });
       resetAndClose();
     }
@@ -106,7 +108,7 @@ export function LoginDialog({ open, onOpenChange }: LoginDialogProps) {
 
   useEffect(() => {
     if (isLoginError) {
-      let errorMessage = "Ocurrió un error inesperado";
+      let errorMessage = t("login.unexpectedError", "Ocurrió un error inesperado");
 
       // Use a type guard to safely access the `data` property
       if (isFetchBaseQueryError(loginError)) {
@@ -114,7 +116,7 @@ export function LoginDialog({ open, onOpenChange }: LoginDialogProps) {
       }
 
       toast({
-        title: "Error de inicio de sesión",
+        title: t("login.loginError", "Error de inicio de sesión"),
         description: errorMessage,
         variant: "destructive",
       });
@@ -123,14 +125,14 @@ export function LoginDialog({ open, onOpenChange }: LoginDialogProps) {
 
   useEffect(() => {
     if (isSignUpError) {
-      let errorMessage = "Ocurrió un error inesperado";
+      let errorMessage = t("login.unexpectedError", "Ocurrió un error inesperado");
 
       if (isFetchBaseQueryError(signUpError)) {
         errorMessage = extractErrorMessage(signUpError.data, errorMessage);
       }
 
       toast({
-        title: "Error de registro",
+        title: t("login.registrationError", "Error de registro"),
         description: errorMessage,
         variant: "destructive",
       });
@@ -152,11 +154,11 @@ export function LoginDialog({ open, onOpenChange }: LoginDialogProps) {
     try {
       if (isSignUp) {
         if (!isPasswordValid) {
-          toast({ title: "Contraseña inválida", description: "Por favor, cumple con todos los requisitos de la contraseña.", variant: "destructive" });
+          toast({ title: t("login.invalidPassword", "Contraseña inválida"), description: t("login.passwordRequirements", "Por favor, cumple con todos los requisitos de la contraseña."), variant: "destructive" });
           return;
         }
         if (password !== confirmPassword) {
-          toast({ title: "Contraseñas no coinciden", description: "Las contraseñas no son iguales.", variant: "destructive" });
+          toast({ title: t("login.passwordsMismatchTitle", "Contraseñas no coinciden"), description: t("login.passwordsMismatchDesc", "Las contraseñas no son iguales."), variant: "destructive" });
           return;
         }
         await signUp({ email, password, first_name, last_name }).unwrap();
@@ -182,7 +184,7 @@ export function LoginDialog({ open, onOpenChange }: LoginDialogProps) {
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <LogIn className="h-5 w-5" />
-            {isSignUp ? "Crear cuenta" : "Iniciar Sesión"}
+            {isSignUp ? t("login.createAccount", "Crear cuenta") : t("login.signIn", "Iniciar Sesión")}
           </DialogTitle>
         </DialogHeader>
 
@@ -190,50 +192,50 @@ export function LoginDialog({ open, onOpenChange }: LoginDialogProps) {
           {isSignUp && (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-1">
-                <Label htmlFor="first_name">Nombre</Label>
+                <Label htmlFor="first_name">{t("login.firstName", "Nombre")}</Label>
                 <div className="relative">
                   <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                   <Input
                     id="first_name"
                     type="text"
-                    placeholder="Nombre"
+                    placeholder={t("login.firstNamePlaceholder", "Nombre")}
                     value={first_name}
                     onChange={(e) => setFirstName(formatName(e.target.value))}
                     className="pl-10"
                     required
                   />
                 </div>
-                <p className="text-[11px] text-muted-foreground">Solo letras, inicial en mayúscula.</p>
+                <p className="text-[11px] text-muted-foreground">{t("login.nameHint", "Solo letras, inicial en mayúscula.")}</p>
               </div>
 
               <div className="space-y-1">
-                <Label htmlFor="last_name">Apellido</Label>
+                <Label htmlFor="last_name">{t("login.lastName", "Apellido")}</Label>
                 <div className="relative">
                   <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                   <Input
                     id="last_name"
                     type="text"
-                    placeholder="Apellido"
+                    placeholder={t("login.lastNamePlaceholder", "Apellido")}
                     value={last_name}
                     onChange={(e) => setLastName(formatName(e.target.value))}
                     className="pl-10"
                     required
                   />
                 </div>
-                <p className="text-[11px] text-muted-foreground">Solo letras, inicial en mayúscula.</p>
+                <p className="text-[11px] text-muted-foreground">{t("login.nameHint", "Solo letras, inicial en mayúscula.")}</p>
               </div>
             </div>
           )}
 
           <div className="space-y-1">
-            <Label htmlFor="email">Correo electrónico</Label>
+            <Label htmlFor="email">{t("login.email", "Correo electrónico")}</Label>
             <div className="relative">
               <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
                 id="email"
                 type="email"
                 pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}"
-                title="Debe ser un correo electrónico válido"
+                title={t("login.invalidEmail", "Debe ser un correo electrónico válido")}
                 placeholder="tu@email.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -244,7 +246,7 @@ export function LoginDialog({ open, onOpenChange }: LoginDialogProps) {
           </div>
 
           <div className="space-y-1">
-            <Label htmlFor="password">Contraseña</Label>
+            <Label htmlFor="password">{t("login.password", "Contraseña")}</Label>
             <div className="relative">
               <Lock className={cn("absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4", isSignUp && isPasswordError ? "text-destructive" : "text-muted-foreground")} />
               <Input
@@ -266,19 +268,19 @@ export function LoginDialog({ open, onOpenChange }: LoginDialogProps) {
             </div>
             {isSignUp && (
               <div className="text-[11px] text-muted-foreground mt-2 space-y-1">
-                {isPasswordError && <p className="text-destructive font-semibold mb-1">Contraseña inválida</p>}
+                {isPasswordError && <p className="text-destructive font-semibold mb-1">{t("login.invalidPassword", "Contraseña inválida")}</p>}
                 <div className="flex items-center gap-1">
                   {passwordValidation.length ? <CheckCircle2 className="h-3 w-3 text-green-500" /> : <div className="h-3 w-3 rounded-full border border-muted-foreground/50" />}
-                  <span className={passwordValidation.length ? "text-foreground" : ""}>Mínimo 8 caracteres</span>
+                  <span className={passwordValidation.length ? "text-foreground" : ""}>{t("login.minChars", "Mínimo 8 caracteres")}</span>
                 </div>
                 <div className="flex items-center gap-1">
                   {passwordValidation.letters && passwordValidation.numbers ? <CheckCircle2 className="h-3 w-3 text-green-500" /> : <div className="h-3 w-3 rounded-full border border-muted-foreground/50" />}
-                  <span className={passwordValidation.letters && passwordValidation.numbers ? "text-foreground" : ""}>Debe incluir letras y números</span>
+                  <span className={passwordValidation.letters && passwordValidation.numbers ? "text-foreground" : ""}>{t("login.lettersAndNumbers", "Debe incluir letras y números")}</span>
                 </div>
                 {(first_name || last_name) && (
                   <div className="flex items-center gap-1">
                     {passwordValidation.noName && passwordValidation.noSurname ? <CheckCircle2 className="h-3 w-3 text-green-500" /> : <div className="h-3 w-3 rounded-full border border-muted-foreground/50" />}
-                    <span className={passwordValidation.noName && passwordValidation.noSurname ? "text-foreground" : (password.length > 0 ? "text-destructive" : "")}>No debe contener tu nombre o apellido</span>
+                    <span className={passwordValidation.noName && passwordValidation.noSurname ? "text-foreground" : (password.length > 0 ? "text-destructive" : "")}>{t("login.noNameOrSurname", "No debe contener tu nombre o apellido")}</span>
                   </div>
                 )}
               </div>
@@ -287,7 +289,7 @@ export function LoginDialog({ open, onOpenChange }: LoginDialogProps) {
 
           {isSignUp && (
             <div className="space-y-1">
-              <Label htmlFor="confirmPassword">Confirmar Contraseña</Label>
+              <Label htmlFor="confirmPassword">{t("login.confirmPassword", "Confirmar Contraseña")}</Label>
               <div className="relative">
                 <Lock className={cn("absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4", isConfirmPasswordError ? "text-destructive" : "text-muted-foreground")} />
                 <Input
@@ -313,7 +315,7 @@ export function LoginDialog({ open, onOpenChange }: LoginDialogProps) {
                 </div>
               </div>
               {isConfirmPasswordError && (
-                <p className="text-[11px] text-destructive font-semibold">Las contraseñas no coinciden</p>
+                <p className="text-[11px] text-destructive font-semibold">{t("login.passwordsDoNotMatch", "Las contraseñas no coinciden")}</p>
               )}
             </div>
           )}
@@ -322,12 +324,12 @@ export function LoginDialog({ open, onOpenChange }: LoginDialogProps) {
             {isLoading ? (
               <div className="flex items-center gap-2">
                 <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
-                {isSignUp ? "Creando cuenta..." : "Iniciando sesión..."}
+                {isSignUp ? t("login.creatingAccount", "Creando cuenta...") : t("login.signingIn", "Iniciando sesión...")}
               </div>
             ) : (
               <>
                 <LogIn className="h-4 w-4 mr-2" />
-                {isSignUp ? "Crear cuenta" : "Iniciar Sesión"}
+                {isSignUp ? t("login.createAccount", "Crear cuenta") : t("login.signIn", "Iniciar Sesión")}
               </>
             )}
           </Button>
@@ -339,8 +341,8 @@ export function LoginDialog({ open, onOpenChange }: LoginDialogProps) {
               className="text-sm text-primary hover:underline"
             >
               {isSignUp
-                ? "¿Ya tienes cuenta? Iniciar sesión"
-                : "¿No posee una cuenta? Registrarse"}
+                ? t("login.alreadyHaveAccount", "¿Ya tienes cuenta? Iniciar sesión")
+                : t("login.noAccount", "¿No posee una cuenta? Registrarse")}
             </button>
           </div>
         </form>

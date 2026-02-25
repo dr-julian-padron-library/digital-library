@@ -45,10 +45,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/common/components/ui/dropdown-menu";
+import { useTranslation } from "react-i18next";
 
 const UserManagementPage: React.FC = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { t } = useTranslation();
 
   const [filters, setFilters] = useState<{ search?: string }>({});
   const [pageSize, setPageSize] = useState<number>(10);
@@ -81,13 +83,13 @@ const UserManagementPage: React.FC = () => {
     try {
       await deleteProfile(profileId).unwrap();
       toast({
-        title: "Perfil Eliminado",
-        description: `El perfil de ${profileName} ha sido eliminado exitosamente.`,
+        title: t("profileManagement.profileDeleted"),
+        description: t("profileManagement.profileDeletedSuccess", { name: profileName }),
       });
     } catch (error) {
       toast({
-        title: "Error",
-        description: "Hubo un error al eliminar el perfil del usuario.",
+        title: t("profileManagement.error"),
+        description: t("profileManagement.profileDeleteError"),
         variant: "destructive",
       });
     }
@@ -127,7 +129,7 @@ const UserManagementPage: React.FC = () => {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 p-6">
         <div className="text-xl font-medium text-red-500">
-          Error al cargar los perfiles de usuario.
+          {t("profileManagement.errorLoadingProfiles")}
         </div>
       </div>
     );
@@ -136,18 +138,18 @@ const UserManagementPage: React.FC = () => {
   return (
     <Card className="w-full">
       <CardHeader className="flex">
-        <CardTitle>Gestión de Usuarios</CardTitle>
+        <CardTitle>{t("profileManagement.userManagement")}</CardTitle>
         <div className="flex items-center justify-end space-x-2 pt-2 mt-0">
           <Popover>
             <PopoverTrigger asChild>
               <Button variant="outline" size="sm">
                 <Filter className="w-4 h-4 mr-2" />
-                Filtros
+                {t("profileManagement.filters")}
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-80 space-y-3" align="end">
               <div className="flex flex-col space-y-2">
-                <span className="text-sm font-medium">Tamaño de página</span>
+                <span className="text-sm font-medium">{t("profileManagement.pageSize")}</span>
                 <div className="flex items-center space-x-2">
                   {pageSizeOptions.map((size) => (
                     <Button
@@ -165,7 +167,7 @@ const UserManagementPage: React.FC = () => {
                 </div>
               </div>
               <Input
-                placeholder="Buscar por nombre o cédula..."
+                placeholder={t("profileManagement.searchProfilePlaceholder")}
                 value={filters.search || ""}
                 onChange={(e) => handleChange("search", e.target.value)}
               />
@@ -173,7 +175,7 @@ const UserManagementPage: React.FC = () => {
           </Popover>
           <Button onClick={handleAdd} size="sm">
             <Plus className="w-4 h-4 mr-2" />
-            Añadir Usuario
+            {t("profileManagement.addUser")}
           </Button>
         </div>
       </CardHeader>
@@ -181,7 +183,7 @@ const UserManagementPage: React.FC = () => {
       <CardContent>
         {count === 0 ? (
           <div className="text-center text-muted-foreground py-8">
-            No se encontraron usuarios.
+            {t("profileManagement.noProfilesFound")}
           </div>
         ) : (
           <>
@@ -191,10 +193,10 @@ const UserManagementPage: React.FC = () => {
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Nombre Completo</TableHead>
-                      <TableHead>Correo Electrónico</TableHead>
-                      <TableHead>Cédula</TableHead>
-                      <TableHead className="text-right">Acciones</TableHead>
+                      <TableHead>{t("profileManagement.fullName")}</TableHead>
+                      <TableHead>{t("profileManagement.email")}</TableHead>
+                      <TableHead>{t("profileManagement.nationalDocument")}</TableHead>
+                      <TableHead className="text-right">{t("profileManagement.actions")}</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -222,40 +224,40 @@ const UserManagementPage: React.FC = () => {
                             <DropdownMenu>
                               <DropdownMenuTrigger asChild>
                                 <Button variant="ghost" className="h-8 w-8 p-0">
-                                  <span className="sr-only">Abrir menú</span>
+                                  <span className="sr-only">{t("profileManagement.openMenu")}</span>
                                   <MoreVertical className="h-4 w-4" />
                                 </Button>
                               </DropdownMenuTrigger>
                               <DropdownMenuContent align="end">
                                 <DropdownMenuItem onClick={() => handleEdit(profile.id)}>
-                                  Ver Detalles
+                                  {t("profileManagement.viewDetails")}
                                 </DropdownMenuItem>
                                 <DropdownMenuItem onClick={() => handleEdit(profile.id)}>
-                                  Editar
+                                  {t("profileManagement.edit")}
                                 </DropdownMenuItem>
                                 <AlertDialogTrigger asChild>
                                   <DropdownMenuItem className="text-red-600">
-                                    Eliminar
+                                    {t("profileManagement.delete")}
                                   </DropdownMenuItem>
                                 </AlertDialogTrigger>
                               </DropdownMenuContent>
                             </DropdownMenu>
                             <AlertDialogContent>
                               <AlertDialogHeader>
-                                <AlertDialogTitle>¿Estás absolutamente seguro?</AlertDialogTitle>
+                                <AlertDialogTitle>{t("profileManagement.areYouSure")}</AlertDialogTitle>
                                 <AlertDialogDescription>
-                                  Esta acción no se puede deshacer. Esto eliminará permanentemente el perfil de "{`${profile.user?.first_name} ${profile.user?.last_name}`}".
+                                  {t("profileManagement.deleteConfirmation", { name: `${profile.user?.first_name} ${profile.user?.last_name}` })}
                                 </AlertDialogDescription>
                               </AlertDialogHeader>
                               <AlertDialogFooter>
                                 <AlertDialogCancel className="bg-gray-200 hover:bg-gray-300">
-                                  Cancelar
+                                  {t("profileManagement.cancel")}
                                 </AlertDialogCancel>
                                 <AlertDialogAction
                                   className="bg-red-500 text-white hover:bg-red-600"
                                   onClick={() => handleDeleteProfile(profile.id, `${profile.user?.first_name} ${profile.user?.last_name}`)}
                                 >
-                                  Eliminar
+                                  {t("profileManagement.delete")}
                                 </AlertDialogAction>
                               </AlertDialogFooter>
                             </AlertDialogContent>
@@ -292,40 +294,40 @@ const UserManagementPage: React.FC = () => {
                             <DropdownMenu>
                               <DropdownMenuTrigger asChild>
                                 <Button variant="ghost" className="h-8 w-8 p-0">
-                                  <span className="sr-only">Abrir menú</span>
+                                  <span className="sr-only">{t("profileManagement.openMenu")}</span>
                                   <MoreVertical className="h-4 w-4" />
                                 </Button>
                               </DropdownMenuTrigger>
                               <DropdownMenuContent align="end">
                                 <DropdownMenuItem onClick={() => handleEdit(profile.id)}>
-                                  Ver Detalles
+                                  {t("profileManagement.viewDetails")}
                                 </DropdownMenuItem>
                                 <DropdownMenuItem onClick={() => handleEdit(profile.id)}>
-                                  Editar
+                                  {t("profileManagement.edit")}
                                 </DropdownMenuItem>
                                 <AlertDialogTrigger asChild>
                                   <DropdownMenuItem className="text-red-600">
-                                    Eliminar
+                                    {t("profileManagement.delete")}
                                   </DropdownMenuItem>
                                 </AlertDialogTrigger>
                               </DropdownMenuContent>
                             </DropdownMenu>
                             <AlertDialogContent>
                               <AlertDialogHeader>
-                                <AlertDialogTitle>¿Estás absolutamente seguro?</AlertDialogTitle>
+                                <AlertDialogTitle>{t("profileManagement.areYouSure")}</AlertDialogTitle>
                                 <AlertDialogDescription>
-                                  Esta acción no se puede deshacer. Esto eliminará permanentemente el perfil de "{`${profile.user?.first_name} ${profile.user?.last_name}`}".
+                                  {t("profileManagement.deleteConfirmation", { name: `${profile.user?.first_name} ${profile.user?.last_name}` })}
                                 </AlertDialogDescription>
                               </AlertDialogHeader>
                               <AlertDialogFooter>
                                 <AlertDialogCancel className="bg-gray-200 hover:bg-gray-300">
-                                  Cancelar
+                                  {t("profileManagement.cancel")}
                                 </AlertDialogCancel>
                                 <AlertDialogAction
                                   className="bg-red-500 text-white hover:bg-red-600"
                                   onClick={() => handleDeleteProfile(profile.id, `${profile.user?.first_name} ${profile.user?.last_name}`)}
                                 >
-                                  Eliminar
+                                  {t("profileManagement.delete")}
                                 </AlertDialogAction>
                               </AlertDialogFooter>
                             </AlertDialogContent>

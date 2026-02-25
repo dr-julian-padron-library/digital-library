@@ -9,6 +9,7 @@ import { AspectRatio } from "@/common/components/ui/aspect-ratio";
 import { QRCodeSVG } from 'qrcode.react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/common/components/ui/card";
 import { AlertCircle, QrCode } from 'lucide-react';
+import { useTranslation } from "react-i18next";
 
 export type Book = components['schemas']['Book'];
 
@@ -17,12 +18,13 @@ const BookPage = () => {
     const navigate = useNavigate();
 
     const { data: book, isLoading, error } = useGetBookBySlugQuery(slug!);
+    const { t } = useTranslation();
 
     if (isLoading) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-background p-6">
                 <div className="text-xl font-medium text-biblioteca-blue dark:text-blue-400 animate-pulse">
-                    Cargando libro...
+                    {t("bookPage.loading")}
                 </div>
             </div>
         );
@@ -32,14 +34,14 @@ const BookPage = () => {
         return (
             <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-background p-6">
                 <div className="text-xl font-medium text-red-500">
-                    {book ? "Error al cargar el libro." : "Libro no encontrado."}
+                    {book ? t("bookPage.errorLoading") : t("bookPage.notFound")}
                 </div>
             </div>
         );
     }
 
     const authorCount = book.authors_detail?.length;
-    const authorLabel = authorCount && authorCount > 1 ? "Autores:" : "Autor:";
+    const authorLabel = authorCount && authorCount > 1 ? t("bookPage.authors") : t("bookPage.author");
 
     return (
         <div className="min-h-screen w-full p-4 sm:p-6 lg:p-8">
@@ -53,7 +55,7 @@ const BookPage = () => {
                         <AspectRatio ratio={2 / 3}>
                             <img
                                 src={book.cover}
-                                alt={`Portada de ${book.title}`}
+                                alt={t("bookPage.coverOf", { title: book.title })}
                                 className="h-full w-full rounded-md object-contain"
                             />
                         </AspectRatio>
@@ -86,7 +88,7 @@ const BookPage = () => {
                     {/* Number of Pages */}
                     {book.pages && (
                         <div className="text-sm text-gray-600 dark:text-muted-foreground">
-                            <span className="font-semibold">Páginas:</span>{" "}
+                            <span className="font-semibold">{t("bookPage.pages")}</span>{" "}
                             {book.pages}
                         </div>
                     )}
@@ -94,7 +96,7 @@ const BookPage = () => {
                     {/* Meta Info and Rating */}
                     {book.language_detail && (
                         <div className="text-sm text-gray-600 dark:text-muted-foreground">
-                            <span className="font-semibold">Idioma:</span>{" "}
+                            <span className="font-semibold">{t("bookPage.language")}</span>{" "}
                             {book.language_detail.name}
                         </div>
                     )}
@@ -102,7 +104,7 @@ const BookPage = () => {
 
                     {book.publication_date && (
                         <div className="text-sm text-gray-600 dark:text-muted-foreground">
-                            <span className="font-semibold">Fecha de Publicación:</span>{" "}
+                            <span className="font-semibold">{t("bookPage.publicationDate")}</span>{" "}
                             {book.publication_date}
                         </div>
                     )}
@@ -112,19 +114,19 @@ const BookPage = () => {
                         <div className="flex flex-wrap gap-4 mt-2 p-2 bg-gray-50 dark:bg-muted/50 rounded-md text-sm border border-gray-100 dark:border-border">
                             {book.class_number && (
                                 <div>
-                                    <span className="font-semibold text-xs text-gray-500 dark:text-muted-foreground block">Class Num.</span>
+                                    <span className="font-semibold text-xs text-gray-500 dark:text-muted-foreground block">{t("bookPage.classNum")}</span>
                                     <span className="font-mono text-gray-700 dark:text-foreground">{book.class_number}</span>
                                 </div>
                             )}
                             {book.cutter_number && (
                                 <div>
-                                    <span className="font-semibold text-xs text-gray-500 dark:text-muted-foreground block">Cutter Num.</span>
+                                    <span className="font-semibold text-xs text-gray-500 dark:text-muted-foreground block">{t("bookPage.cutterNum")}</span>
                                     <span className="font-mono text-gray-700 dark:text-foreground">{book.cutter_number}</span>
                                 </div>
                             )}
                             {book.work_mark && (
                                 <div>
-                                    <span className="font-semibold text-xs text-gray-500 dark:text-muted-foreground block">Work Mark</span>
+                                    <span className="font-semibold text-xs text-gray-500 dark:text-muted-foreground block">{t("bookPage.workMark")}</span>
                                     <span className="font-mono text-gray-700 dark:text-foreground">{book.work_mark}</span>
                                 </div>
                             )}
@@ -145,7 +147,7 @@ const BookPage = () => {
                     {/* Synopsis */}
                     <div className="grid gap-2">
                         <h2 className="text-lg font-semibold text-gray-800 dark:text-foreground">
-                            Sinopsis
+                            {t("bookPage.synopsis")}
                         </h2>
                         <p className="text-sm text-gray-700 dark:text-muted-foreground">
                             {book.description || "—"}
@@ -159,23 +161,23 @@ const BookPage = () => {
                     {/* Key Details */}
                     <div className="grid grid-cols-1 gap-x-8 gap-y-4 sm:grid-cols-2">
                         <div>
-                            <span className="font-semibold text-gray-800 dark:text-foreground">Editorial:</span>{" "}
+                            <span className="font-semibold text-gray-800 dark:text-foreground">{t("bookPage.publisher")}</span>{" "}
                             <span className="text-gray-700 dark:text-muted-foreground">{book.publisher || "—"}</span>
                         </div>
                         <div>
-                            <span className="font-semibold text-gray-800 dark:text-foreground">Material:</span>{" "}
+                            <span className="font-semibold text-gray-800 dark:text-foreground">{t("bookPage.material")}</span>{" "}
                             <span className="text-gray-700 dark:text-muted-foreground">
                                 {book.material_type_detail?.name || "—"}
                             </span>
                         </div>
                         <div>
-                            <span className="font-semibold text-gray-800 dark:text-foreground">Copias disponibles:</span>{" "}
+                            <span className="font-semibold text-gray-800 dark:text-foreground">{t("bookPage.availableCopies")}</span>{" "}
                             <span className="text-gray-700 dark:text-muted-foreground">
                                 {book.available_copies ?? "—"}
                             </span>
                         </div>
                         <div>
-                            <span className="font-semibold text-gray-800 dark:text-foreground">Total en stock:</span>{" "}
+                            <span className="font-semibold text-gray-800 dark:text-foreground">{t("bookPage.totalInStock")}</span>{" "}
                             <span className="text-gray-700 dark:text-muted-foreground">
                                 {book.quantity_in_stock ?? "—"}
                             </span>
@@ -191,7 +193,7 @@ const BookPage = () => {
                                 rel="noopener noreferrer"
                                 className="text-biblioteca-blue dark:text-blue-400 underline"
                             >
-                                Descargar archivo digital
+                                {t("bookPage.downloadDigitalFile")}
                             </a>
                         </div>
                     )}
@@ -199,7 +201,7 @@ const BookPage = () => {
                     {/* Secondary Details (ISBN moved here) */}
                     {book.isbn && (
                         <div className="mt-2">
-                            <span className="font-semibold text-gray-800 dark:text-foreground">ISBN:</span>{" "}
+                            <span className="font-semibold text-gray-800 dark:text-foreground">{t("bookPage.isbn")}</span>{" "}
                             <span className="text-gray-700 dark:text-muted-foreground text-sm">{book.isbn}</span>
                         </div>
                     )}
@@ -211,12 +213,12 @@ const BookPage = () => {
                         <CardHeader>
                             <CardTitle className="flex items-center gap-2">
                                 <QrCode className={`h-5 w-5 ${book.cota ? 'text-biblioteca-blue dark:text-blue-400' : 'text-yellow-600 dark:text-yellow-500'}`} />
-                                Código del Libro
+                                {t("bookPage.bookCode")}
                             </CardTitle>
                             <CardDescription>
                                 {book.cota
-                                    ? "Escanea este código para identificar el libro."
-                                    : "Faltan datos para generar el código."}
+                                    ? t("bookPage.scanCode")
+                                    : t("bookPage.missingDataForCode")}
                             </CardDescription>
                         </CardHeader>
                         <CardContent className="flex flex-col items-center justify-center p-6 pt-0">
@@ -239,21 +241,21 @@ const BookPage = () => {
                                     </div>
                                     <div className="space-y-1">
                                         <p className="font-medium text-yellow-800 dark:text-yellow-400">
-                                            QR No Disponible
+                                            {t("bookPage.qrNotAvailable")}
                                         </p>
                                         <p className="text-sm text-muted-foreground px-4 text-left">
-                                            La Cota es requerida para la generación del QR. Opcionalmente, la cota puede ser generada usando el número de clasificación, el número Cutter y la marca de libro.
+                                            {t("bookPage.qrRequirement")}
                                         </p>
                                     </div>
 
                                     {/* Dynamic Listing of Missing Fields for Auto-Generation */}
                                     {(!book.class_number || !book.cutter_number || !book.work_mark) && (
                                         <div className="w-full mt-2 p-3 bg-background/50 rounded-lg border border-border/50 text-left">
-                                            <p className="text-xs font-semibold text-muted-foreground mb-2">Faltante para autogeneración:</p>
+                                            <p className="text-xs font-semibold text-muted-foreground mb-2">{t("bookPage.missingForAutogen")}</p>
                                             <ul className="text-sm list-disc list-inside text-muted-foreground">
-                                                {!book.class_number && <li className="text-yellow-700 dark:text-yellow-500/90">Número de Clasificación</li>}
-                                                {!book.cutter_number && <li className="text-yellow-700 dark:text-yellow-500/90">Número Cutter</li>}
-                                                {!book.work_mark && <li className="text-yellow-700 dark:text-yellow-500/90">Marca de Libro</li>}
+                                                {!book.class_number && <li className="text-yellow-700 dark:text-yellow-500/90">{t("bookPage.classificationNumber")}</li>}
+                                                {!book.cutter_number && <li className="text-yellow-700 dark:text-yellow-500/90">{t("bookPage.cutterNumber")}</li>}
+                                                {!book.work_mark && <li className="text-yellow-700 dark:text-yellow-500/90">{t("bookPage.workMarkCode")}</li>}
                                             </ul>
                                         </div>
                                     )}

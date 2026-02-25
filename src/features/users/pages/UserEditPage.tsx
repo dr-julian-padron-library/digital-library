@@ -12,6 +12,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { ReturnButton } from '@/common/components/ui/return-button';
 import { useToast } from '@/common/hooks/use-toast';
 import { Loader2, User as UserIcon, Phone, MapPin, Calendar, CreditCard, Lock, Eye, EyeOff, Key } from 'lucide-react';
+import i18next from "i18next";
+import { useTranslation } from "react-i18next";
 
 const userEditSchema = z.object({
     national_document: z.string().optional().nullable(),
@@ -29,7 +31,7 @@ const userEditSchema = z.object({
     }
     return true;
 }, {
-    message: "Para cambiar la contraseña, debes llenar todos los campos de contraseña.",
+    message: () => i18next.t('users.passwordFieldsRequired'),
     path: ["old_password"],
 }).refine((data) => {
     if (data.new_password && data.new_password.length < 8) {
@@ -37,7 +39,7 @@ const userEditSchema = z.object({
     }
     return true;
 }, {
-    message: "La nueva contraseña debe tener al menos 8 caracteres.",
+    message: () => i18next.t('users.passwordMinLength'),
     path: ["new_password"],
 }).refine((data) => {
     if (data.new_password !== data.confirm_password) {
@@ -45,7 +47,7 @@ const userEditSchema = z.object({
     }
     return true;
 }, {
-    message: "Las contraseñas no coinciden.",
+    message: () => i18next.t('users.passwordsMustMatch'),
     path: ["confirm_password"],
 });
 
@@ -54,6 +56,7 @@ type UserEditFormData = z.infer<typeof userEditSchema>;
 export default function UserEditPage() {
     const navigate = useNavigate();
     const { toast } = useToast();
+    const { t } = useTranslation();
     const { data: profile, isLoading } = useGetUserProfileQuery();
     const [updateProfile, { isLoading: isUpdating }] = useUpdateUserProfileMutation();
 
@@ -112,22 +115,22 @@ export default function UserEditPage() {
             await updateProfile(formData).unwrap();
 
             toast({
-                title: "Perfil actualizado",
-                description: "Tus datos han sido guardados correctamente.",
+                title: t("users.profileUpdated"),
+                description: t("users.profileSavedSuccessfully"),
             });
 
             navigate('/perfil');
         } catch (error: any) {
             console.error('Failed to update profile:', error);
-            let errorMessage = "No se pudo actualizar el perfil. Por favor intenta de nuevo.";
+            let errorMessage = t("users.profileUpdateErrorRetry");
 
             if (error?.data?.old_password) {
-                errorMessage = "La contraseña actual es incorrecta.";
+                errorMessage = t("users.currentPasswordIncorrect");
             }
 
             toast({
                 variant: "destructive",
-                title: "Error",
+                title: t("users.error"),
                 description: errorMessage,
             });
         }
@@ -148,7 +151,7 @@ export default function UserEditPage() {
             <ReturnButton />
 
             <div className="flex items-center gap-4">
-                <h1 className="text-3xl font-bold text-biblioteca-blue">Editar Perfil</h1>
+                <h1 className="text-3xl font-bold text-biblioteca-blue">{t("users.editProfile")}</h1>
             </div>
 
             <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -156,10 +159,10 @@ export default function UserEditPage() {
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2">
                             <UserIcon className="h-5 w-5 text-biblioteca-blue" />
-                            Información Personal
+                            {t("users.personalInformation")}
                         </CardTitle>
                         <CardDescription>
-                            Actualiza tu información de contacto y datos personales.
+                            {t("users.updateContactInfo")}
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-6">
@@ -168,18 +171,18 @@ export default function UserEditPage() {
                         <div className="space-y-2">
                             <Label htmlFor="national_document" className="flex items-center gap-2">
                                 <CreditCard className="h-4 w-4" />
-                                Cédula de Identidad
+                                {t("users.nationalDocument")}
                             </Label>
                             <Input
                                 id="national_document"
                                 {...register('national_document')}
                                 disabled={hasNationalDocument}
                                 className={hasNationalDocument ? "bg-muted" : ""}
-                                placeholder="Ej. V-12345678"
+                                placeholder={t("users.exampleNationalDocument")}
                             />
                             {hasNationalDocument && (
                                 <p className="text-xs text-muted-foreground">
-                                    El documento de identidad no se puede modificar una vez establecido.
+                                    {t("users.nationalDocCannotBeChanged")}
                                 </p>
                             )}
                             {errors.national_document && (
@@ -191,7 +194,7 @@ export default function UserEditPage() {
                         <div className="space-y-2">
                             <Label htmlFor="phone" className="flex items-center gap-2">
                                 <Phone className="h-4 w-4" />
-                                Teléfono
+                                {t("users.phone")}
                             </Label>
                             <Input
                                 id="phone"
@@ -207,12 +210,12 @@ export default function UserEditPage() {
                         <div className="space-y-2">
                             <Label htmlFor="address" className="flex items-center gap-2">
                                 <MapPin className="h-4 w-4" />
-                                Dirección
+                                {t("users.address")}
                             </Label>
                             <Input
                                 id="address"
                                 {...register('address')}
-                                placeholder="Ej. Av. Principal, Edificio A, Piso 1"
+                                placeholder={t("users.exampleAddress")}
                             />
                             {errors.address && (
                                 <p className="text-sm text-destructive">{errors.address.message}</p>
@@ -223,7 +226,7 @@ export default function UserEditPage() {
                         <div className="space-y-2">
                             <Label htmlFor="birth_date" className="flex items-center gap-2">
                                 <Calendar className="h-4 w-4" />
-                                Fecha de Nacimiento
+                                {t("users.birthDate")}
                             </Label>
                             <Input
                                 id="birth_date"
@@ -242,15 +245,15 @@ export default function UserEditPage() {
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2">
                             <Key className="h-5 w-5 text-biblioteca-blue" />
-                            Cambiar Contraseña
+                            {t("users.changePassword")}
                         </CardTitle>
                         <CardDescription>
-                            Deja estos campos vacíos si no deseas cambiar tu contraseña.
+                            {t("users.leaveEmptyIfNotChangingPassword")}
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-6">
                         <div className="space-y-2">
-                            <Label htmlFor="old_password">Contraseña Anterior</Label>
+                            <Label htmlFor="old_password">{t("users.oldPassword")}</Label>
                             <div className="relative">
                                 <Input
                                     id="old_password"
@@ -275,7 +278,7 @@ export default function UserEditPage() {
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="new_password">Nueva Contraseña</Label>
+                            <Label htmlFor="new_password">{t("users.newPassword")}</Label>
                             <div className="relative">
                                 <Input
                                     id="new_password"
@@ -300,7 +303,7 @@ export default function UserEditPage() {
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="confirm_password">Confirmar Nueva Contraseña</Label>
+                            <Label htmlFor="confirm_password">{t("users.confirmNewPassword")}</Label>
                             <div className="relative">
                                 <Input
                                     id="confirm_password"
@@ -327,12 +330,12 @@ export default function UserEditPage() {
                         <div className="bg-muted/50 p-4 rounded-lg text-sm text-muted-foreground space-y-2">
                             <div className="flex items-center gap-2 font-medium text-foreground/80">
                                 <Lock className="h-4 w-4" />
-                                Requisitos de seguridad
+                                {t("users.securityRequirements")}
                             </div>
                             <ul className="list-disc list-inside space-y-1 ml-1">
-                                <li>La contraseña debe tener al menos 8 caracteres.</li>
-                                <li>No debe ser una contraseña común o fácil de adivinar.</li>
-                                <li>Se recomienda combinar letras, números y símbolos.</li>
+                                <li>{t("users.passwordReq1")}</li>
+                                <li>{t("users.passwordReq2")}</li>
+                                <li>{t("users.passwordReq3")}</li>
                             </ul>
                         </div>
                     </CardContent>
@@ -344,7 +347,7 @@ export default function UserEditPage() {
                         variant="ghost"
                         onClick={() => navigate('/perfil')}
                     >
-                        Cancelar
+                        {t("users.cancel")}
                     </Button>
                     <Button
                         type="submit"
@@ -352,7 +355,7 @@ export default function UserEditPage() {
                         className="bg-biblioteca-blue hover:bg-biblioteca-blue/90"
                     >
                         {isUpdating && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                        Guardar Cambios
+                        {t("users.saveChanges")}
                     </Button>
                 </div>
 

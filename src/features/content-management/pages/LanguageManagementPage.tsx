@@ -46,10 +46,12 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/common/components/ui/dropdown-menu";
+import { useTranslation } from "react-i18next";
 
 const LanguageManagementPage: React.FC = () => {
     const navigate = useNavigate();
     const { toast } = useToast();
+    const { t } = useTranslation();
 
     const [filters, setFilters] = useState<{ search?: string }>({});
     const [pageSize, setPageSize] = useState<number>(10);
@@ -82,13 +84,13 @@ const LanguageManagementPage: React.FC = () => {
         try {
             await deleteLanguage(languageSlug).unwrap();
             toast({
-                title: "Idioma Eliminado",
-                description: `El idioma "${languageLabel}" ha sido eliminado exitosamente.`,
+                title: t("languageManagement.languageDeleted"),
+                description: t("languageManagement.languageDeletedSuccess", { name: languageLabel }),
             });
         } catch (error) {
             toast({
-                title: "Error",
-                description: "Hubo un error al eliminar el idioma.",
+                title: t("languageManagement.error"),
+                description: t("languageManagement.languageDeleteError"),
                 variant: "destructive",
             });
         }
@@ -132,7 +134,7 @@ const LanguageManagementPage: React.FC = () => {
         return (
             <div className="min-h-screen flex items-center justify-center bg-gray-50 p-6">
                 <div className="text-xl font-medium text-red-500">
-                    Error al cargar los lenguajes.
+                    {t("languageManagement.errorLoadingLanguages")}
                 </div>
             </div>
         );
@@ -141,18 +143,18 @@ const LanguageManagementPage: React.FC = () => {
     return (
         <Card className="w-full">
             <CardHeader className="flex">
-                <CardTitle className="">Listado de Idiomas</CardTitle>
+                <CardTitle className="">{t("languageManagement.languageList")}</CardTitle>
                 <div className="flex items-center justify-end space-x-2 pt-2 mt-0">
                     <Popover>
                         <PopoverTrigger asChild>
                             <Button variant="outline" size="sm">
                                 <Filter className="w-4 h-4 mr-2" />
-                                Filtros
+                                {t("languageManagement.filters")}
                             </Button>
                         </PopoverTrigger>
                         <PopoverContent className="w-80 space-y-3" align="end">
                             <div className="flex flex-col space-y-2">
-                                <span className="text-sm font-medium">Tamaño de página</span>
+                                <span className="text-sm font-medium">{t("languageManagement.pageSize")}</span>
                                 <div className="flex items-center space-x-2">
                                     {pageSizeOptions.map((size) => (
                                         <Button
@@ -170,7 +172,7 @@ const LanguageManagementPage: React.FC = () => {
                                 </div>
                             </div>
                             <Input
-                                placeholder="Buscar por nombre de idioma..."
+                                placeholder={t("languageManagement.searchLanguagePlaceholder")}
                                 value={filters.search || ""}
                                 onChange={(e) => handleChange("search", e.target.value)}
                             />
@@ -178,7 +180,7 @@ const LanguageManagementPage: React.FC = () => {
                     </Popover>
                     <Button onClick={handleAdd} size="sm">
                         <Plus className="w-4 h-4 mr-2" />
-                        Añadir Idioma
+                        {t("languageManagement.addLanguage")}
                     </Button>
                 </div>
             </CardHeader>
@@ -186,7 +188,7 @@ const LanguageManagementPage: React.FC = () => {
             <CardContent>
                 {count === 0 ? (
                     <div className="text-center text-muted-foreground py-8">
-                        No se encontraron lenguajes.
+                        {t("languageManagement.noLanguagesFound")}
                     </div>
                 ) : (
                     <>
@@ -196,8 +198,8 @@ const LanguageManagementPage: React.FC = () => {
                                 <Table>
                                     <TableHeader>
                                         <TableRow>
-                                            <TableHead>Nombre del Idioma</TableHead>
-                                            <TableHead className="text-right">Acciones</TableHead>
+                                            <TableHead>{t("languageManagement.languageName")}</TableHead>
+                                            <TableHead className="text-right">{t("languageManagement.actions")}</TableHead>
                                         </TableRow>
                                     </TableHeader>
                                     <TableBody>
@@ -209,40 +211,40 @@ const LanguageManagementPage: React.FC = () => {
                                                         <DropdownMenu>
                                                             <DropdownMenuTrigger asChild>
                                                                 <Button variant="ghost" className="h-8 w-8 p-0">
-                                                                    <span className="sr-only">Abrir menú</span>
+                                                                    <span className="sr-only">{t("languageManagement.openMenu")}</span>
                                                                     <MoreVertical className="h-4 w-4" />
                                                                 </Button>
                                                             </DropdownMenuTrigger>
                                                             <DropdownMenuContent align="end">
                                                                 <DropdownMenuItem onClick={() => handleEdit(language.slug)}>
-                                                                    Ver Detalles
+                                                                    {t("languageManagement.viewDetails")}
                                                                 </DropdownMenuItem>
                                                                 <DropdownMenuItem onClick={() => handleEdit(language.slug)}>
-                                                                    Editar
+                                                                    {t("languageManagement.edit")}
                                                                 </DropdownMenuItem>
                                                                 <AlertDialogTrigger asChild>
                                                                     <DropdownMenuItem className="text-red-600">
-                                                                        Eliminar
+                                                                        {t("languageManagement.delete")}
                                                                     </DropdownMenuItem>
                                                                 </AlertDialogTrigger>
                                                             </DropdownMenuContent>
                                                         </DropdownMenu>
                                                         <AlertDialogContent>
                                                             <AlertDialogHeader>
-                                                                <AlertDialogTitle>¿Estás absolutamente seguro?</AlertDialogTitle>
+                                                                <AlertDialogTitle>{t("languageManagement.areYouSure")}</AlertDialogTitle>
                                                                 <AlertDialogDescription>
-                                                                    Esta acción no se puede deshacer. Esto eliminará permanentemente el idioma "{language.name}".
+                                                                    {t("languageManagement.deleteConfirmation", { name: language.name })}
                                                                 </AlertDialogDescription>
                                                             </AlertDialogHeader>
                                                             <AlertDialogFooter>
                                                                 <AlertDialogCancel className="bg-gray-200 hover:bg-gray-300">
-                                                                    Cancelar
+                                                                    {t("languageManagement.cancel")}
                                                                 </AlertDialogCancel>
                                                                 <AlertDialogAction
                                                                     className="bg-red-500 text-white hover:bg-red-600"
                                                                     onClick={() => handleDeleteLanguage(language.slug, language.name)}
                                                                 >
-                                                                    Eliminar
+                                                                    {t("languageManagement.delete")}
                                                                 </AlertDialogAction>
                                                             </AlertDialogFooter>
                                                         </AlertDialogContent>
@@ -268,40 +270,40 @@ const LanguageManagementPage: React.FC = () => {
                                                         <DropdownMenu>
                                                             <DropdownMenuTrigger asChild>
                                                                 <Button variant="ghost" className="h-8 w-8 p-0">
-                                                                    <span className="sr-only">Abrir menú</span>
+                                                                    <span className="sr-only">{t("languageManagement.openMenu")}</span>
                                                                     <MoreVertical className="h-4 w-4" />
                                                                 </Button>
                                                             </DropdownMenuTrigger>
                                                             <DropdownMenuContent align="end">
                                                                 <DropdownMenuItem onClick={() => handleEdit(language.id)}>
-                                                                    Ver Detalles
+                                                                    {t("languageManagement.viewDetails")}
                                                                 </DropdownMenuItem>
                                                                 <DropdownMenuItem onClick={() => handleEdit(language.id)}>
-                                                                    Editar
+                                                                    {t("languageManagement.edit")}
                                                                 </DropdownMenuItem>
                                                                 <AlertDialogTrigger asChild>
                                                                     <DropdownMenuItem className="text-red-600">
-                                                                        Eliminar
+                                                                        {t("languageManagement.delete")}
                                                                     </DropdownMenuItem>
                                                                 </AlertDialogTrigger>
                                                             </DropdownMenuContent>
                                                         </DropdownMenu>
                                                         <AlertDialogContent>
                                                             <AlertDialogHeader>
-                                                                <AlertDialogTitle>¿Estás absolutamente seguro?</AlertDialogTitle>
+                                                                <AlertDialogTitle>{t("languageManagement.areYouSure")}</AlertDialogTitle>
                                                                 <AlertDialogDescription>
-                                                                    Esta acción no se puede deshacer. Esto eliminará permanentemente el idioma "{language.name}".
+                                                                    {t("languageManagement.deleteConfirmation", { name: language.name })}
                                                                 </AlertDialogDescription>
                                                             </AlertDialogHeader>
                                                             <AlertDialogFooter>
                                                                 <AlertDialogCancel className="bg-gray-200 hover:bg-gray-300">
-                                                                    Cancelar
+                                                                    {t("languageManagement.cancel")}
                                                                 </AlertDialogCancel>
                                                                 <AlertDialogAction
                                                                     className="bg-red-500 text-white hover:bg-red-600"
                                                                     onClick={() => handleDeleteLanguage(language.id, language.name)}
                                                                 >
-                                                                    Eliminar
+                                                                    {t("languageManagement.delete")}
                                                                 </AlertDialogAction>
                                                             </AlertDialogFooter>
                                                         </AlertDialogContent>
