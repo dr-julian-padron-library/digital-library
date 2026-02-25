@@ -53,10 +53,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/common/components/ui/dropdown-menu";
+import { useTranslation } from "react-i18next";
 
 const CollectionPage: React.FC = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { t } = useTranslation();
 
   const [activeLabel, setActiveLabel] = useState("Libros");
   const [filters, setFilters] = useState<{
@@ -114,13 +116,13 @@ const CollectionPage: React.FC = () => {
     try {
       await deleteBook(slug).unwrap();
       toast({
-        title: "Libro Eliminado",
-        description: "El libro ha sido eliminado exitosamente.",
+        title: t("collectionManagement.bookDeleted"),
+        description: t("collectionManagement.bookDeletedSuccess"),
       });
     } catch (error) {
       toast({
-        title: "Error",
-        description: "Hubo un error al eliminar el libro.",
+        title: t("collectionManagement.error"),
+        description: t("collectionManagement.bookDeleteError"),
         variant: "destructive",
       });
     }
@@ -130,13 +132,13 @@ const CollectionPage: React.FC = () => {
     try {
       await deleteVideo(slug).unwrap();
       toast({
-        title: "Video Eliminado",
-        description: "El video ha sido eliminado exitosamente.",
+        title: t("collectionManagement.videoDeleted"),
+        description: t("collectionManagement.videoDeletedSuccess"),
       });
     } catch (error) {
       toast({
-        title: "Error",
-        description: "Hubo un error al eliminar el video.",
+        title: t("collectionManagement.error"),
+        description: t("collectionManagement.videoDeleteError"),
         variant: "destructive",
       });
     }
@@ -161,7 +163,7 @@ const CollectionPage: React.FC = () => {
     <Card className="w-full">
       <CardHeader className="justify-between">
         <div className="items-center gap-4">
-          <CardTitle>Listado de Materiales</CardTitle>
+          <CardTitle>{t("collectionManagement.materialsList")}</CardTitle>
           <div className="flex justify-between pt-4">
             <div className="flex gap-2">
               <Button
@@ -172,14 +174,14 @@ const CollectionPage: React.FC = () => {
                 }}
                 size="sm"
               >
-                Libros
+                {t("collectionManagement.books")}
               </Button>
               <Button
                 variant={activeLabel === "Videos" ? "default" : "outline"}
                 onClick={() => setActiveLabel("Videos")}
                 size="sm"
               >
-                Videos
+                {t("collectionManagement.videos")}
               </Button>
             </div>
             <div className="flex items-center gap-2">
@@ -191,13 +193,13 @@ const CollectionPage: React.FC = () => {
                   onPageSizeChange={handlePageSizeChange}
                 />
               ) : (
-                <div className="text-sm text-muted-foreground">Filtros de video (próximamente)</div>
+                <div className="text-sm text-muted-foreground">{t("collectionManagement.videoFiltersComingSoon")}</div>
               )}
               <Popover>
                 <PopoverTrigger asChild>
                   <Button className="flex items-center gap-1">
                     <Plus className="w-4 h-4" />
-                    Añadir
+                    {t("collectionManagement.add")}
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent
@@ -210,13 +212,13 @@ const CollectionPage: React.FC = () => {
                       variant="ghost"
                       className="justify-start"
                       onClick={() => handleAdd("book")}
-                    >Añadir Libro
+                    >{t("collectionManagement.addBook")}
                     </Button>
                     <Button
                       variant="ghost"
                       className="justify-start"
                       onClick={() => handleAdd("video")}
-                    >Añadir Video
+                    >{t("collectionManagement.addVideo")}
                     </Button>
                   </div>
                 </PopoverContent>
@@ -230,18 +232,18 @@ const CollectionPage: React.FC = () => {
       <CardContent>
         {isFetching && (
           <div className="text-center text-muted-foreground py-4">
-            Cargando...
+            {t("collectionManagement.loading")}
           </div>
         )}
 
         {!isFetching && activeLabel === "Libros" && books.length === 0 && (
           <div className="text-center text-muted-foreground py-8">
-            No se encontraron materiales.
+            {t("collectionManagement.noMaterialsFound")}
           </div>
         )}
         {!isFetching && activeLabel === "Videos" && videos.length === 0 && (
           <div className="text-center text-muted-foreground py-8">
-            No se encontraron materiales.
+            {t("collectionManagement.noMaterialsFound")}
           </div>
         )}
 
@@ -251,13 +253,13 @@ const CollectionPage: React.FC = () => {
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Titulo</TableHead>
-                    <TableHead>Autor</TableHead>
-                    <TableHead>Año</TableHead>
-                    <TableHead>Cantidad</TableHead>
-                    <TableHead>Disponibles</TableHead>
-                    <TableHead>Tipo</TableHead>
-                    <TableHead className="text-right">Acciones</TableHead>
+                    <TableHead>{t("collectionManagement.title")}</TableHead>
+                    <TableHead>{t("collectionManagement.author")}</TableHead>
+                    <TableHead>{t("collectionManagement.year")}</TableHead>
+                    <TableHead>{t("collectionManagement.quantity")}</TableHead>
+                    <TableHead>{t("collectionManagement.available")}</TableHead>
+                    <TableHead>{t("collectionManagement.type")}</TableHead>
+                    <TableHead className="text-right">{t("collectionManagement.actions")}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -266,13 +268,13 @@ const CollectionPage: React.FC = () => {
                       book.authors
                         ?.filter((a): a is Author => a !== null)
                         .map((a) => a.name)
-                        .join(", ") || "Sin autor";
+                        .join(", ") || t("collectionManagement.noAuthor");
 
                     return (
                       <TableRow key={book.id}>
                         <TableCell className="font-medium">{book.title}</TableCell>
                         <TableCell>{authors}</TableCell>
-                        <TableCell>{book.publication_date || "N/A"}</TableCell>
+                        <TableCell>{book.publication_date || t("collectionManagement.NA")}</TableCell>
                         <TableCell>
                           <Badge
                             variant={
@@ -297,7 +299,7 @@ const CollectionPage: React.FC = () => {
                         </TableCell>
                         <TableCell>
                           <Badge variant="outline">
-                            {book.material_type_detail?.name || "N/A"}
+                            {book.material_type_detail?.name || t("collectionManagement.NA")}
                           </Badge>
                         </TableCell>
                         <TableCell className="text-right">
@@ -305,41 +307,40 @@ const CollectionPage: React.FC = () => {
                             <DropdownMenu>
                               <DropdownMenuTrigger asChild>
                                 <Button variant="ghost" className="h-8 w-8 p-0">
-                                  <span className="sr-only">Abrir menú</span>
+                                  <span className="sr-only">{t("collectionManagement.openMenu")}</span>
                                   <MoreVertical className="h-4 w-4" />
                                 </Button>
                               </DropdownMenuTrigger>
                               <DropdownMenuContent align="end">
                                 <DropdownMenuItem onClick={() => handleEdit(book.slug)}>
-                                  Ver Detalles
+                                  {t("collectionManagement.viewDetails")}
                                 </DropdownMenuItem>
                                 <DropdownMenuItem onClick={() => handleEdit(book.slug)}>
-                                  Editar
+                                  {t("collectionManagement.edit")}
                                 </DropdownMenuItem>
                                 <AlertDialogTrigger asChild>
                                   <DropdownMenuItem className="text-red-600">
-                                    Eliminar
+                                    {t("collectionManagement.delete")}
                                   </DropdownMenuItem>
                                 </AlertDialogTrigger>
                               </DropdownMenuContent>
                             </DropdownMenu>
                             <AlertDialogContent>
                               <AlertDialogHeader>
-                                <AlertDialogTitle>¿Estás absolutamente seguro?</AlertDialogTitle>
+                                <AlertDialogTitle>{t("collectionManagement.areYouSure")}</AlertDialogTitle>
                                 <AlertDialogDescription>
-                                  Esta acción no se puede deshacer. Esto eliminará
-                                  permanentemente este material de la biblioteca.
+                                  {t("collectionManagement.deleteConfirmation")}
                                 </AlertDialogDescription>
                               </AlertDialogHeader>
                               <AlertDialogFooter>
                                 <AlertDialogCancel className="bg-gray-200 hover:bg-gray-300">
-                                  Cancelar
+                                  {t("collectionManagement.cancel")}
                                 </AlertDialogCancel>
                                 <AlertDialogAction
                                   className="bg-red-500 text-white hover:bg-red-600"
                                   onClick={() => handleDeleteBook(book.slug)}
                                 >
-                                  Eliminar
+                                  {t("collectionManagement.delete")}
                                 </AlertDialogAction>
                               </AlertDialogFooter>
                             </AlertDialogContent>
@@ -364,24 +365,24 @@ const CollectionPage: React.FC = () => {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Titulo</TableHead>
-                  <TableHead>Director</TableHead>
-                  <TableHead>Año de Lanzamiento</TableHead>
-                  <TableHead>Duración</TableHead>
-                  <TableHead>Tipo</TableHead>
-                  <TableHead className="text-right">Acciones</TableHead>
+                  <TableHead>{t("collectionManagement.title")}</TableHead>
+                  <TableHead>{t("collectionManagement.director")}</TableHead>
+                  <TableHead>{t("collectionManagement.releaseYear")}</TableHead>
+                  <TableHead>{t("collectionManagement.duration")}</TableHead>
+                  <TableHead>{t("collectionManagement.type")}</TableHead>
+                  <TableHead className="text-right">{t("collectionManagement.actions")}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {videos.map((video: MinimalVideo) => (
                   <TableRow key={video.id}>
                     <TableCell className="font-medium">{video.title}</TableCell>
-                    <TableCell>{video.director || "N/A"}</TableCell>
-                    <TableCell>{video.release_date || "N/A"}</TableCell>
-                    <TableCell>{video.duration || "N/A"}</TableCell>
+                    <TableCell>{video.director || t("collectionManagement.NA")}</TableCell>
+                    <TableCell>{video.release_date || t("collectionManagement.NA")}</TableCell>
+                    <TableCell>{video.duration || t("collectionManagement.NA")}</TableCell>
                     <TableCell>
                       <Badge variant="outline">
-                        {video.material_type_detail?.name || "N/A"}
+                        {video.material_type_detail?.name || t("collectionManagement.NA")}
                       </Badge>
                     </TableCell>
                     <TableCell className="text-right">
@@ -389,41 +390,40 @@ const CollectionPage: React.FC = () => {
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
                             <Button variant="ghost" className="h-8 w-8 p-0">
-                              <span className="sr-only">Abrir menú</span>
+                              <span className="sr-only">{t("collectionManagement.openMenu")}</span>
                               <MoreVertical className="h-4 w-4" />
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
                             <DropdownMenuItem onClick={() => handleEdit(video.slug)}>
-                              Ver Detalles
+                              {t("collectionManagement.viewDetails")}
                             </DropdownMenuItem>
                             <DropdownMenuItem onClick={() => handleEdit(video.slug)}>
-                              Editar
+                              {t("collectionManagement.edit")}
                             </DropdownMenuItem>
                             <AlertDialogTrigger asChild>
                               <DropdownMenuItem className="text-red-600">
-                                Eliminar
+                                {t("collectionManagement.delete")}
                               </DropdownMenuItem>
                             </AlertDialogTrigger>
                           </DropdownMenuContent>
                         </DropdownMenu>
                         <AlertDialogContent>
                           <AlertDialogHeader>
-                            <AlertDialogTitle>¿Estás absolutamente seguro?</AlertDialogTitle>
+                            <AlertDialogTitle>{t("collectionManagement.areYouSure")}</AlertDialogTitle>
                             <AlertDialogDescription>
-                              Esta acción no se puede deshacer. Esto eliminará
-                              permanentemente este material de la biblioteca.
+                              {t("collectionManagement.deleteConfirmation")}
                             </AlertDialogDescription>
                           </AlertDialogHeader>
                           <AlertDialogFooter>
                             <AlertDialogCancel className="bg-gray-200 hover:bg-gray-300">
-                              Cancelar
+                              {t("collectionManagement.cancel")}
                             </AlertDialogCancel>
                             <AlertDialogAction
                               className="bg-red-500 text-white hover:bg-red-600"
                               onClick={() => handleDeleteVideo(video.slug)}
                             >
-                              Eliminar
+                              {t("collectionManagement.delete")}
                             </AlertDialogAction>
                           </AlertDialogFooter>
                         </AlertDialogContent>

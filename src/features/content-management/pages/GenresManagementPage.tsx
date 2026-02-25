@@ -53,10 +53,12 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/common/components/ui/dropdown-menu";
+import { useTranslation } from "react-i18next";
 
 const GenresManagementPage: React.FC = () => {
     const navigate = useNavigate();
     const { toast } = useToast();
+    const { t } = useTranslation();
 
     const [filters, setFilters] = useState<{ search?: string; sala?: string }>({});
     const [pageSize, setPageSize] = useState<number>(10);
@@ -95,13 +97,13 @@ const GenresManagementPage: React.FC = () => {
         try {
             await deleteGenre(genreSlug).unwrap();
             toast({
-                title: "Género Eliminado",
-                description: `El género "${genreLabel}" ha sido eliminado exitosamente.`,
+                title: t("genresManagement.genreDeleted"),
+                description: t("genresManagement.genreDeletedSuccess", { name: genreLabel }),
             });
         } catch (error) {
             toast({
-                title: "Error",
-                description: "Hubo un error al eliminar el género.",
+                title: t("genresManagement.error"),
+                description: t("genresManagement.genreDeleteError"),
                 variant: "destructive",
             });
         }
@@ -119,18 +121,18 @@ const GenresManagementPage: React.FC = () => {
     return (
         <Card className="w-full">
             <CardHeader className="flex">
-                <CardTitle className="" >Listado de Géneros</CardTitle>
+                <CardTitle className="" >{t("genresManagement.genresList")}</CardTitle>
                 <div className="flex items-center justify-end space-x-2">
                     <Popover>
                         <PopoverTrigger asChild>
                             <Button variant="outline" size="sm">
                                 <Filter className="w-4 h-4 mr-2" />
-                                Filtros
+                                {t("genresManagement.filters")}
                             </Button>
                         </PopoverTrigger>
                         <PopoverContent className="w-80 space-y-3" align="end">
                             <div className="flex flex-col space-y-2">
-                                <span className="text-sm font-medium">Tamaño de página</span>
+                                <span className="text-sm font-medium">{t("genresManagement.pageSize")}</span>
                                 <div className="flex items-center space-x-2">
                                     {pageSizeOptions.map((size) => (
                                         <Button
@@ -148,16 +150,16 @@ const GenresManagementPage: React.FC = () => {
                                 </div>
                             </div>
                             <Input
-                                placeholder="Buscar por nombre de género..."
+                                placeholder={t("genresManagement.searchGenrePlaceholder")}
                                 value={filters.search || ""}
                                 onChange={(e) => handleChange("search", e.target.value)}
                             />
                             <Select onValueChange={(value) => handleChange("sala", value === "all" ? "" : value)} value={filters.sala || "all"}>
                                 <SelectTrigger>
-                                    <SelectValue placeholder="Nombre de Sala" />
+                                    <SelectValue placeholder={t("genresManagement.roomName")} />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="all">Todas las Salas</SelectItem>
+                                    <SelectItem value="all">{t("genresManagement.allRooms")}</SelectItem>
                                     {uniqueSalas.map((sala) => (
                                         <SelectItem key={sala} value={sala}>
                                             {sala}
@@ -169,17 +171,17 @@ const GenresManagementPage: React.FC = () => {
                     </Popover>
                     <Button onClick={handleAdd} size="sm">
                         <Plus className="w-4 h-4 mr-2" />
-                        Añadir Género
+                        {t("genresManagement.addGenre")}
                     </Button>
                 </div>
             </CardHeader>
 
             <CardContent>
                 {isFetchingGenres ? (
-                    <div className="text-center text-muted-foreground py-4">Cargando...</div>
+                    <div className="text-center text-muted-foreground py-4">{t("genresManagement.loading")}</div>
                 ) : genres?.count === 0 ? (
                     <div className="text-center text-muted-foreground py-8">
-                        No se encontraron géneros.
+                        {t("genresManagement.noGenresFound")}
                     </div>
                 ) : (
                     <>
@@ -187,10 +189,10 @@ const GenresManagementPage: React.FC = () => {
                             <Table>
                                 <TableHeader>
                                     <TableRow>
-                                        <TableHead>Código</TableHead>
-                                        <TableHead>Nombre del Género</TableHead>
-                                        <TableHead>Sala</TableHead>
-                                        <TableHead className="text-right">Acciones</TableHead>
+                                        <TableHead>{t("genresManagement.code")}</TableHead>
+                                        <TableHead>{t("genresManagement.genreName")}</TableHead>
+                                        <TableHead>{t("genresManagement.room")}</TableHead>
+                                        <TableHead className="text-right">{t("genresManagement.actions")}</TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
@@ -206,41 +208,40 @@ const GenresManagementPage: React.FC = () => {
                                                     <DropdownMenu>
                                                         <DropdownMenuTrigger asChild>
                                                             <Button variant="ghost" className="h-8 w-8 p-0">
-                                                                <span className="sr-only">Abrir menú</span>
+                                                                <span className="sr-only">{t("genresManagement.openMenu")}</span>
                                                                 <MoreVertical className="h-4 w-4" />
                                                             </Button>
                                                         </DropdownMenuTrigger>
                                                         <DropdownMenuContent align="end">
                                                             <DropdownMenuItem onClick={() => handleEdit(genre.slug)}>
-                                                                Ver Detalles
+                                                                {t("genresManagement.viewDetails")}
                                                             </DropdownMenuItem>
                                                             <DropdownMenuItem onClick={() => handleEdit(genre.slug)}>
-                                                                Editar
+                                                                {t("genresManagement.edit")}
                                                             </DropdownMenuItem>
                                                             <AlertDialogTrigger asChild>
                                                                 <DropdownMenuItem className="text-red-600">
-                                                                    Eliminar
+                                                                    {t("genresManagement.delete")}
                                                                 </DropdownMenuItem>
                                                             </AlertDialogTrigger>
                                                         </DropdownMenuContent>
                                                     </DropdownMenu>
                                                     <AlertDialogContent>
                                                         <AlertDialogHeader>
-                                                            <AlertDialogTitle>¿Estás absolutamente seguro?</AlertDialogTitle>
+                                                            <AlertDialogTitle>{t("genresManagement.areYouSure")}</AlertDialogTitle>
                                                             <AlertDialogDescription>
-                                                                Esta acción no se puede deshacer. Esto eliminará
-                                                                permanentemente el género "{genre.label}".
+                                                                {t("genresManagement.deleteConfirmation", { name: genre.label })}
                                                             </AlertDialogDescription>
                                                         </AlertDialogHeader>
                                                         <AlertDialogFooter>
                                                             <AlertDialogCancel className="bg-gray-200 hover:bg-gray-300">
-                                                                Cancelar
+                                                                {t("genresManagement.cancel")}
                                                             </AlertDialogCancel>
                                                             <AlertDialogAction
                                                                 className="bg-red-500 text-white hover:bg-red-600"
                                                                 onClick={() => handleDeleteGenre(genre.slug, genre.label)}
                                                             >
-                                                                Eliminar
+                                                                {t("genresManagement.delete")}
                                                             </AlertDialogAction>
                                                         </AlertDialogFooter>
                                                     </AlertDialogContent>

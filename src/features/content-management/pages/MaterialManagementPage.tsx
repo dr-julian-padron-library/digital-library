@@ -45,10 +45,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/common/components/ui/dropdown-menu";
+import { useTranslation } from "react-i18next";
 
 const MaterialManagementPage: React.FC = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { t } = useTranslation();
 
   const [filters, setFilters] = useState<{ search?: string }>({});
   const [pageSize, setPageSize] = useState<number>(10);
@@ -81,13 +83,13 @@ const MaterialManagementPage: React.FC = () => {
     try {
       await deleteMaterialType(materialTypeSlug).unwrap();
       toast({
-        title: "Tipo de Material Eliminado",
-        description: `El tipo de material "${materialLabel}" ha sido eliminado exitosamente.`,
+        title: t("materialManagement.materialTypeDeleted"),
+        description: t("materialManagement.materialTypeDeletedSuccess", { name: materialLabel }),
       });
     } catch (error) {
       toast({
-        title: "Error",
-        description: "Hubo un error al eliminar el tipo de material.",
+        title: t("materialManagement.error"),
+        description: t("materialManagement.materialTypeDeleteError"),
         variant: "destructive",
       });
     }
@@ -123,7 +125,7 @@ const MaterialManagementPage: React.FC = () => {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 p-6">
         <div className="text-xl font-medium text-red-500">
-          Error al cargar los tipos de material.
+          {t("materialManagement.errorLoadingMaterialTypes")}
         </div>
       </div>
     );
@@ -132,18 +134,18 @@ const MaterialManagementPage: React.FC = () => {
   return (
     <Card className="w-full">
       <CardHeader className="flex">
-        <CardTitle className="">Listado de Tipos de Material</CardTitle>
+        <CardTitle className="">{t("materialManagement.materialTypesList")}</CardTitle>
         <div className="flex items-center justify-end space-x-2 pt-2 mt-0">
           <Popover>
             <PopoverTrigger asChild>
               <Button variant="outline" size="sm">
                 <Filter className="w-4 h-4 mr-2" />
-                Filtros
+                {t("materialManagement.filters")}
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-80 space-y-3" align="end">
               <div className="flex flex-col space-y-2">
-                <span className="text-sm font-medium">Tamaño de página</span>
+                <span className="text-sm font-medium">{t("materialManagement.pageSize")}</span>
                 <div className="flex items-center space-x-2">
                   {pageSizeOptions.map((size) => (
                     <Button
@@ -161,7 +163,7 @@ const MaterialManagementPage: React.FC = () => {
                 </div>
               </div>
               <Input
-                placeholder="Buscar por nombre de material..."
+                placeholder={t("materialManagement.searchMaterialPlaceholder")}
                 value={filters.search || ""}
                 onChange={(e) => handleChange("search", e.target.value)}
               />
@@ -169,7 +171,7 @@ const MaterialManagementPage: React.FC = () => {
           </Popover>
           <Button onClick={handleAdd} size="sm">
             <Plus className="w-4 h-4 mr-2" />
-            Añadir Tipo de Material
+            {t("materialManagement.addMaterialType")}
           </Button>
         </div>
       </CardHeader>
@@ -177,7 +179,7 @@ const MaterialManagementPage: React.FC = () => {
       <CardContent>
         {count === 0 ? (
           <div className="text-center text-muted-foreground py-8">
-            No se encontraron tipos de material.
+            {t("materialManagement.noMaterialTypesFound")}
           </div>
         ) : (
           <>
@@ -187,8 +189,8 @@ const MaterialManagementPage: React.FC = () => {
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Nombre del Tipo de Material</TableHead>
-                      <TableHead className="text-right">Acciones</TableHead>
+                      <TableHead>{t("materialManagement.materialTypeName")}</TableHead>
+                      <TableHead className="text-right">{t("materialManagement.actions")}</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -200,40 +202,40 @@ const MaterialManagementPage: React.FC = () => {
                             <DropdownMenu>
                               <DropdownMenuTrigger asChild>
                                 <Button variant="ghost" className="h-8 w-8 p-0">
-                                  <span className="sr-only">Abrir menú</span>
+                                  <span className="sr-only">{t("materialManagement.openMenu")}</span>
                                   <MoreVertical className="h-4 w-4" />
                                 </Button>
                               </DropdownMenuTrigger>
                               <DropdownMenuContent align="end">
                                 <DropdownMenuItem onClick={() => handleEdit(materialType.id)}>
-                                  Ver Detalles
+                                  {t("materialManagement.viewDetails")}
                                 </DropdownMenuItem>
                                 <DropdownMenuItem onClick={() => handleEdit(materialType.id)}>
-                                  Editar
+                                  {t("materialManagement.edit")}
                                 </DropdownMenuItem>
                                 <AlertDialogTrigger asChild>
                                   <DropdownMenuItem className="text-red-600">
-                                    Eliminar
+                                    {t("materialManagement.delete")}
                                   </DropdownMenuItem>
                                 </AlertDialogTrigger>
                               </DropdownMenuContent>
                             </DropdownMenu>
                             <AlertDialogContent>
                               <AlertDialogHeader>
-                                <AlertDialogTitle>¿Estás absolutamente seguro?</AlertDialogTitle>
+                                <AlertDialogTitle>{t("materialManagement.areYouSure")}</AlertDialogTitle>
                                 <AlertDialogDescription>
-                                  Esta acción no se puede deshacer. Esto eliminará permanentemente el tipo de material "{materialType.name}".
+                                  {t("materialManagement.deleteConfirmation", { name: materialType.name })}
                                 </AlertDialogDescription>
                               </AlertDialogHeader>
                               <AlertDialogFooter>
                                 <AlertDialogCancel className="bg-gray-200 hover:bg-gray-300">
-                                  Cancelar
+                                  {t("materialManagement.cancel")}
                                 </AlertDialogCancel>
                                 <AlertDialogAction
                                   className="bg-red-500 text-white hover:bg-red-600"
                                   onClick={() => handleDeleteMaterialType(materialType.slug, materialType.name)}
                                 >
-                                  Eliminar
+                                  {t("materialManagement.delete")}
                                 </AlertDialogAction>
                               </AlertDialogFooter>
                             </AlertDialogContent>
@@ -259,40 +261,40 @@ const MaterialManagementPage: React.FC = () => {
                             <DropdownMenu>
                               <DropdownMenuTrigger asChild>
                                 <Button variant="ghost" className="h-8 w-8 p-0">
-                                  <span className="sr-only">Abrir menú</span>
+                                  <span className="sr-only">{t("materialManagement.openMenu")}</span>
                                   <MoreVertical className="h-4 w-4" />
                                 </Button>
                               </DropdownMenuTrigger>
                               <DropdownMenuContent align="end">
                                 <DropdownMenuItem onClick={() => handleEdit(materialType.id)}>
-                                  Ver Detalles
+                                  {t("materialManagement.viewDetails")}
                                 </DropdownMenuItem>
                                 <DropdownMenuItem onClick={() => handleEdit(materialType.id)}>
-                                  Editar
+                                  {t("materialManagement.edit")}
                                 </DropdownMenuItem>
                                 <AlertDialogTrigger asChild>
                                   <DropdownMenuItem className="text-red-600">
-                                    Eliminar
+                                    {t("materialManagement.delete")}
                                   </DropdownMenuItem>
                                 </AlertDialogTrigger>
                               </DropdownMenuContent>
                             </DropdownMenu>
                             <AlertDialogContent>
                               <AlertDialogHeader>
-                                <AlertDialogTitle>¿Estás absolutamente seguro?</AlertDialogTitle>
+                                <AlertDialogTitle>{t("materialManagement.areYouSure")}</AlertDialogTitle>
                                 <AlertDialogDescription>
-                                  Esta acción no se puede deshacer. Esto eliminará permanentemente el tipo de material "{materialType.name}".
+                                  {t("materialManagement.deleteConfirmation", { name: materialType.name })}
                                 </AlertDialogDescription>
                               </AlertDialogHeader>
                               <AlertDialogFooter>
                                 <AlertDialogCancel className="bg-gray-200 hover:bg-gray-300">
-                                  Cancelar
+                                  {t("materialManagement.cancel")}
                                 </AlertDialogCancel>
                                 <AlertDialogAction
                                   className="bg-red-500 text-white hover:bg-red-600"
                                   onClick={() => handleDeleteMaterialType(materialType.slug, materialType.name)}
                                 >
-                                  Eliminar
+                                  {t("materialManagement.delete")}
                                 </AlertDialogAction>
                               </AlertDialogFooter>
                             </AlertDialogContent>

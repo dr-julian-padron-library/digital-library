@@ -7,6 +7,7 @@ import { UserPlus } from "lucide-react";
 import { useToast } from "@/common/hooks/use-toast";
 import { CedulaInput } from "@/common/components/ui/cedula-input";
 import { useCreateProfileMutation } from "@/features/content-management/api/profilesApiSlice";
+import { useTranslation } from "react-i18next";
 
 interface AddUserDialogProps {
   onUserAdded: () => void;
@@ -25,6 +26,7 @@ export function AddUserDialog({ onUserAdded }: AddUserDialogProps) {
     address: '',
   });
   const { toast } = useToast();
+  const { t } = useTranslation();
   const [createProfile, { isLoading }] = useCreateProfileMutation();
 
   const dialogTitleId = useId();
@@ -34,8 +36,8 @@ export function AddUserDialog({ onUserAdded }: AddUserDialogProps) {
 
     if (!formData.email || !formData.password || !formData.first_name || !formData.last_name) {
       toast({
-        title: "Error",
-        description: "Por favor complete los campos obligatorios",
+        title: t("users.error"),
+        description: t("users.pleaseFillRequiredFields"),
         variant: "destructive",
       });
       return;
@@ -56,8 +58,8 @@ export function AddUserDialog({ onUserAdded }: AddUserDialogProps) {
       await createProfile({ formData: data }).unwrap();
 
       toast({
-        title: "Éxito",
-        description: "Usuario creado correctamente",
+        title: t("users.success"),
+        description: t("users.userCreated"),
       });
 
       setFormData({
@@ -76,8 +78,8 @@ export function AddUserDialog({ onUserAdded }: AddUserDialogProps) {
     } catch (error: any) {
       console.error('Error creating user:', error);
       toast({
-        title: "Error",
-        description: error?.data?.detail || error.message || "No se pudo crear el usuario",
+        title: t("users.error"),
+        description: error?.data?.detail || error.message || t("users.errorCreatingUser"),
         variant: "destructive",
       });
     }
@@ -95,104 +97,104 @@ export function AddUserDialog({ onUserAdded }: AddUserDialogProps) {
       <DialogTrigger asChild>
         <Button className="bg-primary fg-primary-foreground hover:bg-primary/90">
           <UserPlus className="h-4 w-4 mr-2" />
-          Añadir usuario
+          {t("users.addUser")}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[600px]">
         <DialogHeader>
           {/* Apply the unique ID to the DialogTitle */}
-          <DialogTitle id={dialogTitleId}>Añadir Usuario</DialogTitle>
+          <DialogTitle id={dialogTitleId}>{t("users.addUser")}</DialogTitle>
           <DialogDescription>
-            Complete la información del nuevo usuario.
+            {t("users.fillNewUserInfo")}
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4 mt-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="email">Email *</Label>
+              <Label htmlFor="email">{t("users.emailRequired")}</Label>
               <Input
                 id="email"
                 type="email"
                 value={formData.email}
                 onChange={(e) => handleInputChange('email', e.target.value)}
-                placeholder="Ingrese el email"
+                placeholder={t("users.enterEmail")}
                 required
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password">Contraseña *</Label>
+              <Label htmlFor="password">{t("users.passwordRequired")}</Label>
               <Input
                 id="password"
                 type="password"
                 value={formData.password}
                 onChange={(e) => handleInputChange('password', e.target.value)}
-                placeholder="Ingrese la contraseña"
+                placeholder={t("users.enterPassword")}
                 required
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="first_name">Nombre *</Label>
+              <Label htmlFor="first_name">{t("users.firstNameRequired")}</Label>
               <Input
                 id="first_name"
                 value={formData.first_name}
                 onChange={(e) => handleInputChange('first_name', e.target.value)}
-                placeholder="Ingrese el nombre"
+                placeholder={t("users.enterFirstName")}
                 required
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="last_name">Apellido *</Label>
+              <Label htmlFor="last_name">{t("users.lastNameRequired")}</Label>
               <Input
                 id="last_name"
                 value={formData.last_name}
                 onChange={(e) => handleInputChange('last_name', e.target.value)}
-                placeholder="Ingrese el apellido"
+                placeholder={t("users.enterLastName")}
                 required
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="national_document">Cédula</Label>
+              <Label htmlFor="national_document">{t("users.nationalDocument")}</Label>
               <CedulaInput
                 id="national_document"
                 value={formData.national_document}
                 onChange={(valor) => handleInputChange('national_document', valor)}
-                placeholder="Ingrese la cédula"
+                placeholder={t("users.enterNationalDocument")}
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="phone">Teléfono</Label>
+              <Label htmlFor="phone">{t("users.phone")}</Label>
               <Input
                 id="phone"
                 value={formData.phone}
                 onChange={(e) => handleInputChange('phone', e.target.value)}
-                placeholder="Ingrese el teléfono"
+                placeholder={t("users.enterPhone")}
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="birth_date">Fecha de Nacimiento</Label>
+              <Label htmlFor="birth_date">{t("users.birthDate")}</Label>
               <Input
                 id="birth_date"
                 type="date"
                 value={formData.birth_date}
                 onChange={(e) => handleInputChange('birth_date', e.target.value)}
-                placeholder="Ingrese la fecha de nacimiento"
+                placeholder={t("users.enterBirthDate")}
               />
             </div>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="address">Dirección</Label>
+            <Label htmlFor="address">{t("users.address")}</Label>
             <Input
               id="address"
               value={formData.address}
               onChange={(e) => handleInputChange('address', e.target.value)}
-              placeholder="Ingrese la dirección"
+              placeholder={t("users.enterAddress")}
             />
           </div>
 
@@ -203,14 +205,14 @@ export function AddUserDialog({ onUserAdded }: AddUserDialogProps) {
               onClick={() => setOpen(false)}
               disabled={isLoading}
             >
-              Cancelar
+              {t("users.cancel")}
             </Button>
             <Button
               type="submit"
               disabled={isLoading}
               className="bg-primary fg-primary-foreground hover:bg-primary/90"
             >
-              {isLoading ? "Creando..." : "Crear Usuario"}
+              {isLoading ? t("users.creating") : t("users.createUser")}
             </Button>
           </div>
         </form>

@@ -45,10 +45,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/common/components/ui/dropdown-menu";
+import { useTranslation } from "react-i18next";
 
 const AuthorManagementPage: React.FC = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { t } = useTranslation();
 
   const [filters, setFilters] = useState<{ search?: string }>({});
   const [pageSize, setPageSize] = useState<number>(10);
@@ -77,8 +79,8 @@ const AuthorManagementPage: React.FC = () => {
     if (!authorSlug) {
       console.error("Author slug is undefined or empty. Cannot navigate.");
       toast({
-        title: "Error de Navegación",
-        description: "No se pudo encontrar la información del autor para editar.",
+        title: t("authorManagement.navigationError"),
+        description: t("authorManagement.authorEditError"),
         variant: "destructive",
       });
       return;
@@ -90,13 +92,13 @@ const AuthorManagementPage: React.FC = () => {
     try {
       await deleteAuthor(authorSlug).unwrap();
       toast({
-        title: "Autor Eliminado",
-        description: `El autor "${authorName}" ha sido eliminado exitosamente.`,
+        title: t("authorManagement.authorDeleted"),
+        description: t("authorManagement.authorDeletedSuccess", { name: authorName }),
       });
     } catch (error) {
       toast({
-        title: "Error",
-        description: "Hubo un error al eliminar el autor.",
+        title: t("authorManagement.error"),
+        description: t("authorManagement.authorDeleteError"),
         variant: "destructive",
       });
     }
@@ -140,7 +142,7 @@ const AuthorManagementPage: React.FC = () => {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 p-6">
         <div className="text-xl font-medium text-red-500">
-          Error al cargar los autores.
+          {t("authorManagement.errorLoadingAuthors")}
         </div>
       </div>
     );
@@ -149,18 +151,18 @@ const AuthorManagementPage: React.FC = () => {
   return (
     <Card className="w-full">
       <CardHeader className="flex">
-        <CardTitle className="">Listado de Autores</CardTitle>
+        <CardTitle className="">{t("authorManagement.authorList")}</CardTitle>
         <div className="flex items-center justify-end space-x-2 pt-2 mt-0">
           <Popover>
             <PopoverTrigger asChild>
               <Button variant="outline" size="sm">
                 <Filter className="w-4 h-4 mr-2" />
-                Filtros
+                {t("authorManagement.filters")}
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-80 space-y-3" align="end">
               <div className="flex flex-col space-y-2">
-                <span className="text-sm font-medium">Tamaño de página</span>
+                <span className="text-sm font-medium">{t("authorManagement.pageSize")}</span>
                 <div className="flex items-center space-x-2">
                   {pageSizeOptions.map((size) => (
                     <Button
@@ -178,7 +180,7 @@ const AuthorManagementPage: React.FC = () => {
                 </div>
               </div>
               <Input
-                placeholder="Buscar por nombre de autor..."
+                placeholder={t("authorManagement.searchAuthorPlaceholder")}
                 value={filters.search || ""}
                 onChange={(e) => handleChange("search", e.target.value)}
               />
@@ -186,7 +188,7 @@ const AuthorManagementPage: React.FC = () => {
           </Popover>
           <Button onClick={handleAdd} size="sm">
             <Plus className="w-4 h-4 mr-2" />
-            Añadir Autor
+            {t("authorManagement.addAuthor")}
           </Button>
         </div>
       </CardHeader>
@@ -194,7 +196,7 @@ const AuthorManagementPage: React.FC = () => {
       <CardContent>
         {count === 0 ? (
           <div className="text-center text-muted-foreground py-8">
-            No se encontraron autores.
+            {t("authorManagement.noAuthorsFound")}
           </div>
         ) : (
           <>
@@ -204,8 +206,8 @@ const AuthorManagementPage: React.FC = () => {
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Nombre del Autor</TableHead>
-                      <TableHead className="text-right">Acciones</TableHead>
+                      <TableHead>{t("authorManagement.authorName")}</TableHead>
+                      <TableHead className="text-right">{t("authorManagement.actions")}</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -217,40 +219,40 @@ const AuthorManagementPage: React.FC = () => {
                             <DropdownMenu>
                               <DropdownMenuTrigger asChild>
                                 <Button variant="ghost" className="h-8 w-8 p-0">
-                                  <span className="sr-only">Abrir menú</span>
+                                  <span className="sr-only">{t("authorManagement.openMenu")}</span>
                                   <MoreVertical className="h-4 w-4" />
                                 </Button>
                               </DropdownMenuTrigger>
                               <DropdownMenuContent align="end">
                                 <DropdownMenuItem onClick={() => handleEdit(author.slug)}>
-                                  Ver Detalles
+                                  {t("authorManagement.viewDetails")}
                                 </DropdownMenuItem>
                                 <DropdownMenuItem onClick={() => handleEdit(author.slug)}>
-                                  Editar
+                                  {t("authorManagement.edit")}
                                 </DropdownMenuItem>
                                 <AlertDialogTrigger asChild>
                                   <DropdownMenuItem className="text-red-600">
-                                    Eliminar
+                                    {t("authorManagement.delete")}
                                   </DropdownMenuItem>
                                 </AlertDialogTrigger>
                               </DropdownMenuContent>
                             </DropdownMenu>
                             <AlertDialogContent>
                               <AlertDialogHeader>
-                                <AlertDialogTitle>¿Estás absolutamente seguro?</AlertDialogTitle>
+                                <AlertDialogTitle>{t("authorManagement.areYouSure")}</AlertDialogTitle>
                                 <AlertDialogDescription>
-                                  Esta acción no se puede deshacer. Esto eliminará permanentemente el autor "{author.name}".
+                                  {t("authorManagement.deleteConfirmation", { name: author.name })}
                                 </AlertDialogDescription>
                               </AlertDialogHeader>
                               <AlertDialogFooter>
                                 <AlertDialogCancel className="bg-gray-200 hover:bg-gray-300">
-                                  Cancelar
+                                  {t("authorManagement.cancel")}
                                 </AlertDialogCancel>
                                 <AlertDialogAction
                                   className="bg-red-500 text-white hover:bg-red-600"
                                   onClick={() => handleDeleteAuthor(author.slug, author.name)}
                                 >
-                                  Eliminar
+                                  {t("authorManagement.delete")}
                                 </AlertDialogAction>
                               </AlertDialogFooter>
                             </AlertDialogContent>
@@ -276,40 +278,40 @@ const AuthorManagementPage: React.FC = () => {
                             <DropdownMenu>
                               <DropdownMenuTrigger asChild>
                                 <Button variant="ghost" className="h-8 w-8 p-0">
-                                  <span className="sr-only">Abrir menú</span>
+                                  <span className="sr-only">{t("authorManagement.openMenu")}</span>
                                   <MoreVertical className="h-4 w-4" />
                                 </Button>
                               </DropdownMenuTrigger>
                               <DropdownMenuContent align="end">
                                 <DropdownMenuItem onClick={() => handleEdit(author.slug)}>
-                                  Ver Detalles
+                                  {t("authorManagement.viewDetails")}
                                 </DropdownMenuItem>
                                 <DropdownMenuItem onClick={() => handleEdit(author.slug)}>
-                                  Editar
+                                  {t("authorManagement.edit")}
                                 </DropdownMenuItem>
                                 <AlertDialogTrigger asChild>
                                   <DropdownMenuItem className="text-red-600">
-                                    Eliminar
+                                    {t("authorManagement.delete")}
                                   </DropdownMenuItem>
                                 </AlertDialogTrigger>
                               </DropdownMenuContent>
                             </DropdownMenu>
                             <AlertDialogContent>
                               <AlertDialogHeader>
-                                <AlertDialogTitle>¿Estás absolutamente seguro?</AlertDialogTitle>
+                                <AlertDialogTitle>{t("authorManagement.areYouSure")}</AlertDialogTitle>
                                 <AlertDialogDescription>
-                                  Esta acción no se puede deshacer. Esto eliminará permanentemente el autor "{author.name}".
+                                  {t("authorManagement.deleteConfirmation", { name: author.name })}
                                 </AlertDialogDescription>
                               </AlertDialogHeader>
                               <AlertDialogFooter>
                                 <AlertDialogCancel className="bg-gray-200 hover:bg-gray-300">
-                                  Cancelar
+                                  {t("authorManagement.cancel")}
                                 </AlertDialogCancel>
                                 <AlertDialogAction
                                   className="bg-red-500 text-white hover:bg-red-600"
                                   onClick={() => handleDeleteAuthor(author.slug, author.name)}
                                 >
-                                  Eliminar
+                                  {t("authorManagement.delete")}
                                 </AlertDialogAction>
                               </AlertDialogFooter>
                             </AlertDialogContent>

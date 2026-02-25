@@ -25,6 +25,7 @@ import { Moon, Sun, Monitor, Type, RotateCcw } from "lucide-react";
 import { cn } from "@/common/lib/utils";
 import { useIsMobile } from "@/common/hooks/use-mobile";
 import { useDispatch, useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 import {
     selectConfiguration,
     setInterfaceColor,
@@ -53,12 +54,14 @@ export const ConfigurationPopup = ({
         dispatch(resetConfiguration());
     };
 
+    const { t } = useTranslation();
+
     if (isMobile) {
         return (
             <Drawer open={open} onOpenChange={onOpenChange}>
                 <DrawerContent>
                     <DrawerHeader className="text-left">
-                        <DrawerTitle>Configuration</DrawerTitle>
+                        <DrawerTitle>{t("configuration.title")}</DrawerTitle>
                     </DrawerHeader>
                     <ConfigurationForm
                         configuration={configuration}
@@ -75,7 +78,7 @@ export const ConfigurationPopup = ({
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="max-w-lg p-0 gap-0 overflow-hidden flex flex-col max-h-[85vh]">
                 <DialogHeader className="px-6 py-4 border-b shrink-0">
-                    <DialogTitle className="text-xl font-bold">Configuration</DialogTitle>
+                    <DialogTitle className="text-xl font-bold">{t("configuration.title")}</DialogTitle>
                 </DialogHeader>
                 <ConfigurationForm
                     configuration={configuration}
@@ -109,13 +112,15 @@ const ConfigurationForm = ({
         { name: "#005f73", class: "bg-biblioteca-light-blue" },
     ];
 
+    const { t } = useTranslation();
+
     return (
         <>
             <div className={cn("p-6 space-y-6 flex-1 overflow-y-auto", isMobile && "pb-4")}>
                 {/* Interface Color */}
                 {/* <section className="space-y-4">
                     <Label className="uppercase text-muted-foreground tracking-wider text-xs font-semibold">
-                        Interface Color
+                        {t("interfaceColor")}
                     </Label>
                     <div className="flex space-x-4">
                         {colors.map((color) => (
@@ -138,7 +143,7 @@ const ConfigurationForm = ({
                 {/* Display Theme */}
                 <section className="space-y-4">
                     <Label className="uppercase text-muted-foreground tracking-wider text-xs font-semibold">
-                        Display Theme
+                        {t("configuration.displayTheme")}
                     </Label>
                     <div className="grid grid-cols-3 gap-3">
                         <Button
@@ -150,7 +155,7 @@ const ConfigurationForm = ({
                             onClick={() => dispatch(setTheme("light"))}
                         >
                             <Sun className="w-6 h-6" />
-                            <span className="text-xs font-medium">Light</span>
+                            <span className="text-xs font-medium">{t("configuration.light")}</span>
                         </Button>
                         <Button
                             variant="outline"
@@ -161,7 +166,7 @@ const ConfigurationForm = ({
                             onClick={() => dispatch(setTheme("dark"))}
                         >
                             <Moon className="w-6 h-6" />
-                            <span className="text-xs font-medium">Dark</span>
+                            <span className="text-xs font-medium">{t("configuration.dark")}</span>
                         </Button>
                         <Button
                             variant="outline"
@@ -172,7 +177,7 @@ const ConfigurationForm = ({
                             onClick={() => dispatch(setTheme("auto"))}
                         >
                             <Monitor className="w-6 h-6" />
-                            <span className="text-xs font-medium">Auto</span>
+                            <span className="text-xs font-medium">{t("configuration.auto")}</span>
                         </Button>
                     </div>
                 </section>
@@ -227,11 +232,11 @@ const ConfigurationForm = ({
                 {/* Language */}
                 <section className="space-y-4">
                     <Label className="uppercase text-muted-foreground tracking-wider text-xs font-semibold">
-                        Language
+                        {t("configuration.language")}
                     </Label>
                     <Select value={language} onValueChange={(value) => dispatch(setLanguage(value))}>
                         <SelectTrigger className="w-full text-base">
-                            <SelectValue placeholder="Select Language" />
+                            <SelectValue placeholder={t("configuration.selectLanguage")} />
                         </SelectTrigger>
                         <SelectContent>
                             <SelectItem value="es">
@@ -250,7 +255,7 @@ const ConfigurationForm = ({
                     className="text-muted-foreground hover:text-foreground"
                 >
                     <RotateCcw className="w-4 h-4 mr-2" />
-                    Reset
+                    {t("configuration.reset")}
                 </Button>
             </div>
         </>

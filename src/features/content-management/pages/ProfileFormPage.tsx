@@ -10,11 +10,13 @@ import { useToast } from '@/common/hooks/use-toast';
 import { ProfileForm } from '@/features/content-management/components/ProfileForm/ProfileForm';
 import { Profile, ProfileFormData } from '@/features/content-management/components/ProfileForm/ProfileFormConfig';
 import { useGetProfileByIdQuery, useUpdateProfileMutation, useCreateProfileMutation } from '@/features/content-management/api/profilesApiSlice';
+import { useTranslation } from 'react-i18next';
 
 export default function ProfilePage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { t } = useTranslation();
   const [editing, setEditing] = useState(false);
 
   const { data: profile, isLoading, isError } = useGetProfileByIdQuery(id!, {
@@ -42,23 +44,23 @@ export default function ProfilePage() {
         // Handle update operation
         await updateProfile({ id, formData }).unwrap();
         toast({
-          title: "Éxito",
-          description: "Perfil actualizado correctamente",
+          title: t("profileForm.success"),
+          description: t("profileForm.profileUpdated"),
         });
         setEditing(false);
       } else {
         // Handle create operation
         await createProfile({ formData }).unwrap(); // Fix is here
         toast({
-          title: "Éxito",
-          description: "Perfil creado correctamente",
+          title: t("profileForm.success"),
+          description: t("profileForm.profileCreated"),
         });
         navigate('/gestion/usuarios');
       }
     } catch (error) {
       toast({
-        title: "Error",
-        description: `No se pudo ${id ? 'actualizar' : 'crear'} el perfil.`,
+        title: t("profileForm.error"),
+        description: id ? t("profileForm.profileUpdateError") : t("profileForm.profileCreateError"),
         variant: "destructive",
       });
     }
@@ -74,7 +76,7 @@ export default function ProfilePage() {
       <div className="container mx-auto p-6 max-w-6xl">
         <ReturnButton />
         <div className="flex items-center justify-between my-3">
-          <h1 className="text-3xl font-bold text-biblioteca-dark">Crear Nuevo Perfil</h1>
+          <h1 className="text-3xl font-bold text-biblioteca-dark">{t("profileForm.createNewProfile")}</h1>
         </div>
         <ProfileForm
           onSubmit={handleSave}
@@ -99,7 +101,7 @@ export default function ProfilePage() {
         <ReturnButton />
         <Card>
           <CardContent className="pt-6">
-            <p className="text-center text-muted-foreground">Usuario no encontrado</p>
+            <p className="text-center text-muted-foreground">{t("profileForm.userNotFound")}</p>
           </CardContent>
         </Card>
       </div>
@@ -110,11 +112,11 @@ export default function ProfilePage() {
     <div className="container mx-auto p-6 max-w-6xl">
       <ReturnButton />
       <div className="flex items-center justify-between my-3">
-        <h1 className="text-3xl font-bold text-biblioteca-dark">Perfil de Usuario</h1>
+        <h1 className="text-3xl font-bold text-biblioteca-dark">{t("profileForm.userProfile")}</h1>
         {!editing && (
           <Button onClick={handleEdit} size="sm">
             <Edit className="h-4 w-4 mr-2" />
-            Editar Perfil
+            {t("profileForm.editProfile")}
           </Button>
         )}
       </div>
@@ -141,7 +143,7 @@ export default function ProfilePage() {
             <CardContent className="space-y-4">
               <div className="flex items-center gap-2 text-sm">
                 <User className="h-4 w-4 text-muted-foreground" />
-                <span>Cédula: {profile.national_document || 'N/A'}</span>
+                <span>{t("profileForm.nationalDocument", { id: profile.national_document || t("profileForm.notAvailable") })}</span>
               </div>
               {profile.phone && (
                 <div className="flex items-center gap-2 text-sm">
@@ -158,7 +160,7 @@ export default function ProfilePage() {
               {profile.birth_date && (
                 <div className="flex items-center gap-2 text-sm">
                   <Calendar className="h-4 w-4 text-muted-foreground" />
-                  <span>Fecha de Nacimiento: {new Date(profile.birth_date).toLocaleDateString()}</span>
+                  <span>{t("profileForm.birthDate", { date: new Date(profile.birth_date).toLocaleDateString() })}</span>
                 </div>
               )}
             </CardContent>
@@ -167,14 +169,14 @@ export default function ProfilePage() {
           {/* Statistics and Other Info Card */}
           <Card className="lg:col-span-2">
             <CardHeader>
-              <CardTitle>Información Adicional</CardTitle>
+              <CardTitle>{t("profileForm.additionalInformation")}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
               <Separator />
               <div>
                 <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
                   <BookOpen className="h-5 w-5" />
-                  Estadísticas de Préstamos
+                  {t("profileForm.loanStatistics")}
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 </div>
