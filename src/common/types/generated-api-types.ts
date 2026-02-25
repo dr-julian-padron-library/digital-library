@@ -728,6 +728,27 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/library/reading-sessions/fast_return/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * @description Fast return endpoint for librarians.
+         *     Expects: { "user_id": <uuid|str>, "cota": <str> }
+         *     - user_id: Must be Profile UUID or National Document (Cedula). Integer IDs are REJECTED.
+         */
+        post: operations["library_reading_sessions_fast_return_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/library/videos/": {
         parameters: {
             query?: never;
@@ -2816,8 +2837,6 @@ export interface operations {
                 /** @description Número de resultados a devolver por página. */
                 page_size?: number;
                 publication_date?: string;
-                /** @description Un término de búsqueda. */
-                search?: string;
             };
             header?: never;
             path?: never;
@@ -3732,6 +3751,31 @@ export interface operations {
         };
     };
     library_reading_sessions_fast_checkout_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReadingSessionRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["ReadingSessionRequest"];
+                "multipart/form-data": components["schemas"]["ReadingSessionRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReadingSession"];
+                };
+            };
+        };
+    };
+    library_reading_sessions_fast_return_create: {
         parameters: {
             query?: never;
             header?: never;

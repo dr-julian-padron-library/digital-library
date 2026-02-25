@@ -7,7 +7,7 @@
 
 import {
     Home, BookOpen, Clock, Calendar, Book, LibraryBig, Users,
-    BookType, Languages, ScrollText, User, Zap
+    BookType, Languages, ScrollText, User, Zap, RotateCcw
 } from "lucide-react";
 import { Capability } from '@/features/authentication/types/user_roles';
 import type { MenuItem } from "@/common/components/ui/sidebar";
@@ -44,11 +44,19 @@ export const SIDEBAR_ITEMS: MenuItem[] = [
     },
 
     // Administration Group - Requires specific capabilities
-        {
+    {
         group: "sidebar.administration",
         title: "sidebar.fastCheckout",
         url: "/gestion/prestamo-rapido",
         icon: Zap,
+        requiresAuth: true,
+        capability: Capability.MANAGE_LOANS,
+    },
+    {
+        group: "sidebar.administration",
+        title: "sidebar.fastReturn",
+        url: "/gestion/devolucion-rapida",
+        icon: RotateCcw,
         requiresAuth: true,
         capability: Capability.MANAGE_LOANS,
     },
@@ -77,6 +85,18 @@ export const SIDEBAR_ITEMS: MenuItem[] = [
             { title: "sidebar.languages", url: "/gestion/lenguajes", icon: Languages, requiresAuth: true, capability: Capability.MANAGE_CONTENT },
             { title: "sidebar.materials", url: "/gestion/materiales", icon: ScrollText, requiresAuth: true, capability: Capability.MANAGE_CONTENT },
             { title: "sidebar.authors", url: "/gestion/autores", icon: User, requiresAuth: true, capability: Capability.MANAGE_CONTENT },
+        ]
+    },
+    {
+        group: "sidebar.administration",
+        title: "sidebar.loanManagement",
+        url: "",
+        icon: BookOpen, // Using BookOpen as it is related to books (like Salas used it)
+        requiresAuth: true,
+        capability: Capability.MANAGE_LOANS,
+        children: [
+            { title: "sidebar.readingSessions", url: "/gestion/sesiones-lectura", icon: BookOpen, requiresAuth: true, capability: Capability.MANAGE_LOANS },
+            { title: "sidebar.bookReservations", url: "/gestion/reservas-libros", icon: Calendar, requiresAuth: true, capability: Capability.MANAGE_LOANS },
         ]
     },
     // {

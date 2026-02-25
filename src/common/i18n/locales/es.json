@@ -16,6 +16,7 @@
         "authors": "Autores",
         "userManagement": "Gestión de Usuarios",
         "fastCheckout": "Préstamo Rápido",
+        "fastReturn": "Devolución Rápida",
         "brand": {
             "title": "Biblioteca Pública Central",
             "subtitle": "Dr. Julián Padrón"
@@ -23,7 +24,10 @@
         "footer": {
             "address": "Calle Bermúdez, Complejo Cultural de Maturín",
             "city_state_country": "Maturín, Monagas, Venezuela"
-        }
+        },
+        "loanManagement": "Gestión de Préstamos",
+        "readingSessions": "Sesiones de Lectura",
+        "bookReservations": "Reservas de Libros"
     },
     "common": {
         "return": "VOLVER"
