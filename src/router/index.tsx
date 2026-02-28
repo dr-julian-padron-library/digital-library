@@ -12,6 +12,8 @@ import UserEditPage from "@/features/users/pages/UserEditPage";
 import RoomsPage from "@/features/content/pages/RoomsPage";
 import SelectedRoomPage from "@/features/content/pages/SelectedRoomPage";
 import BookPage from "@/features/content/pages/BookPage";
+import NewsListPage from "@/features/content/pages/NewsListPage";
+import NewsDetailPage from "@/features/content/pages/NewsDetailPage";
 
 // Reservations
 import PrestamoSala from "@/features/room-bookings/pages/RoomBookingPage";
@@ -34,6 +36,8 @@ import ProfileFormPage from "@/features/content-management/pages/ProfileFormPage
 import Estadisticas from "@/features/content-management/pages/StatisticsDashboardPage";
 import RoomBookingManagementPage from "@/features/room-bookings/pages/RoomBookingManagementPage";
 import FastCheckoutPage from "@/features/loans/pages/FastCheckoutPage";
+import NewsManagementPage from "@/features/content-management/pages/NewsManagementPage";
+import NewsFormPage from "@/features/content-management/pages/NewsFormPage";
 
 import NotFound from "@/pages/NotFound";
 
@@ -68,6 +72,10 @@ export const router = createBrowserRouter([
             },
             // Redirect old routes to new ones (Optional but good for UX, though we rely on link updates mostly)
             { path: "prestamo/sala", element: <Navigate to="/reservas/salas" replace /> },
+
+            // News
+            { path: "noticias", element: <NewsListPage /> },
+            { path: "noticias/:slug", element: <NewsDetailPage /> },
         ]
     },
     {
@@ -103,6 +111,10 @@ export const router = createBrowserRouter([
             { path: "estadisticas", element: <Estadisticas /> },
             { path: "reservas-salas", element: <RoomBookingManagementPage /> },
             { path: "prestamo-rapido", element: <FastCheckoutPage /> },
+
+            { path: "noticias", element: <NewsManagementPage /> },
+            { path: "noticias/create", element: <NewsFormPage /> },
+            { path: "noticias/:slug", element: <NewsFormPage /> },
         ]
     },
     { path: "*", element: <NotFound /> }

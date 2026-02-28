@@ -1,36 +1,25 @@
-
-import { Calendar, ArrowRight } from "lucide-react";
+import { Calendar, ArrowRight, Newspaper } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/common/components/ui/card";
 import { Button } from "@/common/components/ui/button";
-
-const news = [
-  {
-    id: 1,
-    title: "Nuevas Adquisiciones de Literatura Venezolana",
-    excerpt: "Hemos incorporado más de 200 nuevos títulos de autores venezolanos contemporáneos a nuestra colección.",
-    date: "2024-06-15",
-    category: "Novedades"
-  },
-  {
-    id: 2,
-    title: "Taller de Escritura Creativa",
-    excerpt: "Inscripciones abiertas para el taller de escritura creativa dirigido por escritores locales reconocidos.",
-    date: "2024-06-10",
-    category: "Eventos"
-  },
-  {
-    id: 3,
-    title: "Digitalización del Archivo Histórico",
-    excerpt: "Iniciamos el proceso de digitalización de documentos históricos de Maturín y la región oriental.",
-    date: "2024-06-05",
-    category: "Proyectos"
-  }
-];
-
+import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useGetNewsListQuery } from "@/features/content-management/api/newsApiSlice";
 
 export function NewsSection() {
   const { t } = useTranslation();
+  const { data: newsData, isFetching } = useGetNewsListQuery({
+    page_size: 3,
+    page: 1,
+    ordering: "-published_date",
+    is_published: true,
+  });
+
+  const displayNews = newsData?.results || [];
+
+  if (!isFetching && displayNews.length === 0) {
+    return null;
+  }
+
   return (
     <section className="py-16 bg-muted/50">
       <div className="container mx-auto px-4">
@@ -43,40 +32,51 @@ export function NewsSection() {
               {t('homepage.news.subtitle')}
             </p>
           </div>
-          <Button variant="outline" className="border-primary text-primary hover:bg-primary hover:text-primary-foreground">
-            {t('homepage.news.view_all')}
-            <ArrowRight className="ml-2 w-4 h-4" />
-          </Button>
+          <Link to="/noticias">
+            <Button variant="outline" className="border-primary text-primary hover:bg-primary hover:text-primary-foreground">
+              {t('homepage.news.view_all')}
+              <ArrowRight className="ml-2 w-4 h-4" />
+            </Button>
+          </Link>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {news.map((item) => (
-            <Card key={item.id} className="book-card-hover">
-              <CardHeader>
-                <div className="flex items-center justify-between mb-2">
-                  <span className="bg-highlight-gold/20 text-primary px-3 py-1 rounded-full text-sm font-medium">
-                    {item.category}
-                  </span>
-                  <div className="flex items-center text-muted-foreground text-sm">
-                    <Calendar className="w-4 h-4 mr-1" />
-                    {new Date(item.date).toLocaleDateString('es-ES')}
+          {isFetching ? (
+            Array.from({ length: 3 }).map((_, i) => (
+              <Card key={i} className="animate-pulse h-64 bg-muted/50"></Card>
+            ))
+          ) : (
+            displayNews.map((item) => (
+              <Card key={item.id} className="book-card-hover">
+                <CardHeader>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-primary text-sm font-medium flex items-center gap-1.5">
+                      <Newspaper className="w-4 h-4" />
+                      Noticia
+                    </span>
+                    <div className="flex items-center text-muted-foreground text-sm">
+                      <Calendar className="w-4 h-4 mr-1" />
+                      {item.published_date && new Date(item.published_date).toLocaleDateString('es-ES')}
+                    </div>
                   </div>
-                </div>
-                <CardTitle className="text-primary font-display text-lg">
-                  {item.title}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground mb-4">
-                  {item.excerpt}
-                </p>
-                <Button variant="ghost" className="text-primary hover:text-destructive p-0">
-                  {t('homepage.news.read_more')}
-                  <ArrowRight className="ml-2 w-4 h-4" />
-                </Button>
-              </CardContent>
-            </Card>
-          ))}
+                  <CardTitle className="text-primary font-display text-lg line-clamp-2">
+                    {item.title}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground mb-4 line-clamp-3">
+                    {item.subtitle}
+                  </p>
+                  <Link to={`/noticias/${item.slug}`}>
+                    <Button variant="ghost" className="text-primary hover:text-destructive p-0">
+                      {t('homepage.news.read_more')}
+                      <ArrowRight className="ml-2 w-4 h-4" />
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
+            ))
+          )}
         </div>
       </div>
     </section>
