@@ -33,7 +33,7 @@ const RoomsPage = () => {
         <main className="flex-1 px-6 md:px-12 py-6 md:py-10">
             <section className="mb-12 md:mb-16 text-center">
                 <h2 className="font-display text-4xl md:text-5xl mb-4 text-biblioteca-blue dark:text-primary ">
-                    <span>{t('rooms.title_prefix')} <span className="text-biblioteca-gold dark:text-highlight-gold italic">{t('rooms.title_highlight')}</span></span>
+                    <span>{t('rooms.title_prefix')} <span className="text-highlight-gold italic">{t('rooms.title_highlight')}</span></span>
                 </h2>
                 <div className="w-24 h-[1px] bg-gradient-to-r from-transparent via-primary to-transparent mx-auto mb-8"></div>
 

@@ -7,7 +7,7 @@
 
 import {
     Home, BookOpen, Clock, Calendar, Book, LibraryBig, Users,
-    BookType, Languages, ScrollText, User, Zap
+    BookType, Languages, ScrollText, User, Zap, Newspaper
 } from "lucide-react";
 import { Capability } from '@/features/authentication/types/user_roles';
 import type { MenuItem } from "@/common/components/ui/sidebar";
@@ -30,6 +30,13 @@ export const SIDEBAR_ITEMS: MenuItem[] = [
     },
     {
         group: "sidebar.navigation",
+        title: "sidebar.news",
+        url: "/noticias",
+        icon: Newspaper,
+        requiresAuth: false
+    },
+    {
+        group: "sidebar.navigation",
         title: "sidebar.history",
         url: "/historia",
         icon: Clock,
@@ -44,7 +51,7 @@ export const SIDEBAR_ITEMS: MenuItem[] = [
     },
 
     // Administration Group - Requires specific capabilities
-        {
+    {
         group: "sidebar.administration",
         title: "sidebar.fastCheckout",
         url: "/gestion/prestamo-rapido",
@@ -73,6 +80,7 @@ export const SIDEBAR_ITEMS: MenuItem[] = [
         capability: Capability.MANAGE_CONTENT,
         children: [
             { title: "sidebar.collection", url: "/gestion/coleccion", icon: LibraryBig, requiresAuth: true, capability: Capability.MANAGE_CONTENT },
+            { title: "sidebar.news", url: "/gestion/noticias", icon: Newspaper, requiresAuth: true, capability: Capability.MANAGE_CONTENT },
             { title: "sidebar.genres", url: "/gestion/generos", icon: BookType, requiresAuth: true, capability: Capability.MANAGE_CONTENT },
             { title: "sidebar.languages", url: "/gestion/lenguajes", icon: Languages, requiresAuth: true, capability: Capability.MANAGE_CONTENT },
             { title: "sidebar.materials", url: "/gestion/materiales", icon: ScrollText, requiresAuth: true, capability: Capability.MANAGE_CONTENT },
