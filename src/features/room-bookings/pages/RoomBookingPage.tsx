@@ -24,6 +24,77 @@ export interface DatosSolicitud {
   equiposSolicitados?: string;
 }
 
+interface PasoRendererProps {
+  pasoActual: PasoFormulario;
+  datosSolicitud: Partial<DatosSolicitud>;
+  actualizarDatos: (nuevosDatos: Partial<DatosSolicitud>) => void;
+  avanzarPaso: () => void;
+  retrocederPaso: () => void;
+  setPasoActual: (paso: PasoFormulario) => void;
+}
+
+const PasoRenderer: React.FC<PasoRendererProps> = ({
+  pasoActual,
+  datosSolicitud,
+  actualizarDatos,
+  avanzarPaso,
+  retrocederPaso,
+  setPasoActual
+}) => {
+  switch (pasoActual) {
+    case 'fecha':
+      return (
+        <CalendarioDisponibilidad
+          fechaSeleccionada={datosSolicitud.fecha}
+          onFechaSeleccionada={(fecha) => {
+            actualizarDatos({ fecha });
+            avanzarPaso();
+          }}
+        />
+      );
+    case 'hora':
+      return (
+        <SelectorHorarios
+          fecha={datosSolicitud.fecha!}
+          horaInicio={datosSolicitud.horaInicio}
+          horaFin={datosSolicitud.horaFin}
+          onHorarioSeleccionado={(horaInicio, horaFin) => {
+            actualizarDatos({ horaInicio, horaFin });
+            avanzarPaso();
+          }}
+          onRetroceder={retrocederPaso}
+        />
+      );
+    case 'datos':
+      return (
+        <FormularioSolicitud
+          datosSolicitud={datosSolicitud}
+          onDatosActualizados={actualizarDatos}
+          onEnviar={async () => {
+            setPasoActual('confirmacion');
+          }}
+          onRetroceder={retrocederPaso}
+          isLoading={false}
+        />
+      );
+    case 'confirmacion':
+      return (
+        <PantallaConfirmacion
+          datosSolicitud={datosSolicitud as DatosSolicitud}
+          onNuevaSolicitud={() => {
+            // we will pass this as a prop from PrestamoSala in reality
+            // actually we can do it via setPasoActual directly, but we need to clear data
+          }}
+        // We can't clear here without an extra function, let's fix below.
+        />
+      );
+    default:
+      return null;
+  }
+};
+
+
+
 const PrestamoSala = () => {
   const [pasoActual, setPasoActual] = useState<PasoFormulario>('fecha');
   const [datosSolicitud, setDatosSolicitud] = useState<Partial<DatosSolicitud>>({});
@@ -68,58 +139,7 @@ const PrestamoSala = () => {
     return titulos[paso];
   };
 
-  const renderPaso = () => {
-    switch (pasoActual) {
-      case 'fecha':
-        return (
-          <CalendarioDisponibilidad
-            fechaSeleccionada={datosSolicitud.fecha}
-            onFechaSeleccionada={(fecha) => {
-              actualizarDatos({ fecha });
-              avanzarPaso();
-            }}
-          />
-        );
-      case 'hora':
-        return (
-          <SelectorHorarios
-            fecha={datosSolicitud.fecha!}
-            horaInicio={datosSolicitud.horaInicio}
-            horaFin={datosSolicitud.horaFin}
-            onHorarioSeleccionado={(horaInicio, horaFin) => {
-              actualizarDatos({ horaInicio, horaFin });
-              avanzarPaso();
-            }}
-            onRetroceder={retrocederPaso}
-          />
-        );
-      case 'datos':
-        return (
-          <FormularioSolicitud
-            datosSolicitud={datosSolicitud}
-            onDatosActualizados={actualizarDatos}
-            onEnviar={async (datos) => {
-              // Loading handled in component, we just accept success
-              setPasoActual('confirmacion');
-            }}
-            onRetroceder={retrocederPaso}
-            isLoading={false} // No parent loading state anymore
-          />
-        );
-      case 'confirmacion':
-        return (
-          <PantallaConfirmacion
-            datosSolicitud={datosSolicitud as DatosSolicitud}
-            onNuevaSolicitud={() => {
-              setDatosSolicitud({});
-              setPasoActual('fecha');
-            }}
-          />
-        );
-      default:
-        return null;
-    }
-  };
+
 
   const IconoPaso = getIconoPaso(pasoActual);
 
@@ -182,7 +202,24 @@ const PrestamoSala = () => {
           </CardHeader>
           <CardContent className="p-0">
             <div className="min-h-[500px]">
-              {renderPaso()}
+              {pasoActual === 'confirmacion' ? (
+                <PantallaConfirmacion
+                  datosSolicitud={datosSolicitud as DatosSolicitud}
+                  onNuevaSolicitud={() => {
+                    setDatosSolicitud({});
+                    setPasoActual('fecha');
+                  }}
+                />
+              ) : (
+                <PasoRenderer
+                  pasoActual={pasoActual}
+                  datosSolicitud={datosSolicitud}
+                  actualizarDatos={actualizarDatos}
+                  avanzarPaso={avanzarPaso}
+                  retrocederPaso={retrocederPaso}
+                  setPasoActual={setPasoActual}
+                />
+              )}
             </div>
           </CardContent>
         </Card>

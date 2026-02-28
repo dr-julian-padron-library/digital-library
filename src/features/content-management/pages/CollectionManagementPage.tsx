@@ -249,109 +249,12 @@ const CollectionPage: React.FC = () => {
 
         {activeLabel === "Libros" && books.length > 0 && (
           <>
-            <div className="border rounded-lg overflow-hidden">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>{t("collectionManagement.title")}</TableHead>
-                    <TableHead>{t("collectionManagement.author")}</TableHead>
-                    <TableHead>{t("collectionManagement.year")}</TableHead>
-                    <TableHead>{t("collectionManagement.quantity")}</TableHead>
-                    <TableHead>{t("collectionManagement.available")}</TableHead>
-                    <TableHead>{t("collectionManagement.type")}</TableHead>
-                    <TableHead className="text-right">{t("collectionManagement.actions")}</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {books.map((book: MinimalBook) => {
-                    const authors =
-                      book.authors
-                        ?.filter((a): a is Author => a !== null)
-                        .map((a) => a.name)
-                        .join(", ") || t("collectionManagement.noAuthor");
-
-                    return (
-                      <TableRow key={book.id}>
-                        <TableCell className="font-medium">{book.title}</TableCell>
-                        <TableCell>{authors}</TableCell>
-                        <TableCell>{book.publication_date || t("collectionManagement.NA")}</TableCell>
-                        <TableCell>
-                          <Badge
-                            variant={
-                              book.quantity_in_stock > 0
-                                ? "default"
-                                : "destructive"
-                            }
-                          >
-                            {book.quantity_in_stock}
-                          </Badge>
-                        </TableCell>
-                        <TableCell>
-                          <Badge
-                            variant={
-                              book.available_copies > 0
-                                ? "default"
-                                : "destructive"
-                            }
-                          >
-                            {book.available_copies}
-                          </Badge>
-                        </TableCell>
-                        <TableCell>
-                          <Badge variant="outline">
-                            {book.material_type_detail?.name || t("collectionManagement.NA")}
-                          </Badge>
-                        </TableCell>
-                        <TableCell className="text-right">
-                          <AlertDialog>
-                            <DropdownMenu>
-                              <DropdownMenuTrigger asChild>
-                                <Button variant="ghost" className="h-8 w-8 p-0">
-                                  <span className="sr-only">{t("collectionManagement.openMenu")}</span>
-                                  <MoreVertical className="h-4 w-4" />
-                                </Button>
-                              </DropdownMenuTrigger>
-                              <DropdownMenuContent align="end">
-                                <DropdownMenuItem onClick={() => handleEdit(book.slug)}>
-                                  {t("collectionManagement.viewDetails")}
-                                </DropdownMenuItem>
-                                <DropdownMenuItem onClick={() => handleEdit(book.slug)}>
-                                  {t("collectionManagement.edit")}
-                                </DropdownMenuItem>
-                                <AlertDialogTrigger asChild>
-                                  <DropdownMenuItem className="text-red-600">
-                                    {t("collectionManagement.delete")}
-                                  </DropdownMenuItem>
-                                </AlertDialogTrigger>
-                              </DropdownMenuContent>
-                            </DropdownMenu>
-                            <AlertDialogContent>
-                              <AlertDialogHeader>
-                                <AlertDialogTitle>{t("collectionManagement.areYouSure")}</AlertDialogTitle>
-                                <AlertDialogDescription>
-                                  {t("collectionManagement.deleteConfirmation")}
-                                </AlertDialogDescription>
-                              </AlertDialogHeader>
-                              <AlertDialogFooter>
-                                <AlertDialogCancel className="bg-gray-200 hover:bg-gray-300">
-                                  {t("collectionManagement.cancel")}
-                                </AlertDialogCancel>
-                                <AlertDialogAction
-                                  className="bg-red-500 text-white hover:bg-red-600"
-                                  onClick={() => handleDeleteBook(book.slug)}
-                                >
-                                  {t("collectionManagement.delete")}
-                                </AlertDialogAction>
-                              </AlertDialogFooter>
-                            </AlertDialogContent>
-                          </AlertDialog>
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
-                </TableBody>
-              </Table>
-            </div>
+            <CollectionBookTable
+              books={books}
+              t={t}
+              handleEdit={handleEdit}
+              handleDeleteBook={handleDeleteBook}
+            />
             <PaginationComponent
               currentPage={page}
               maxPage={maxPage}
@@ -361,83 +264,198 @@ const CollectionPage: React.FC = () => {
         )}
 
         {activeLabel === "Videos" && videos.length > 0 && (
-          <div className="border rounded-lg overflow-hidden">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>{t("collectionManagement.title")}</TableHead>
-                  <TableHead>{t("collectionManagement.director")}</TableHead>
-                  <TableHead>{t("collectionManagement.releaseYear")}</TableHead>
-                  <TableHead>{t("collectionManagement.duration")}</TableHead>
-                  <TableHead>{t("collectionManagement.type")}</TableHead>
-                  <TableHead className="text-right">{t("collectionManagement.actions")}</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {videos.map((video: MinimalVideo) => (
-                  <TableRow key={video.id}>
-                    <TableCell className="font-medium">{video.title}</TableCell>
-                    <TableCell>{video.director || t("collectionManagement.NA")}</TableCell>
-                    <TableCell>{video.release_date || t("collectionManagement.NA")}</TableCell>
-                    <TableCell>{video.duration || t("collectionManagement.NA")}</TableCell>
-                    <TableCell>
-                      <Badge variant="outline">
-                        {video.material_type_detail?.name || t("collectionManagement.NA")}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <AlertDialog>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" className="h-8 w-8 p-0">
-                              <span className="sr-only">{t("collectionManagement.openMenu")}</span>
-                              <MoreVertical className="h-4 w-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuItem onClick={() => handleEdit(video.slug)}>
-                              {t("collectionManagement.viewDetails")}
-                            </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => handleEdit(video.slug)}>
-                              {t("collectionManagement.edit")}
-                            </DropdownMenuItem>
-                            <AlertDialogTrigger asChild>
-                              <DropdownMenuItem className="text-red-600">
-                                {t("collectionManagement.delete")}
-                              </DropdownMenuItem>
-                            </AlertDialogTrigger>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                        <AlertDialogContent>
-                          <AlertDialogHeader>
-                            <AlertDialogTitle>{t("collectionManagement.areYouSure")}</AlertDialogTitle>
-                            <AlertDialogDescription>
-                              {t("collectionManagement.deleteConfirmation")}
-                            </AlertDialogDescription>
-                          </AlertDialogHeader>
-                          <AlertDialogFooter>
-                            <AlertDialogCancel className="bg-gray-200 hover:bg-gray-300">
-                              {t("collectionManagement.cancel")}
-                            </AlertDialogCancel>
-                            <AlertDialogAction
-                              className="bg-red-500 text-white hover:bg-red-600"
-                              onClick={() => handleDeleteVideo(video.slug)}
-                            >
-                              {t("collectionManagement.delete")}
-                            </AlertDialogAction>
-                          </AlertDialogFooter>
-                        </AlertDialogContent>
-                      </AlertDialog>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
+          <CollectionVideoTable
+            videos={videos}
+            t={t}
+            handleEdit={handleEdit}
+            handleDeleteVideo={handleDeleteVideo}
+          />
         )}
       </CardContent>
     </Card>
   );
 };
+
+const CollectionBookTable = ({ books, t, handleEdit, handleDeleteBook }: any) => (
+  <div className="border rounded-lg overflow-hidden">
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead>{t("collectionManagement.title")}</TableHead>
+          <TableHead>{t("collectionManagement.author")}</TableHead>
+          <TableHead>{t("collectionManagement.year")}</TableHead>
+          <TableHead>{t("collectionManagement.quantity")}</TableHead>
+          <TableHead>{t("collectionManagement.available")}</TableHead>
+          <TableHead>{t("collectionManagement.type")}</TableHead>
+          <TableHead className="text-right">{t("collectionManagement.actions")}</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {books.map((book: MinimalBook) => {
+          const authors =
+            book.authors
+              ?.filter((a): a is Author => a !== null)
+              .map((a) => a.name)
+              .join(", ") || t("collectionManagement.noAuthor");
+
+          return (
+            <TableRow key={book.id}>
+              <TableCell className="font-medium">{book.title}</TableCell>
+              <TableCell>{authors}</TableCell>
+              <TableCell>{book.publication_date || t("collectionManagement.NA")}</TableCell>
+              <TableCell>
+                <Badge
+                  variant={
+                    book.quantity_in_stock > 0
+                      ? "default"
+                      : "destructive"
+                  }
+                >
+                  {book.quantity_in_stock}
+                </Badge>
+              </TableCell>
+              <TableCell>
+                <Badge
+                  variant={
+                    book.available_copies > 0
+                      ? "default"
+                      : "destructive"
+                  }
+                >
+                  {book.available_copies}
+                </Badge>
+              </TableCell>
+              <TableCell>
+                <Badge variant="outline">
+                  {book.material_type_detail?.name || t("collectionManagement.NA")}
+                </Badge>
+              </TableCell>
+              <TableCell className="text-right">
+                <AlertDialog>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" className="h-8 w-8 p-0">
+                        <span className="sr-only">{t("collectionManagement.openMenu")}</span>
+                        <MoreVertical className="h-4 w-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem onClick={() => handleEdit(book.slug)}>
+                        {t("collectionManagement.viewDetails")}
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => handleEdit(book.slug)}>
+                        {t("collectionManagement.edit")}
+                      </DropdownMenuItem>
+                      <AlertDialogTrigger asChild>
+                        <DropdownMenuItem className="text-red-600">
+                          {t("collectionManagement.delete")}
+                        </DropdownMenuItem>
+                      </AlertDialogTrigger>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>{t("collectionManagement.areYouSure")}</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        {t("collectionManagement.deleteConfirmation")}
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel className="bg-gray-200 hover:bg-gray-300">
+                        {t("collectionManagement.cancel")}
+                      </AlertDialogCancel>
+                      <AlertDialogAction
+                        className="bg-red-500 text-white hover:bg-red-600"
+                        onClick={() => handleDeleteBook(book.slug)}
+                      >
+                        {t("collectionManagement.delete")}
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              </TableCell>
+            </TableRow>
+          );
+        })}
+      </TableBody>
+    </Table>
+  </div>
+);
+
+const CollectionVideoTable = ({ videos, t, handleEdit, handleDeleteVideo }: any) => (
+  <div className="border rounded-lg overflow-hidden">
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead>{t("collectionManagement.title")}</TableHead>
+          <TableHead>{t("collectionManagement.director")}</TableHead>
+          <TableHead>{t("collectionManagement.releaseYear")}</TableHead>
+          <TableHead>{t("collectionManagement.duration")}</TableHead>
+          <TableHead>{t("collectionManagement.type")}</TableHead>
+          <TableHead className="text-right">{t("collectionManagement.actions")}</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {videos.map((video: MinimalVideo) => (
+          <TableRow key={video.id}>
+            <TableCell className="font-medium">{video.title}</TableCell>
+            <TableCell>{video.director || t("collectionManagement.NA")}</TableCell>
+            <TableCell>{video.release_date || t("collectionManagement.NA")}</TableCell>
+            <TableCell>{video.duration || t("collectionManagement.NA")}</TableCell>
+            <TableCell>
+              <Badge variant="outline">
+                {video.material_type_detail?.name || t("collectionManagement.NA")}
+              </Badge>
+            </TableCell>
+            <TableCell className="text-right">
+              <AlertDialog>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" className="h-8 w-8 p-0">
+                      <span className="sr-only">{t("collectionManagement.openMenu")}</span>
+                      <MoreVertical className="h-4 w-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem onClick={() => handleEdit(video.slug)}>
+                      {t("collectionManagement.viewDetails")}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => handleEdit(video.slug)}>
+                      {t("collectionManagement.edit")}
+                    </DropdownMenuItem>
+                    <AlertDialogTrigger asChild>
+                      <DropdownMenuItem className="text-red-600">
+                        {t("collectionManagement.delete")}
+                      </DropdownMenuItem>
+                    </AlertDialogTrigger>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>{t("collectionManagement.areYouSure")}</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      {t("collectionManagement.deleteConfirmation")}
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel className="bg-gray-200 hover:bg-gray-300">
+                      {t("collectionManagement.cancel")}
+                    </AlertDialogCancel>
+                    <AlertDialogAction
+                      className="bg-red-500 text-white hover:bg-red-600"
+                      onClick={() => handleDeleteVideo(video.slug)}
+                    >
+                      {t("collectionManagement.delete")}
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            </TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  </div>
+);
 
 export default CollectionPage;

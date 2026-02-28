@@ -166,8 +166,8 @@ const RoomBookingManagementPage: React.FC = () => {
                 <div className="h-8 bg-muted rounded w-1/4 animate-pulse"></div>
                 <div className="h-10 bg-muted rounded animate-pulse"></div>
                 <div className="space-y-3">
-                    {[...Array(5)].map((_, i) => (
-                        <div key={i} className="h-12 bg-muted rounded animate-pulse"></div>
+                    {['ske-1', 'ske-2', 'ske-3', 'ske-4', 'ske-5'].map((key) => (
+                        <div key={key} className="h-12 bg-muted rounded animate-pulse"></div>
                     ))}
                 </div>
             </div>
@@ -186,85 +186,15 @@ const RoomBookingManagementPage: React.FC = () => {
         <Card className="w-full">
             <CardHeader className="flex flex-col md:flex-row md:items-center justify-between space-y-4 md:space-y-0 pb-6">
                 <CardTitle className="text-2xl font-bold">Gestión de Reservas de Salas</CardTitle>
-                <div className="flex flex-col sm:flex-row items-center gap-2">
-                    <div className="relative w-full sm:w-64">
-                        <Input
-                            placeholder="Buscar por solicitante, email..."
-                            value={filters.search || ""}
-                            onChange={(e) => handleFilterChange("search", e.target.value)}
-                            className="w-full"
-                        />
-                    </div>
-
-                    <Popover>
-                        <PopoverTrigger asChild>
-                            <Button variant="outline" className="w-full sm:w-auto">
-                                <Filter className="w-4 h-4 mr-2" />
-                                Filtros
-                            </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-80 p-4 space-y-4" align="end">
-                            <h4 className="font-medium leading-none mb-2">Filtros Avanzados</h4>
-                            <div className="space-y-2">
-                                <label className="text-sm font-medium">Estado</label>
-                                <Select
-                                    value={filters.status || "ALL"}
-                                    onValueChange={(val) => handleFilterChange("status", val)}
-                                >
-                                    <SelectTrigger>
-                                        <SelectValue placeholder="Todos los estados" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="ALL">Todos</SelectItem>
-                                        <SelectItem value="PENDING">Pendiente</SelectItem>
-                                        <SelectItem value="APPROVED">Aprobada</SelectItem>
-                                        <SelectItem value="REJECTED">Rechazada</SelectItem>
-                                        <SelectItem value="CANCELLED">Cancelada</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                            </div>
-
-                            <div className="space-y-2">
-                                <label className="text-sm font-medium">Fecha del Evento</label>
-                                <Input
-                                    type="date"
-                                    value={filters.event_date || ""}
-                                    onChange={(e) => handleFilterChange("event_date", e.target.value)}
-                                />
-                            </div>
-
-                            <div className="space-y-2">
-                                <label className="text-sm font-medium">Registros por página</label>
-                                <div className="flex flex-wrap gap-2">
-                                    {pageSizeOptions.map((size) => (
-                                        <Button
-                                            key={size}
-                                            variant={pageSize === size ? "default" : "outline"}
-                                            size="sm"
-                                            onClick={() => {
-                                                setPageSize(size);
-                                                setPage(1);
-                                            }}
-                                        >
-                                            {size}
-                                        </Button>
-                                    ))}
-                                </div>
-                            </div>
-
-                            <Button
-                                variant="ghost"
-                                className="w-full mt-2"
-                                onClick={() => {
-                                    setFilters({});
-                                    setPage(1);
-                                }}
-                            >
-                                Limpiar Filtros
-                            </Button>
-                        </PopoverContent>
-                    </Popover>
-                </div>
+                <BookingFilters
+                    filters={filters as any}
+                    handleFilterChange={handleFilterChange as any}
+                    pageSizeOptions={pageSizeOptions}
+                    pageSize={pageSize}
+                    setPageSize={setPageSize}
+                    setPage={setPage}
+                    setFilters={setFilters}
+                />
             </CardHeader>
 
             <CardContent>
@@ -274,79 +204,17 @@ const RoomBookingManagementPage: React.FC = () => {
                     </div>
                 ) : (
                     <>
-                        {/* Desktop View */}
-                        <div className="hidden md:block border rounded-lg overflow-hidden">
-                            <Table>
-                                <TableHeader>
-                                    <TableRow>
-                                        <TableHead>Fecha</TableHead>
-                                        <TableHead>Horario</TableHead>
-                                        <TableHead>Solicitante</TableHead>
-                                        <TableHead>Evento</TableHead>
-                                        <TableHead>Estado</TableHead>
-                                        <TableHead className="text-right">Acciones</TableHead>
-                                    </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                    {bookingResults.map((booking) => (
-                                        <TableRow key={booking.id}>
-                                            <TableCell className="font-medium whitespace-nowrap">
-                                                {format(new Date(booking.event_date), "dd MMM yyyy", { locale: es })}
-                                            </TableCell>
-                                            <TableCell className="whitespace-nowrap text-sm text-muted-foreground">
-                                                {booking.start_time.slice(0, 5)} - {booking.end_time.slice(0, 5)}
-                                            </TableCell>
-                                            <TableCell>
-                                                <div className="font-medium">{booking.full_name}</div>
-                                                <div className="text-xs text-muted-foreground">{booking.email}</div>
-                                            </TableCell>
-                                            <TableCell>
-                                                <div className="max-w-[150px] truncate" title={booking.description}>
-                                                    {booking.event_type}
-                                                </div>
-                                            </TableCell>
-                                            <TableCell>{getStatusBadge(booking.status || "PENDING")}</TableCell>
-                                            <TableCell className="text-right">
-                                                <BookingActionsDropdown booking={booking} onAction={handleAction} />
-                                            </TableCell>
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </div>
+                        <BookingDesktopTable
+                            bookingResults={bookingResults}
+                            handleAction={handleAction}
+                            getStatusBadge={getStatusBadge}
+                        />
 
-                        {/* Mobile View */}
-                        <div className="md:hidden space-y-4">
-                            {bookingResults.map((booking) => (
-                                <Card key={booking.id} className="overflow-hidden">
-                                    <CardContent className="p-4 space-y-3">
-                                        <div className="flex justify-between items-start">
-                                            <div className="space-y-1">
-                                                <div className="flex items-center gap-2">
-                                                    <CalendarIcon className="w-4 h-4 text-muted-foreground" />
-                                                    <span className="font-medium">
-                                                        {format(new Date(booking.event_date), "dd MMM yyyy", { locale: es })}
-                                                    </span>
-                                                </div>
-                                                <div className="text-sm text-muted-foreground">
-                                                    {booking.start_time.slice(0, 5)} - {booking.end_time.slice(0, 5)}
-                                                </div>
-                                            </div>
-                                            {getStatusBadge(booking.status || "PENDING")}
-                                        </div>
-
-                                        <div className="pt-2 border-t">
-                                            <div className="font-medium">{booking.full_name}</div>
-                                            <div className="text-sm text-muted-foreground">{booking.event_type}</div>
-                                        </div>
-
-                                        <div className="flex justify-end pt-2">
-                                            <BookingActionsDropdown booking={booking} onAction={handleAction} />
-                                        </div>
-                                    </CardContent>
-                                </Card>
-                            ))}
-                        </div>
+                        <BookingMobileList
+                            bookingResults={bookingResults}
+                            handleAction={handleAction}
+                            getStatusBadge={getStatusBadge}
+                        />
 
                         {count > 0 && (
                             <div className="py-4">
@@ -363,6 +231,196 @@ const RoomBookingManagementPage: React.FC = () => {
         </Card>
     );
 };
+
+const BookingFilters = ({
+    filters,
+    handleFilterChange,
+    pageSizeOptions,
+    pageSize,
+    setPageSize,
+    setPage,
+    setFilters
+}: {
+    filters: { search?: string; status?: string; event_date?: string; event_type?: string; };
+    handleFilterChange: (key: string, value: string) => void;
+    pageSizeOptions: number[];
+    pageSize: number;
+    setPageSize: (size: number) => void;
+    setPage: (page: number) => void;
+    setFilters: (filters: {}) => void;
+}) => (
+    <div className="flex flex-col sm:flex-row items-center gap-2">
+        <div className="relative w-full sm:w-64">
+            <Input
+                placeholder="Buscar por solicitante, email..."
+                value={filters.search || ""}
+                onChange={(e) => handleFilterChange("search", e.target.value)}
+                className="w-full"
+            />
+        </div>
+
+        <Popover>
+            <PopoverTrigger asChild>
+                <Button variant="outline" className="w-full sm:w-auto">
+                    <Filter className="w-4 h-4 mr-2" />
+                    Filtros
+                </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-80 p-4 space-y-4" align="end">
+                <h4 className="font-medium leading-none mb-2">Filtros Avanzados</h4>
+                <div className="space-y-2">
+                    <div className="text-sm font-medium mb-1">Estado</div>
+                    <Select
+                        value={filters.status || "ALL"}
+                        onValueChange={(val) => handleFilterChange("status", val)}
+                    >
+                        <SelectTrigger>
+                            <SelectValue placeholder="Todos los estados" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="ALL">Todos</SelectItem>
+                            <SelectItem value="PENDING">Pendiente</SelectItem>
+                            <SelectItem value="APPROVED">Aprobada</SelectItem>
+                            <SelectItem value="REJECTED">Rechazada</SelectItem>
+                            <SelectItem value="CANCELLED">Cancelada</SelectItem>
+                        </SelectContent>
+                    </Select>
+                </div>
+
+                <div className="space-y-2">
+                    <div className="text-sm font-medium mb-1">Fecha del Evento</div>
+                    <Input
+                        type="date"
+                        value={filters.event_date || ""}
+                        onChange={(e) => handleFilterChange("event_date", e.target.value)}
+                    />
+                </div>
+
+                <div className="space-y-2">
+                    <div className="text-sm font-medium mb-1">Registros por página</div>
+                    <div className="flex flex-wrap gap-2">
+                        {pageSizeOptions.map((size) => (
+                            <Button
+                                key={size}
+                                variant={pageSize === size ? "default" : "outline"}
+                                size="sm"
+                                onClick={() => {
+                                    setPageSize(size);
+                                    setPage(1);
+                                }}
+                            >
+                                {size}
+                            </Button>
+                        ))}
+                    </div>
+                </div>
+
+                <Button
+                    variant="ghost"
+                    className="w-full mt-2"
+                    onClick={() => {
+                        setFilters({});
+                        setPage(1);
+                    }}
+                >
+                    Limpiar Filtros
+                </Button>
+            </PopoverContent>
+        </Popover>
+    </div>
+);
+
+const BookingDesktopTable = ({
+    bookingResults,
+    handleAction,
+    getStatusBadge
+}: {
+    bookingResults: RoomBooking[];
+    handleAction: (action: string, booking: RoomBooking) => void;
+    getStatusBadge: (status: string) => React.ReactNode;
+}) => (
+    <div className="hidden md:block border rounded-lg overflow-hidden">
+        <Table>
+            <TableHeader>
+                <TableRow>
+                    <TableHead>Fecha</TableHead>
+                    <TableHead>Horario</TableHead>
+                    <TableHead>Solicitante</TableHead>
+                    <TableHead>Evento</TableHead>
+                    <TableHead>Estado</TableHead>
+                    <TableHead className="text-right">Acciones</TableHead>
+                </TableRow>
+            </TableHeader>
+            <TableBody>
+                {bookingResults.map((booking) => (
+                    <TableRow key={booking.id}>
+                        <TableCell className="font-medium whitespace-nowrap">
+                            {format(new Date(booking.event_date), "dd MMM yyyy", { locale: es })}
+                        </TableCell>
+                        <TableCell className="whitespace-nowrap text-sm text-muted-foreground">
+                            {booking.start_time.slice(0, 5)} - {booking.end_time.slice(0, 5)}
+                        </TableCell>
+                        <TableCell>
+                            <div className="font-medium">{booking.full_name}</div>
+                            <div className="text-xs text-muted-foreground">{booking.email}</div>
+                        </TableCell>
+                        <TableCell>
+                            <div className="max-w-[150px] truncate" title={booking.description}>
+                                {booking.event_type}
+                            </div>
+                        </TableCell>
+                        <TableCell>{getStatusBadge(booking.status || "PENDING")}</TableCell>
+                        <TableCell className="text-right">
+                            <BookingActionsDropdown booking={booking} onAction={handleAction} />
+                        </TableCell>
+                    </TableRow>
+                ))}
+            </TableBody>
+        </Table>
+    </div>
+);
+
+const BookingMobileList = ({
+    bookingResults,
+    handleAction,
+    getStatusBadge
+}: {
+    bookingResults: RoomBooking[];
+    handleAction: (action: string, booking: RoomBooking) => void;
+    getStatusBadge: (status: string) => React.ReactNode;
+}) => (
+    <div className="md:hidden space-y-4">
+        {bookingResults.map((booking) => (
+            <Card key={booking.id} className="overflow-hidden">
+                <CardContent className="p-4 space-y-3">
+                    <div className="flex justify-between items-start">
+                        <div className="space-y-1">
+                            <div className="flex items-center gap-2">
+                                <CalendarIcon className="w-4 h-4 text-muted-foreground" />
+                                <span className="font-medium">
+                                    {format(new Date(booking.event_date), "dd MMM yyyy", { locale: es })}
+                                </span>
+                            </div>
+                            <div className="text-sm text-muted-foreground">
+                                {booking.start_time.slice(0, 5)} - {booking.end_time.slice(0, 5)}
+                            </div>
+                        </div>
+                        {getStatusBadge(booking.status || "PENDING")}
+                    </div>
+
+                    <div className="pt-2 border-t">
+                        <div className="font-medium">{booking.full_name}</div>
+                        <div className="text-sm text-muted-foreground">{booking.event_type}</div>
+                    </div>
+
+                    <div className="flex justify-end pt-2">
+                        <BookingActionsDropdown booking={booking} onAction={handleAction} />
+                    </div>
+                </CardContent>
+            </Card>
+        ))}
+    </div>
+);
 
 const BookingActionsDropdown = ({
     booking,

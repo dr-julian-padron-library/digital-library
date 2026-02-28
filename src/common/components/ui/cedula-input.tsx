@@ -27,47 +27,24 @@ export function CedulaInput({
     id,
     placeholder = '12345678',
 }: CedulaInputProps) {
-    // Parse initial value
-    const [type, setType] = useState<string>('V');
-    const [number, setNumber] = useState<string>('');
-
-    useEffect(() => {
-        if (value) {
-            const match = value.match(/^([VEJ])([0-9]*)$/i);
-            if (match) {
-                setType(match[1].toUpperCase());
-                setNumber(match[2]);
-            } else {
-                // Fallback for just numbers or invalid formats
-                // If it's just numbers, assume V? Or just keep it in number?
-                // Let's assume if it doesn't start with VEJ, it's all number
-                const cleanValue = value.replace(/[^0-9]/g, '');
-                if (cleanValue) {
-                    setNumber(cleanValue);
-                    // Keep existing type if possible, or default to V
-                }
-            }
-        } else {
-            setNumber('');
-        }
-    }, [value]);
+    const match = value.match(/^([VEJ])([0-9]*)$/i);
+    const type = match ? match[1].toUpperCase() : 'V';
+    const number = match ? match[2] : value.replace(/[^0-9]/g, '');
 
     const handleTypeChange = (newType: string) => {
-        setType(newType);
-        triggerChange(newType, number);
+        if (onChange) {
+            onChange(`${newType}${number}`);
+        }
     };
 
     const handleNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const newNumber = e.target.value.replace(/[^0-9]/g, '');
-        setNumber(newNumber);
-        triggerChange(type, newNumber);
-    };
-
-    const triggerChange = (t: string, n: string) => {
         if (onChange) {
-            onChange(`${t}${n}`);
+            onChange(`${type}${newNumber}`);
         }
     };
+
+
 
     return (
         <div className={cn('flex space-x-2', className)}>

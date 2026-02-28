@@ -1,9 +1,21 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/common/components/ui/card";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/common/components/ui/chart";
-import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
+import React, { Suspense } from 'react';
+
+const ResponsiveContainer = React.lazy(() => import("recharts").then(m => ({ default: m.ResponsiveContainer })));
+const PieChart = React.lazy(() => import("recharts").then(m => ({ default: m.PieChart })));
+const Pie = React.lazy(() => import("recharts").then(m => ({ default: m.Pie })));
+const Cell = React.lazy(() => import("recharts").then(m => ({ default: m.Cell })));
+const BarChart = React.lazy(() => import("recharts").then(m => ({ default: m.BarChart })));
+const Bar = React.lazy(() => import("recharts").then(m => ({ default: m.Bar })));
+const XAxis = React.lazy(() => import("recharts").then(m => ({ default: m.XAxis })));
+const YAxis = React.lazy(() => import("recharts").then(m => ({ default: m.YAxis })));
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
+
+// @ts-ignore
+declare const supabase: any;
 
 // Function to get books by category data
 const getBooksData = async (t: any) => {
@@ -126,29 +138,31 @@ export const BooksChart = () => {
           <CardTitle className="text-biblioteca-blue">{t("charts.booksByCategory")}</CardTitle>
         </CardHeader>
         <CardContent>
-          <ChartContainer config={chartConfig} className="h-64">
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie
-                  data={booksByCategory}
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={40}
-                  outerRadius={80}
-                  paddingAngle={5}
-                  dataKey="value"
-                >
-                  {booksByCategory.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
-                  ))}
-                </Pie>
-                <ChartTooltip content={<ChartTooltipContent />} />
-              </PieChart>
-            </ResponsiveContainer>
-          </ChartContainer>
+          <Suspense fallback={<div className="h-64 flex items-center justify-center">Cargando gráfico...</div>}>
+            <ChartContainer config={chartConfig} className="h-64">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={booksByCategory}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={40}
+                    outerRadius={80}
+                    paddingAngle={5}
+                    dataKey="value"
+                  >
+                    {booksByCategory.map((entry) => (
+                      <Cell key={entry.name} fill={entry.color} />
+                    ))}
+                  </Pie>
+                  <ChartTooltip content={<ChartTooltipContent />} />
+                </PieChart>
+              </ResponsiveContainer>
+            </ChartContainer>
+          </Suspense>
           <div className="grid grid-cols-2 gap-2 mt-4">
-            {booksByCategory.map((category, index) => (
-              <div key={index} className="flex items-center space-x-2">
+            {booksByCategory.map((category) => (
+              <div key={category.name} className="flex items-center space-x-2">
                 <div
                   className="w-3 h-3 rounded-full"
                   style={{ backgroundColor: category.color }}
@@ -168,17 +182,19 @@ export const BooksChart = () => {
           <CardTitle className="text-biblioteca-blue">{t("charts.monthlyActivity")}</CardTitle>
         </CardHeader>
         <CardContent>
-          <ChartContainer config={chartConfig} className="h-64">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={monthlyData}>
-                <XAxis dataKey="month" />
-                <YAxis />
-                <ChartTooltip content={<ChartTooltipContent />} />
-                <Bar dataKey="reserved" fill="var(--color-reserved)" />
-                <Bar dataKey="returned" fill="var(--color-returned)" />
-              </BarChart>
-            </ResponsiveContainer>
-          </ChartContainer>
+          <Suspense fallback={<div className="h-64 flex items-center justify-center">Cargando gráfico...</div>}>
+            <ChartContainer config={chartConfig} className="h-64">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={monthlyData}>
+                  <XAxis dataKey="month" />
+                  <YAxis />
+                  <ChartTooltip content={<ChartTooltipContent />} />
+                  <Bar dataKey="reserved" fill="var(--color-reserved)" />
+                  <Bar dataKey="returned" fill="var(--color-returned)" />
+                </BarChart>
+              </ResponsiveContainer>
+            </ChartContainer>
+          </Suspense>
         </CardContent>
       </Card>
     </div>

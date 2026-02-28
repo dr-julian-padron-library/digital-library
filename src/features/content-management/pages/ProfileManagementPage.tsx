@@ -116,8 +116,8 @@ const UserManagementPage: React.FC = () => {
           <div className="h-8 bg-muted rounded w-1/4"></div>
           <div className="h-10 bg-muted rounded"></div>
           <div className="space-y-3">
-            {[...Array(5)].map((_, i) => (
-              <div key={i} className="h-12 bg-muted rounded"></div>
+            {[1, 2, 3, 4, 5].map((skeletonId) => (
+              <div key={`profile-skeleton-${skeletonId}`} className="h-12 bg-muted rounded"></div>
             ))}
           </div>
         </div>
@@ -188,162 +188,22 @@ const UserManagementPage: React.FC = () => {
         ) : (
           <>
             {/* Desktop Table View */}
-            <div className="hidden md:block">
-              <div className="border rounded-lg overflow-hidden">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>{t("profileManagement.fullName")}</TableHead>
-                      <TableHead>{t("profileManagement.email")}</TableHead>
-                      <TableHead>{t("profileManagement.nationalDocument")}</TableHead>
-                      <TableHead className="text-right">{t("profileManagement.actions")}</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {profileResults.map((profile) => (
-                      <TableRow key={profile.id}>
-                        <TableCell className="font-medium">
-                          <div className="flex items-center gap-2">
-                            <Avatar className="h-8 w-8">
-                              <AvatarFallback className="text-xs bg-biblioteca-primary text-white">
-                                {getInitials(profile.user?.first_name, profile.user?.last_name)}
-                              </AvatarFallback>
-                            </Avatar>
-                            <span>{`${profile.user?.first_name} ${profile.user?.last_name}`}</span>
-                          </div>
-                        </TableCell>
-                        <TableCell>{profile.user?.email}</TableCell>
-                        <TableCell>{profile.national_document}</TableCell>
-                        {/* <TableCell>
-                          <Badge variant={profile.activo ? "default" : "secondary"}>
-                            {profile.activo ? "Activo" : "Inactivo"}
-                          </Badge>
-                        </TableCell> */}
-                        <TableCell className="text-right">
-                          <AlertDialog>
-                            <DropdownMenu>
-                              <DropdownMenuTrigger asChild>
-                                <Button variant="ghost" className="h-8 w-8 p-0">
-                                  <span className="sr-only">{t("profileManagement.openMenu")}</span>
-                                  <MoreVertical className="h-4 w-4" />
-                                </Button>
-                              </DropdownMenuTrigger>
-                              <DropdownMenuContent align="end">
-                                <DropdownMenuItem onClick={() => handleEdit(profile.id)}>
-                                  {t("profileManagement.viewDetails")}
-                                </DropdownMenuItem>
-                                <DropdownMenuItem onClick={() => handleEdit(profile.id)}>
-                                  {t("profileManagement.edit")}
-                                </DropdownMenuItem>
-                                <AlertDialogTrigger asChild>
-                                  <DropdownMenuItem className="text-red-600">
-                                    {t("profileManagement.delete")}
-                                  </DropdownMenuItem>
-                                </AlertDialogTrigger>
-                              </DropdownMenuContent>
-                            </DropdownMenu>
-                            <AlertDialogContent>
-                              <AlertDialogHeader>
-                                <AlertDialogTitle>{t("profileManagement.areYouSure")}</AlertDialogTitle>
-                                <AlertDialogDescription>
-                                  {t("profileManagement.deleteConfirmation", { name: `${profile.user?.first_name} ${profile.user?.last_name}` })}
-                                </AlertDialogDescription>
-                              </AlertDialogHeader>
-                              <AlertDialogFooter>
-                                <AlertDialogCancel className="bg-gray-200 hover:bg-gray-300">
-                                  {t("profileManagement.cancel")}
-                                </AlertDialogCancel>
-                                <AlertDialogAction
-                                  className="bg-red-500 text-white hover:bg-red-600"
-                                  onClick={() => handleDeleteProfile(profile.id, `${profile.user?.first_name} ${profile.user?.last_name}`)}
-                                >
-                                  {t("profileManagement.delete")}
-                                </AlertDialogAction>
-                              </AlertDialogFooter>
-                            </AlertDialogContent>
-                          </AlertDialog>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
-            </div>
+            <ProfileDesktopTable
+              profileResults={profileResults}
+              getInitials={getInitials}
+              handleEdit={handleEdit}
+              handleDeleteProfile={handleDeleteProfile}
+              t={t}
+            />
 
             {/* Mobile Card View */}
-            <div className="md:hidden grid gap-4">
-              {profileResults.map((profile) => (
-                <Card key={profile.id}>
-                  <CardContent className="p-4">
-                    <div className="space-y-3">
-                      <div className="flex justify-between items-start">
-                        <div className="flex items-center gap-2">
-                          <Avatar className="h-10 w-10">
-                            <AvatarFallback className="text-xs bg-biblioteca-primary text-white">
-                              {getInitials(profile.user?.first_name, profile.user?.last_name)}
-                            </AvatarFallback>
-                          </Avatar>
-                          <div>
-                            <h3 className="font-semibold text-sm">{`${profile.user?.first_name} ${profile.user?.last_name}`}</h3>
-                            <p className="text-xs text-muted-foreground">{profile.user?.email}</p>
-                            <p className="text-xs text-muted-foreground">{profile.national_document}</p>
-                          </div>
-                        </div>
-                        <div className="flex gap-1">
-                          <AlertDialog>
-                            <DropdownMenu>
-                              <DropdownMenuTrigger asChild>
-                                <Button variant="ghost" className="h-8 w-8 p-0">
-                                  <span className="sr-only">{t("profileManagement.openMenu")}</span>
-                                  <MoreVertical className="h-4 w-4" />
-                                </Button>
-                              </DropdownMenuTrigger>
-                              <DropdownMenuContent align="end">
-                                <DropdownMenuItem onClick={() => handleEdit(profile.id)}>
-                                  {t("profileManagement.viewDetails")}
-                                </DropdownMenuItem>
-                                <DropdownMenuItem onClick={() => handleEdit(profile.id)}>
-                                  {t("profileManagement.edit")}
-                                </DropdownMenuItem>
-                                <AlertDialogTrigger asChild>
-                                  <DropdownMenuItem className="text-red-600">
-                                    {t("profileManagement.delete")}
-                                  </DropdownMenuItem>
-                                </AlertDialogTrigger>
-                              </DropdownMenuContent>
-                            </DropdownMenu>
-                            <AlertDialogContent>
-                              <AlertDialogHeader>
-                                <AlertDialogTitle>{t("profileManagement.areYouSure")}</AlertDialogTitle>
-                                <AlertDialogDescription>
-                                  {t("profileManagement.deleteConfirmation", { name: `${profile.user?.first_name} ${profile.user?.last_name}` })}
-                                </AlertDialogDescription>
-                              </AlertDialogHeader>
-                              <AlertDialogFooter>
-                                <AlertDialogCancel className="bg-gray-200 hover:bg-gray-300">
-                                  {t("profileManagement.cancel")}
-                                </AlertDialogCancel>
-                                <AlertDialogAction
-                                  className="bg-red-500 text-white hover:bg-red-600"
-                                  onClick={() => handleDeleteProfile(profile.id, `${profile.user?.first_name} ${profile.user?.last_name}`)}
-                                >
-                                  {t("profileManagement.delete")}
-                                </AlertDialogAction>
-                              </AlertDialogFooter>
-                            </AlertDialogContent>
-                          </AlertDialog>
-                        </div>
-                      </div>
-                      {/* <div className="mt-2">
-                        <Badge variant={profile.activo ? "default" : "secondary"}>
-                          {profile.activo ? "Activo" : "Inactivo"}
-                        </Badge>
-                      </div> */}
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
+            <ProfileMobileList
+              profileResults={profileResults}
+              getInitials={getInitials}
+              handleEdit={handleEdit}
+              handleDeleteProfile={handleDeleteProfile}
+              t={t}
+            />
             {count > 0 && (
               <div className="flex justify-center mt-4">
                 <PaginationComponent
@@ -359,5 +219,155 @@ const UserManagementPage: React.FC = () => {
     </Card>
   );
 };
+
+const ProfileDesktopTable = ({ profileResults, getInitials, handleEdit, handleDeleteProfile, t }: any) => (
+  <div className="hidden md:block">
+    <div className="border rounded-lg overflow-hidden">
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>{t("profileManagement.fullName")}</TableHead>
+            <TableHead>{t("profileManagement.email")}</TableHead>
+            <TableHead>{t("profileManagement.nationalDocument")}</TableHead>
+            <TableHead className="text-right">{t("profileManagement.actions")}</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {profileResults.map((profile: any) => (
+            <TableRow key={profile.id}>
+              <TableCell className="font-medium">
+                <div className="flex items-center gap-2">
+                  <Avatar className="h-8 w-8">
+                    <AvatarFallback className="text-xs bg-biblioteca-primary text-white">
+                      {getInitials(profile.user?.first_name || '', profile.user?.last_name || '')}
+                    </AvatarFallback>
+                  </Avatar>
+                  <span>{`${profile.user?.first_name} ${profile.user?.last_name}`}</span>
+                </div>
+              </TableCell>
+              <TableCell>{profile.user?.email}</TableCell>
+              <TableCell>{profile.national_document}</TableCell>
+              <TableCell className="text-right">
+                <AlertDialog>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" className="h-8 w-8 p-0">
+                        <span className="sr-only">{t("profileManagement.openMenu")}</span>
+                        <MoreVertical className="h-4 w-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem onClick={() => handleEdit(profile.id)}>
+                        {t("profileManagement.viewDetails")}
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => handleEdit(profile.id)}>
+                        {t("profileManagement.edit")}
+                      </DropdownMenuItem>
+                      <AlertDialogTrigger asChild>
+                        <DropdownMenuItem className="text-red-600">
+                          {t("profileManagement.delete")}
+                        </DropdownMenuItem>
+                      </AlertDialogTrigger>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>{t("profileManagement.areYouSure")}</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        {t("profileManagement.deleteConfirmation", { name: `${profile.user?.first_name} ${profile.user?.last_name}` })}
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel className="bg-gray-200 hover:bg-gray-300">
+                        {t("profileManagement.cancel")}
+                      </AlertDialogCancel>
+                      <AlertDialogAction
+                        className="bg-red-500 text-white hover:bg-red-600"
+                        onClick={() => handleDeleteProfile(profile.id, `${profile.user?.first_name} ${profile.user?.last_name}`)}
+                      >
+                        {t("profileManagement.delete")}
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
+  </div>
+);
+
+const ProfileMobileList = ({ profileResults, getInitials, handleEdit, handleDeleteProfile, t }: any) => (
+  <div className="md:hidden grid gap-4">
+    {profileResults.map((profile: any) => (
+      <Card key={profile.id}>
+        <CardContent className="p-4">
+          <div className="space-y-3">
+            <div className="flex justify-between items-start">
+              <div className="flex items-center gap-2">
+                <Avatar className="h-10 w-10">
+                  <AvatarFallback className="text-xs bg-biblioteca-primary text-white">
+                    {getInitials(profile.user?.first_name || '', profile.user?.last_name || '')}
+                  </AvatarFallback>
+                </Avatar>
+                <div>
+                  <h3 className="font-semibold text-sm">{`${profile.user?.first_name} ${profile.user?.last_name}`}</h3>
+                  <p className="text-xs text-muted-foreground">{profile.user?.email}</p>
+                  <p className="text-xs text-muted-foreground">{profile.national_document}</p>
+                </div>
+              </div>
+              <div className="flex gap-1">
+                <AlertDialog>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" className="h-8 w-8 p-0">
+                        <span className="sr-only">{t("profileManagement.openMenu")}</span>
+                        <MoreVertical className="h-4 w-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem onClick={() => handleEdit(profile.id)}>
+                        {t("profileManagement.viewDetails")}
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => handleEdit(profile.id)}>
+                        {t("profileManagement.edit")}
+                      </DropdownMenuItem>
+                      <AlertDialogTrigger asChild>
+                        <DropdownMenuItem className="text-red-600">
+                          {t("profileManagement.delete")}
+                        </DropdownMenuItem>
+                      </AlertDialogTrigger>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>{t("profileManagement.areYouSure")}</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        {t("profileManagement.deleteConfirmation", { name: `${profile.user?.first_name} ${profile.user?.last_name}` })}
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel className="bg-gray-200 hover:bg-gray-300">
+                        {t("profileManagement.cancel")}
+                      </AlertDialogCancel>
+                      <AlertDialogAction
+                        className="bg-red-500 text-white hover:bg-red-600"
+                        onClick={() => handleDeleteProfile(profile.id, `${profile.user?.first_name} ${profile.user?.last_name}`)}
+                      >
+                        {t("profileManagement.delete")}
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    ))}
+  </div>
+);
 
 export default UserManagementPage;

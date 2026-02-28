@@ -138,9 +138,9 @@ export function SelectorHorarios({
           </h4>
 
           <div className="space-y-3">
-            {franjas.map((franja, index) => (
+            {franjas.map((franja) => (
               <div
-                key={index}
+                key={`${franja.inicio}-${franja.fin}`}
                 className={`
                   p-4 rounded-lg border-2 transition-all duration-200 cursor-pointer
                   ${franja.disponible
@@ -150,6 +150,14 @@ export function SelectorHorarios({
                     : 'border-destructive/30 bg-destructive/10 cursor-not-allowed opacity-60'
                   }
                 `}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    franja.disponible && seleccionarHorario(franja.inicio, franja.fin);
+                  }
+                }}
                 onClick={() => franja.disponible && seleccionarHorario(franja.inicio, franja.fin)}
               >
                 <div className="flex items-center justify-between">

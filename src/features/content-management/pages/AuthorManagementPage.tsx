@@ -129,8 +129,8 @@ const AuthorManagementPage: React.FC = () => {
           <div className="h-8 bg-muted rounded w-1/4"></div>
           <div className="h-10 bg-muted rounded"></div>
           <div className="space-y-3">
-            {[...Array(5)].map((_, i) => (
-              <div key={i} className="h-12 bg-muted rounded"></div>
+            {[1, 2, 3, 4, 5].map((skeletonId) => (
+              <div key={`author-skeleton-${skeletonId}`} className="h-12 bg-muted rounded"></div>
             ))}
           </div>
         </div>

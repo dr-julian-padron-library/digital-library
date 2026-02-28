@@ -31,7 +31,7 @@ const userEditSchema = z.object({
     }
     return true;
 }, {
-    message: () => i18next.t('users.passwordFieldsRequired'),
+    message: i18next.t('users.passwordFieldsRequired'),
     path: ["old_password"],
 }).refine((data) => {
     if (data.new_password && data.new_password.length < 8) {
@@ -39,7 +39,7 @@ const userEditSchema = z.object({
     }
     return true;
 }, {
-    message: () => i18next.t('users.passwordMinLength'),
+    message: i18next.t('users.passwordMinLength'),
     path: ["new_password"],
 }).refine((data) => {
     if (data.new_password !== data.confirm_password) {
@@ -47,11 +47,189 @@ const userEditSchema = z.object({
     }
     return true;
 }, {
-    message: () => i18next.t('users.passwordsMustMatch'),
+    message: i18next.t('users.passwordsMustMatch'),
     path: ["confirm_password"],
 });
 
 type UserEditFormData = z.infer<typeof userEditSchema>;
+
+const PersonalInformationCard = ({ register, errors, hasNationalDocument, t }: any) => (
+    <Card>
+        <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+                <UserIcon className="h-5 w-5 text-biblioteca-blue" />
+                {t("users.personalInformation")}
+            </CardTitle>
+            <CardDescription>
+                {t("users.updateContactInfo")}
+            </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-6">
+            <div className="space-y-2">
+                <Label htmlFor="national_document" className="flex items-center gap-2">
+                    <CreditCard className="h-4 w-4" />
+                    {t("users.nationalDocument")}
+                </Label>
+                <Input
+                    id="national_document"
+                    {...register('national_document')}
+                    disabled={hasNationalDocument}
+                    className={hasNationalDocument ? "bg-muted" : ""}
+                    placeholder={t("users.exampleNationalDocument")}
+                />
+                {hasNationalDocument && (
+                    <p className="text-xs text-muted-foreground">
+                        {t("users.nationalDocCannotBeChanged")}
+                    </p>
+                )}
+                {errors.national_document && (
+                    <p className="text-sm text-destructive">{errors.national_document.message}</p>
+                )}
+            </div>
+            <div className="space-y-2">
+                <Label htmlFor="phone" className="flex items-center gap-2">
+                    <Phone className="h-4 w-4" />
+                    {t("users.phone")}
+                </Label>
+                <Input
+                    id="phone"
+                    {...register('phone')}
+                    placeholder="+58 412 1234567"
+                />
+                {errors.phone && (
+                    <p className="text-sm text-destructive">{errors.phone.message}</p>
+                )}
+            </div>
+            <div className="space-y-2">
+                <Label htmlFor="address" className="flex items-center gap-2">
+                    <MapPin className="h-4 w-4" />
+                    {t("users.address")}
+                </Label>
+                <Input
+                    id="address"
+                    {...register('address')}
+                    placeholder={t("users.exampleAddress")}
+                />
+                {errors.address && (
+                    <p className="text-sm text-destructive">{errors.address.message}</p>
+                )}
+            </div>
+            <div className="space-y-2">
+                <Label htmlFor="birth_date" className="flex items-center gap-2">
+                    <Calendar className="h-4 w-4" />
+                    {t("users.birthDate")}
+                </Label>
+                <Input
+                    id="birth_date"
+                    type="date"
+                    {...register('birth_date')}
+                />
+                {errors.birth_date && (
+                    <p className="text-sm text-destructive">{errors.birth_date.message}</p>
+                )}
+            </div>
+        </CardContent>
+    </Card>
+);
+
+const SecurityCard = ({ register, errors, t, showOldPassword, setShowOldPassword, showNewPassword, setShowNewPassword, showConfirmPassword, setShowConfirmPassword }: any) => (
+    <Card>
+        <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+                <Key className="h-5 w-5 text-biblioteca-blue" />
+                {t("users.changePassword")}
+            </CardTitle>
+            <CardDescription>
+                {t("users.leaveEmptyIfNotChangingPassword")}
+            </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-6">
+            <div className="space-y-2">
+                <Label htmlFor="old_password">{t("users.oldPassword")}</Label>
+                <div className="relative">
+                    <Input
+                        id="old_password"
+                        type={showOldPassword ? "text" : "password"}
+                        {...register('old_password')}
+                        placeholder="••••••••"
+                        className="pr-10"
+                    />
+                    <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                        onClick={() => setShowOldPassword(!showOldPassword)}
+                    >
+                        {showOldPassword ? <EyeOff className="h-4 w-4 text-muted-foreground" /> : <Eye className="h-4 w-4 text-muted-foreground" />}
+                    </Button>
+                </div>
+                {errors.old_password && (
+                    <p className="text-sm text-destructive">{errors.old_password.message}</p>
+                )}
+            </div>
+            <div className="space-y-2">
+                <Label htmlFor="new_password">{t("users.newPassword")}</Label>
+                <div className="relative">
+                    <Input
+                        id="new_password"
+                        type={showNewPassword ? "text" : "password"}
+                        {...register('new_password')}
+                        placeholder="••••••••"
+                        className="pr-10"
+                    />
+                    <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                        onClick={() => setShowNewPassword(!showNewPassword)}
+                    >
+                        {showNewPassword ? <EyeOff className="h-4 w-4 text-muted-foreground" /> : <Eye className="h-4 w-4 text-muted-foreground" />}
+                    </Button>
+                </div>
+                {errors.new_password && (
+                    <p className="text-sm text-destructive">{errors.new_password.message}</p>
+                )}
+            </div>
+            <div className="space-y-2">
+                <Label htmlFor="confirm_password">{t("users.confirmNewPassword")}</Label>
+                <div className="relative">
+                    <Input
+                        id="confirm_password"
+                        type={showConfirmPassword ? "text" : "password"}
+                        {...register('confirm_password')}
+                        placeholder="••••••••"
+                        className="pr-10"
+                    />
+                    <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    >
+                        {showConfirmPassword ? <EyeOff className="h-4 w-4 text-muted-foreground" /> : <Eye className="h-4 w-4 text-muted-foreground" />}
+                    </Button>
+                </div>
+                {errors.confirm_password && (
+                    <p className="text-sm text-destructive">{errors.confirm_password.message}</p>
+                )}
+            </div>
+            <div className="bg-muted/50 p-4 rounded-lg text-sm text-muted-foreground space-y-2">
+                <div className="flex items-center gap-2 font-medium text-foreground/80">
+                    <Lock className="h-4 w-4" />
+                    {t("users.securityRequirements")}
+                </div>
+                <ul className="list-disc list-inside space-y-1 ml-1">
+                    <li>{t("users.passwordReq1")}</li>
+                    <li>{t("users.passwordReq2")}</li>
+                    <li>{t("users.passwordReq3")}</li>
+                </ul>
+            </div>
+        </CardContent>
+    </Card>
+);
 
 export default function UserEditPage() {
     const navigate = useNavigate();
@@ -72,6 +250,15 @@ export default function UserEditPage() {
         reset,
     } = useForm<UserEditFormData>({
         resolver: zodResolver(userEditSchema),
+        values: profile ? {
+            national_document: profile.national_document || '',
+            phone: profile.phone || '',
+            address: profile.address || '',
+            birth_date: profile.birth_date || '',
+            old_password: '',
+            new_password: '',
+            confirm_password: '',
+        } : undefined,
         defaultValues: {
             national_document: '',
             phone: '',
@@ -83,19 +270,7 @@ export default function UserEditPage() {
         }
     });
 
-    useEffect(() => {
-        if (profile) {
-            reset({
-                national_document: profile.national_document || '',
-                phone: profile.phone || '',
-                address: profile.address || '',
-                birth_date: profile.birth_date || '',
-                old_password: '',
-                new_password: '',
-                confirm_password: '',
-            });
-        }
-    }, [profile, reset]);
+
 
     const onSubmit = async (data: UserEditFormData) => {
         try {
@@ -155,191 +330,24 @@ export default function UserEditPage() {
             </div>
 
             <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <Card>
-                    <CardHeader>
-                        <CardTitle className="flex items-center gap-2">
-                            <UserIcon className="h-5 w-5 text-biblioteca-blue" />
-                            {t("users.personalInformation")}
-                        </CardTitle>
-                        <CardDescription>
-                            {t("users.updateContactInfo")}
-                        </CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-6">
+                <PersonalInformationCard
+                    register={register}
+                    errors={errors}
+                    hasNationalDocument={hasNationalDocument}
+                    t={t}
+                />
 
-                        {/* National Document */}
-                        <div className="space-y-2">
-                            <Label htmlFor="national_document" className="flex items-center gap-2">
-                                <CreditCard className="h-4 w-4" />
-                                {t("users.nationalDocument")}
-                            </Label>
-                            <Input
-                                id="national_document"
-                                {...register('national_document')}
-                                disabled={hasNationalDocument}
-                                className={hasNationalDocument ? "bg-muted" : ""}
-                                placeholder={t("users.exampleNationalDocument")}
-                            />
-                            {hasNationalDocument && (
-                                <p className="text-xs text-muted-foreground">
-                                    {t("users.nationalDocCannotBeChanged")}
-                                </p>
-                            )}
-                            {errors.national_document && (
-                                <p className="text-sm text-destructive">{errors.national_document.message}</p>
-                            )}
-                        </div>
-
-                        {/* Phone */}
-                        <div className="space-y-2">
-                            <Label htmlFor="phone" className="flex items-center gap-2">
-                                <Phone className="h-4 w-4" />
-                                {t("users.phone")}
-                            </Label>
-                            <Input
-                                id="phone"
-                                {...register('phone')}
-                                placeholder="+58 412 1234567"
-                            />
-                            {errors.phone && (
-                                <p className="text-sm text-destructive">{errors.phone.message}</p>
-                            )}
-                        </div>
-
-                        {/* Address */}
-                        <div className="space-y-2">
-                            <Label htmlFor="address" className="flex items-center gap-2">
-                                <MapPin className="h-4 w-4" />
-                                {t("users.address")}
-                            </Label>
-                            <Input
-                                id="address"
-                                {...register('address')}
-                                placeholder={t("users.exampleAddress")}
-                            />
-                            {errors.address && (
-                                <p className="text-sm text-destructive">{errors.address.message}</p>
-                            )}
-                        </div>
-
-                        {/* Birth Date */}
-                        <div className="space-y-2">
-                            <Label htmlFor="birth_date" className="flex items-center gap-2">
-                                <Calendar className="h-4 w-4" />
-                                {t("users.birthDate")}
-                            </Label>
-                            <Input
-                                id="birth_date"
-                                type="date"
-                                {...register('birth_date')}
-                            />
-                            {errors.birth_date && (
-                                <p className="text-sm text-destructive">{errors.birth_date.message}</p>
-                            )}
-                        </div>
-                    </CardContent>
-                </Card>
-
-                {/* Password Change Card */}
-                <Card>
-                    <CardHeader>
-                        <CardTitle className="flex items-center gap-2">
-                            <Key className="h-5 w-5 text-biblioteca-blue" />
-                            {t("users.changePassword")}
-                        </CardTitle>
-                        <CardDescription>
-                            {t("users.leaveEmptyIfNotChangingPassword")}
-                        </CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-6">
-                        <div className="space-y-2">
-                            <Label htmlFor="old_password">{t("users.oldPassword")}</Label>
-                            <div className="relative">
-                                <Input
-                                    id="old_password"
-                                    type={showOldPassword ? "text" : "password"}
-                                    {...register('old_password')}
-                                    placeholder="••••••••"
-                                    className="pr-10"
-                                />
-                                <Button
-                                    type="button"
-                                    variant="ghost"
-                                    size="sm"
-                                    className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-                                    onClick={() => setShowOldPassword(!showOldPassword)}
-                                >
-                                    {showOldPassword ? <EyeOff className="h-4 w-4 text-muted-foreground" /> : <Eye className="h-4 w-4 text-muted-foreground" />}
-                                </Button>
-                            </div>
-                            {errors.old_password && (
-                                <p className="text-sm text-destructive">{errors.old_password.message}</p>
-                            )}
-                        </div>
-
-                        <div className="space-y-2">
-                            <Label htmlFor="new_password">{t("users.newPassword")}</Label>
-                            <div className="relative">
-                                <Input
-                                    id="new_password"
-                                    type={showNewPassword ? "text" : "password"}
-                                    {...register('new_password')}
-                                    placeholder="••••••••"
-                                    className="pr-10"
-                                />
-                                <Button
-                                    type="button"
-                                    variant="ghost"
-                                    size="sm"
-                                    className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-                                    onClick={() => setShowNewPassword(!showNewPassword)}
-                                >
-                                    {showNewPassword ? <EyeOff className="h-4 w-4 text-muted-foreground" /> : <Eye className="h-4 w-4 text-muted-foreground" />}
-                                </Button>
-                            </div>
-                            {errors.new_password && (
-                                <p className="text-sm text-destructive">{errors.new_password.message}</p>
-                            )}
-                        </div>
-
-                        <div className="space-y-2">
-                            <Label htmlFor="confirm_password">{t("users.confirmNewPassword")}</Label>
-                            <div className="relative">
-                                <Input
-                                    id="confirm_password"
-                                    type={showConfirmPassword ? "text" : "password"}
-                                    {...register('confirm_password')}
-                                    placeholder="••••••••"
-                                    className="pr-10"
-                                />
-                                <Button
-                                    type="button"
-                                    variant="ghost"
-                                    size="sm"
-                                    className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-                                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                                >
-                                    {showConfirmPassword ? <EyeOff className="h-4 w-4 text-muted-foreground" /> : <Eye className="h-4 w-4 text-muted-foreground" />}
-                                </Button>
-                            </div>
-                            {errors.confirm_password && (
-                                <p className="text-sm text-destructive">{errors.confirm_password.message}</p>
-                            )}
-                        </div>
-
-                        <div className="bg-muted/50 p-4 rounded-lg text-sm text-muted-foreground space-y-2">
-                            <div className="flex items-center gap-2 font-medium text-foreground/80">
-                                <Lock className="h-4 w-4" />
-                                {t("users.securityRequirements")}
-                            </div>
-                            <ul className="list-disc list-inside space-y-1 ml-1">
-                                <li>{t("users.passwordReq1")}</li>
-                                <li>{t("users.passwordReq2")}</li>
-                                <li>{t("users.passwordReq3")}</li>
-                            </ul>
-                        </div>
-                    </CardContent>
-                </Card>
+                <SecurityCard
+                    register={register}
+                    errors={errors}
+                    t={t}
+                    showOldPassword={showOldPassword}
+                    setShowOldPassword={setShowOldPassword}
+                    showNewPassword={showNewPassword}
+                    setShowNewPassword={setShowNewPassword}
+                    showConfirmPassword={showConfirmPassword}
+                    setShowConfirmPassword={setShowConfirmPassword}
+                />
 
                 <div className="flex justify-end gap-4 lg:col-span-2">
                     <Button

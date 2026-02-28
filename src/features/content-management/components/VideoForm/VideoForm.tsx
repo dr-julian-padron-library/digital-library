@@ -29,7 +29,7 @@ interface VideoFormProps {
 export function VideoForm({ initialData, onSubmit, onCancel, isSubmitting }: VideoFormProps) {
   const { toast } = useToast();
   const { t } = useTranslation();
-  const { data: materialTypes } = useGetMaterialTypesQuery();
+  const { data: materialTypes } = useGetMaterialTypesQuery({ page_size: 1000 });
   const { data: genresData } = useGetGenresQuery({ page_size: 1000 });
 
   const isEditMode = !!initialData;
@@ -38,6 +38,7 @@ export function VideoForm({ initialData, onSubmit, onCancel, isSubmitting }: Vid
 
   const { register, handleSubmit, formState: { errors }, reset, watch, control } = useForm<VideoFormData>({
     defaultValues,
+    values: initialData ? mapVideoToFormValues(initialData) : undefined,
   });
 
   const watchedCover = watch('cover');
@@ -55,11 +56,7 @@ export function VideoForm({ initialData, onSubmit, onCancel, isSubmitting }: Vid
     }
   };
 
-  useEffect(() => {
-    if (initialData) {
-      reset(mapVideoToFormValues(initialData));
-    }
-  }, [initialData, reset]);
+
 
   return (
     <form onSubmit={handleSubmit(onFormSubmit)} className="space-y-6">
@@ -137,7 +134,7 @@ export function VideoForm({ initialData, onSubmit, onCancel, isSubmitting }: Vid
                           <SelectValue placeholder={t("videoForm.selectType")} />
                         </SelectTrigger>
                         <SelectContent>
-                          {materialTypes?.map(type => (
+                          {(Array.isArray(materialTypes) ? materialTypes : materialTypes?.results || [])?.map((type: any) => (
                             <SelectItem key={type.name} value={type.name}>{type.name}</SelectItem>
                           ))}
                         </SelectContent>

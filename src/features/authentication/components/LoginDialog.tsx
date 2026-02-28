@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useReducer } from "react";
 import { useLogInMutation, useSignUpMutation } from "@/features/authentication/api/authApiSlice.ts";
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { useToast } from "@/common/components/ui/use-toast";
@@ -45,16 +45,50 @@ const extractErrorMessage = (errorData: unknown, fallback: string) => {
   return fallback;
 };
 
+type AuthState = {
+  email: "";
+  password: "";
+  confirmPassword: "";
+  first_name: "";
+  last_name: "";
+  showPassword: boolean;
+  showConfirmPassword: boolean;
+  isSignUp: boolean;
+};
+
+const initialAuthState = {
+  email: "",
+  password: "",
+  confirmPassword: "",
+  first_name: "",
+  last_name: "",
+  showPassword: false,
+  showConfirmPassword: false,
+  isSignUp: false,
+};
+
+type AuthAction =
+  | { type: 'SET_FIELD'; field: string; value: string | boolean }
+  | { type: 'TOGGLE_FIELD'; field: keyof typeof initialAuthState }
+  | { type: 'RESET' };
+
+function authReducer(state: typeof initialAuthState, action: AuthAction) {
+  switch (action.type) {
+    case 'SET_FIELD':
+      return { ...state, [action.field]: action.value };
+    case 'TOGGLE_FIELD':
+      return { ...state, [action.field]: !state[action.field] };
+    case 'RESET':
+      return initialAuthState;
+    default:
+      return state;
+  }
+}
+
 export function LoginDialog({ open, onOpenChange }: LoginDialogProps) {
   const { t } = useTranslation();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [first_name, setFirstName] = useState("");
-  const [last_name, setLastName] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [isSignUp, setIsSignUp] = useState(false);
+  const [state, dispatch] = useReducer(authReducer, initialAuthState);
+  const { email, password, confirmPassword, first_name, last_name, showPassword, showConfirmPassword, isSignUp } = state;
 
   // Use the mutation hooks directly
   const [logIn, { isLoading: isLoggingIn, isSuccess: isLoginSuccess, isError: isLoginError, error: loginError }] = useLogInMutation();
@@ -85,67 +119,11 @@ export function LoginDialog({ open, onOpenChange }: LoginDialogProps) {
     return cleanVal;
   };
 
-  // Use useEffect to handle side effects like toast messages
-  useEffect(() => {
-    if (isLoginSuccess) {
-      toast({
-        title: t("login.sessionStarted", "Sesión iniciada"),
-        description: t("login.welcomeBack", "Bienvenido de vuelta"),
-      });
-      resetAndClose();
-    }
-  }, [isLoginSuccess, toast]);
 
-  useEffect(() => {
-    if (isSignUpSuccess) {
-      toast({
-        title: t("login.registrationSuccess", "Registro exitoso"),
-        description: t("login.sessionStartedAuto", "Sesión iniciada automáticamente"),
-      });
-      resetAndClose();
-    }
-  }, [isSignUpSuccess, toast]);
-
-  useEffect(() => {
-    if (isLoginError) {
-      let errorMessage = t("login.unexpectedError", "Ocurrió un error inesperado");
-
-      // Use a type guard to safely access the `data` property
-      if (isFetchBaseQueryError(loginError)) {
-        errorMessage = extractErrorMessage(loginError.data, errorMessage);
-      }
-
-      toast({
-        title: t("login.loginError", "Error de inicio de sesión"),
-        description: errorMessage,
-        variant: "destructive",
-      });
-    }
-  }, [isLoginError, loginError, toast]);
-
-  useEffect(() => {
-    if (isSignUpError) {
-      let errorMessage = t("login.unexpectedError", "Ocurrió un error inesperado");
-
-      if (isFetchBaseQueryError(signUpError)) {
-        errorMessage = extractErrorMessage(signUpError.data, errorMessage);
-      }
-
-      toast({
-        title: t("login.registrationError", "Error de registro"),
-        description: errorMessage,
-        variant: "destructive",
-      });
-    }
-  }, [isSignUpError, signUpError, toast]);
 
 
   const resetAndClose = () => {
-    setEmail("");
-    setPassword("");
-    setConfirmPassword("");
-    setFirstName("");
-    setLastName("");
+    dispatch({ type: 'RESET' });
     onOpenChange(false);
   };
 
@@ -162,20 +140,40 @@ export function LoginDialog({ open, onOpenChange }: LoginDialogProps) {
           return;
         }
         await signUp({ email, password, first_name, last_name }).unwrap();
+        toast({
+          title: t("login.registrationSuccess", "Registro exitoso"),
+          description: t("login.sessionStartedAuto", "Sesión iniciada automáticamente"),
+        });
+        resetAndClose();
       } else {
         await logIn({ email, password }).unwrap();
+        toast({
+          title: t("login.sessionStarted", "Sesión iniciada"),
+          description: t("login.welcomeBack", "Bienvenido de vuelta"),
+        });
+        resetAndClose();
       }
     } catch (error) {
+      let errorMessage = t("login.unexpectedError", "Ocurrió un error inesperado");
+      if (isFetchBaseQueryError(error)) {
+        errorMessage = extractErrorMessage(error.data, errorMessage);
+      }
+      toast({
+        title: isSignUp ? t("login.registrationError", "Error de registro") : t("login.loginError", "Error de inicio de sesión"),
+        description: errorMessage,
+        variant: "destructive",
+      });
     }
   };
 
   const toggleMode = () => {
-    setIsSignUp(!isSignUp);
-    setEmail("");
-    setPassword("");
-    setConfirmPassword("");
-    setFirstName("");
-    setLastName("");
+    dispatch({ type: 'TOGGLE_FIELD', field: 'isSignUp' });
+    // Keep credentials if they want to switch mode, or clear them? The previous code cleared them:
+    dispatch({ type: 'SET_FIELD', field: 'email', value: "" });
+    dispatch({ type: 'SET_FIELD', field: 'password', value: "" });
+    dispatch({ type: 'SET_FIELD', field: 'confirmPassword', value: "" });
+    dispatch({ type: 'SET_FIELD', field: 'first_name', value: "" });
+    dispatch({ type: 'SET_FIELD', field: 'last_name', value: "" });
   };
 
   return (
@@ -200,7 +198,7 @@ export function LoginDialog({ open, onOpenChange }: LoginDialogProps) {
                     type="text"
                     placeholder={t("login.firstNamePlaceholder", "Nombre")}
                     value={first_name}
-                    onChange={(e) => setFirstName(formatName(e.target.value))}
+                    onChange={(e) => dispatch({ type: 'SET_FIELD', field: 'first_name', value: formatName(e.target.value) })}
                     className="pl-10"
                     required
                   />
@@ -217,7 +215,7 @@ export function LoginDialog({ open, onOpenChange }: LoginDialogProps) {
                     type="text"
                     placeholder={t("login.lastNamePlaceholder", "Apellido")}
                     value={last_name}
-                    onChange={(e) => setLastName(formatName(e.target.value))}
+                    onChange={(e) => dispatch({ type: 'SET_FIELD', field: 'last_name', value: formatName(e.target.value) })}
                     className="pl-10"
                     required
                   />
@@ -238,7 +236,7 @@ export function LoginDialog({ open, onOpenChange }: LoginDialogProps) {
                 title={t("login.invalidEmail", "Debe ser un correo electrónico válido")}
                 placeholder="tu@email.com"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => dispatch({ type: 'SET_FIELD', field: 'email', value: e.target.value })}
                 className="pl-10"
                 required
               />
@@ -254,13 +252,13 @@ export function LoginDialog({ open, onOpenChange }: LoginDialogProps) {
                 type={showPassword ? "text" : "password"}
                 placeholder="••••••••"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => dispatch({ type: 'SET_FIELD', field: 'password', value: e.target.value })}
                 className={cn("pl-10 pr-10", isSignUp && isPasswordError && "border-destructive focus-visible:ring-destructive")}
                 required
               />
               <button
                 type="button"
-                onClick={() => setShowPassword(!showPassword)}
+                onClick={() => dispatch({ type: 'TOGGLE_FIELD', field: 'showPassword' })}
                 className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground"
               >
                 {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -297,7 +295,7 @@ export function LoginDialog({ open, onOpenChange }: LoginDialogProps) {
                   type={showConfirmPassword ? "text" : "password"}
                   placeholder="••••••••"
                   value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  onChange={(e) => dispatch({ type: 'SET_FIELD', field: 'confirmPassword', value: e.target.value })}
                   className={cn("pl-10 pr-20", isConfirmPasswordError && "border-destructive focus-visible:ring-destructive")}
                   required
                 />
@@ -307,7 +305,7 @@ export function LoginDialog({ open, onOpenChange }: LoginDialogProps) {
                   {isConfirmPasswordError && <XCircle className="h-4 w-4 text-destructive" />}
                   <button
                     type="button"
-                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    onClick={() => dispatch({ type: 'TOGGLE_FIELD', field: 'showConfirmPassword' })}
                     className="text-muted-foreground hover:text-foreground inline-flex items-center justify-center"
                   >
                     {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}

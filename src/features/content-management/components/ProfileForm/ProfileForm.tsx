@@ -38,6 +38,7 @@ export function ProfileForm({
     reset,
   } = useForm<ProfileFormData>({
     defaultValues: defaultProfileFormValues,
+    values: profile ? mapProfileToFormValues(profile) : defaultProfileFormValues,
   });
 
   const onFormSubmit: SubmitHandler<ProfileFormData> = async (data) => {
@@ -52,13 +53,7 @@ export function ProfileForm({
     }
   };
 
-  useEffect(() => {
-    if (profile) {
-      reset(mapProfileToFormValues(profile));
-    } else {
-      reset(defaultProfileFormValues);
-    }
-  }, [profile, reset]);
+
 
   const isNewProfile = !profile;
 

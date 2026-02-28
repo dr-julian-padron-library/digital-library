@@ -47,6 +47,14 @@ const RoomsPage = () => {
                     <div
                         key={item.sala}
                         onClick={() => navigate(`/salas/${item.sala}`)}
+                        role="button"
+                        tabIndex={0}
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter' || e.key === ' ') {
+                                e.preventDefault();
+                                navigate(`/salas/${item.sala}`);
+                            }
+                        }}
                         className="group relative flex flex-col items-center text-center border border-border p-8 bg-card hover:bg-muted/50 transition-all duration-500 overflow-hidden cursor-pointer"
                     >
                         {/* Decorative background grid effect could be added here if assets existed */}

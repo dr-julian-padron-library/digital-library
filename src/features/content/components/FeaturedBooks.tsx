@@ -75,12 +75,12 @@ export function FeaturedBooks() {
 
               <CardContent className="p-6">
                 <div className="flex items-center gap-2 mb-2">
-                  {[...Array(5)].map((_, i) => (
+                  {[1, 2, 3, 4, 5].map((starId) => (
                     <Star
-                      key={i}
-                      className={`w-4 h-4 ${i < Math.floor(book.rating)
-                          ? 'text-highlight-gold fill-highlight-gold'
-                          : 'text-gray-300'
+                      key={`star-${starId}`}
+                      className={`w-4 h-4 ${(starId - 1) < Math.floor(book.rating)
+                        ? 'text-highlight-gold fill-highlight-gold'
+                        : 'text-gray-300'
                         }`}
                     />
                   ))}
@@ -99,8 +99,8 @@ export function FeaturedBooks() {
 
                 <Button
                   className={`w-full ${book.available
-                      ? 'bg-primary hover:bg-primary/90 text-white'
-                      : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                    ? 'bg-primary hover:bg-primary/90 text-white'
+                    : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                     }`}
                   disabled={!book.available}
                 >

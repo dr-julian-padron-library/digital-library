@@ -9,35 +9,30 @@ export const StatsOverview = () => {
   const { data: stats, isLoading } = useQuery({
     queryKey: ['library-stats'],
     queryFn: async () => {
-      // Get total books
-      const { data: booksData, error: booksError } = await supabase
-        .from('books')
-        .select('id, quantityInStock');
-      
-      // Get total loans
-      const { data: loansData, error: loansError } = await supabase
-        .from('loans')
-        .select('id, estado');
-      
-      // Get room booking requests
-      const { data: roomBookingsData, error: roomBookingsError } = await supabase
-        .from('room_bookings')
-        .select('id');
-      
-      // Get active users (profiles)
-      const { data: profilesData, error: profilesError } = await supabase
-        .from('profiles')
-        .select('id, is_active');
-      
+      // @ts-ignore
+      declare const supabase: any;
+
+      const [
+        { data: booksData, error: booksError },
+        { data: loansData, error: loansError },
+        { data: roomBookingsData, error: roomBookingsError },
+        { data: profilesData, error: profilesError }
+      ] = await Promise.all([
+        supabase.from('books').select('id, quantityInStock'),
+        supabase.from('loans').select('id, estado'),
+        supabase.from('room_bookings').select('id'),
+        supabase.from('profiles').select('id, is_active')
+      ]);
+
       if (booksError || loansError || roomBookingsError || profilesError) {
         throw new Error('Error fetching stats');
       }
-      
+
       const totalBooks = booksData?.reduce((sum, book) => sum + (book.quantityInStock || 0), 0) || 0;
       const activeLoans = loansData?.filter(loan => loan.estado === 'PRESTADO').length || 0;
       const prestamoRequests = roomBookingsData?.length || 0;
       const activeUsers = profilesData?.filter(profile => profile.is_active).length || 0;
-      
+
       return {
         activeUsers,
         totalBooks,
@@ -85,8 +80,8 @@ export const StatsOverview = () => {
   if (isLoading) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {[1, 2, 3, 4].map((i) => (
-          <Card key={i} className="animate-pulse">
+        {[1, 2, 3, 4].map((skeletonId) => (
+          <Card key={`stat-skeleton-${skeletonId}`} className="animate-pulse">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <div className="h-4 bg-gray-200 rounded w-24"></div>
             </CardHeader>
@@ -102,8 +97,8 @@ export const StatsOverview = () => {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-      {overviewCards.map((card, index) => (
-        <Card key={index} className="hover:shadow-lg transition-shadow">
+      {overviewCards.map((card) => (
+        <Card key={card.title} className="hover:shadow-lg transition-shadow">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium text-gray-600">
               {card.title}
@@ -115,7 +110,7 @@ export const StatsOverview = () => {
               {card.value.toLocaleString()}
             </div>
             <div className="flex items-center space-x-2">
-              <Badge 
+              <Badge
                 variant={card.changeType === 'positive' ? 'default' : 'destructive'}
                 className="text-xs"
               >

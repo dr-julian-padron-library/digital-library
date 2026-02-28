@@ -1,9 +1,20 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/common/components/ui/card";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/common/components/ui/chart";
-import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, AreaChart, Area } from "recharts";
+import React, { Suspense } from 'react';
+
+const ResponsiveContainer = React.lazy(() => import("recharts").then(m => ({ default: m.ResponsiveContainer })));
+const LineChart = React.lazy(() => import("recharts").then(m => ({ default: m.LineChart })));
+const Line = React.lazy(() => import("recharts").then(m => ({ default: m.Line })));
+const AreaChart = React.lazy(() => import("recharts").then(m => ({ default: m.AreaChart })));
+const Area = React.lazy(() => import("recharts").then(m => ({ default: m.Area })));
+const XAxis = React.lazy(() => import("recharts").then(m => ({ default: m.XAxis })));
+const YAxis = React.lazy(() => import("recharts").then(m => ({ default: m.YAxis })));
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
+
+// @ts-ignore
+declare const supabase: any;
 
 // Function to get user activity data
 const getUserActivityData = async (locale: string) => {
@@ -125,29 +136,31 @@ export const UsersChart = () => {
           <CardTitle className="text-biblioteca-blue">{t("charts.userGrowth")}</CardTitle>
         </CardHeader>
         <CardContent>
-          <ChartContainer config={chartConfig} className="h-64">
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={userActivityData}>
-                <XAxis dataKey="month" />
-                <YAxis />
-                <ChartTooltip content={<ChartTooltipContent />} />
-                <Line
-                  type="monotone"
-                  dataKey="active"
-                  stroke="var(--color-active)"
-                  strokeWidth={2}
-                  dot={{ fill: "var(--color-active)" }}
-                />
-                <Line
-                  type="monotone"
-                  dataKey="new"
-                  stroke="var(--color-new)"
-                  strokeWidth={2}
-                  dot={{ fill: "var(--color-new)" }}
-                />
-              </LineChart>
-            </ResponsiveContainer>
-          </ChartContainer>
+          <Suspense fallback={<div className="h-64 flex items-center justify-center">Cargando gráfico...</div>}>
+            <ChartContainer config={chartConfig} className="h-64">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={userActivityData}>
+                  <XAxis dataKey="month" />
+                  <YAxis />
+                  <ChartTooltip content={<ChartTooltipContent />} />
+                  <Line
+                    type="monotone"
+                    dataKey="active"
+                    stroke="var(--color-active)"
+                    strokeWidth={2}
+                    dot={{ fill: "var(--color-active)" }}
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="new"
+                    stroke="var(--color-new)"
+                    strokeWidth={2}
+                    dot={{ fill: "var(--color-new)" }}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            </ChartContainer>
+          </Suspense>
         </CardContent>
       </Card>
 
@@ -157,22 +170,24 @@ export const UsersChart = () => {
           <CardTitle className="text-biblioteca-blue">{t("charts.dailyVisits")}</CardTitle>
         </CardHeader>
         <CardContent>
-          <ChartContainer config={chartConfig} className="h-64">
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={dailyVisits}>
-                <XAxis dataKey="day" />
-                <YAxis />
-                <ChartTooltip content={<ChartTooltipContent />} />
-                <Area
-                  type="monotone"
-                  dataKey="visits"
-                  stroke="var(--color-visits)"
-                  fill="var(--color-visits)"
-                  fillOpacity={0.3}
-                />
-              </AreaChart>
-            </ResponsiveContainer>
-          </ChartContainer>
+          <Suspense fallback={<div className="h-64 flex items-center justify-center">Cargando gráfico...</div>}>
+            <ChartContainer config={chartConfig} className="h-64">
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={dailyVisits}>
+                  <XAxis dataKey="day" />
+                  <YAxis />
+                  <ChartTooltip content={<ChartTooltipContent />} />
+                  <Area
+                    type="monotone"
+                    dataKey="visits"
+                    stroke="var(--color-visits)"
+                    fill="var(--color-visits)"
+                    fillOpacity={0.3}
+                  />
+                </AreaChart>
+              </ResponsiveContainer>
+            </ChartContainer>
+          </Suspense>
         </CardContent>
       </Card>
     </div>

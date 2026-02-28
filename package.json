@@ -9,6 +9,7 @@
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
     "preview": "vite preview",
+    "doctor": "react-doctor . --verbose -y",
     "generate-api-types": "openapi-typescript http://localhost:8070/schema/ --output src/common/types/generated-api-types.ts"
   },
   "dependencies": {
@@ -89,6 +90,7 @@
     "globals": "^15.9.0",
     "openapi-typescript": "^7.9.1",
     "postcss": "^8.4.47",
+    "react-doctor": "^0.0.29",
     "tailwindcss": "^3.4.11",
     "typescript": "^5.5.3",
     "typescript-eslint": "^8.0.1",

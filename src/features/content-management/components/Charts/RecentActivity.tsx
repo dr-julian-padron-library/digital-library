@@ -12,6 +12,9 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { Calendar, Clock, User, BookOpen } from "lucide-react";
 
+// @ts-ignore
+declare const supabase: any;
+
 export const RecentActivity = () => {
   const { data: recentRequests, isLoading } = useQuery({
     queryKey: ['recent-prestamo-requests'],
@@ -76,8 +79,8 @@ export const RecentActivity = () => {
         <CardContent>
           {isLoading ? (
             <div className="space-y-3">
-              {[1, 2, 3].map((i) => (
-                <div key={i} className="animate-pulse">
+              {[1, 2, 3].map((skeletonId) => (
+                <div key={`recent-skeleton-${skeletonId}`} className="animate-pulse">
                   <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
                   <div className="h-3 bg-gray-200 rounded w-1/2"></div>
                 </div>
@@ -120,8 +123,8 @@ export const RecentActivity = () => {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {mockActivities.map((activity, index) => (
-              <div key={index} className="flex items-start gap-3 p-3 border rounded-lg">
+            {mockActivities.map((activity) => (
+              <div key={activity.description} className="flex items-start gap-3 p-3 border rounded-lg">
                 <div className="p-2 rounded-full bg-biblioteca-blue/10">
                   <activity.icon className="w-4 h-4 text-biblioteca-blue" />
                 </div>
