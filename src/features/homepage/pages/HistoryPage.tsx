@@ -67,7 +67,7 @@ export default function HistoriaPage() {
       <section className="px-6 md:px-12 py-16 md:py-10 text-center relative overflow-hidden">
 
         <h1 className="font-display text-4xl md:text-5xl mb-4 text-biblioteca-blue dark:text-primary tracking-tight">
-          {t('history.title_prefix')} <span className="italic text-biblioteca-gold dark:text-highlight-gold">{t('history.title_highlight')}</span>
+          {t('history.title_prefix')} <span className="italic text-highlight-gold">{t('history.title_highlight')}</span>
         </h1>
 
         <div className="w-24 h-[1px] bg-gradient-to-r from-transparent via-primary to-transparent mx-auto mb-8"></div>

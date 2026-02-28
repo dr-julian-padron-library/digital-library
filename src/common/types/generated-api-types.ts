@@ -629,6 +629,44 @@ export interface paths {
         patch: operations["library_material_types_partial_update"];
         trace?: never;
     };
+    "/library/news/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description A ViewSet for viewing and managing library news. */
+        get: operations["library_news_list"];
+        put?: never;
+        /** @description A ViewSet for viewing and managing library news. */
+        post: operations["library_news_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/library/news/{slug}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description A ViewSet for viewing and managing library news. */
+        get: operations["library_news_retrieve"];
+        /** @description A ViewSet for viewing and managing library news. */
+        put: operations["library_news_update"];
+        post?: never;
+        /** @description A ViewSet for viewing and managing library news. */
+        delete: operations["library_news_destroy"];
+        options?: never;
+        head?: never;
+        /** @description A ViewSet for viewing and managing library news. */
+        patch: operations["library_news_partial_update"];
+        trace?: never;
+    };
     "/library/reading-sessions/": {
         parameters: {
             query?: never;
@@ -1410,6 +1448,34 @@ export interface components {
             name: string;
             slug?: string;
         };
+        LibraryNews: {
+            /** Format: uuid */
+            readonly id: string;
+            title: string;
+            subtitle?: string | null;
+            readonly slug: string;
+            content: string;
+            /** Format: uri */
+            image?: string | null;
+            readonly author: number | null;
+            is_published?: boolean;
+            /** Format: date-time */
+            published_date?: string;
+            /** Format: date-time */
+            readonly created_at: string;
+            /** Format: date-time */
+            readonly updated_at: string;
+        };
+        LibraryNewsRequest: {
+            title: string;
+            subtitle?: string | null;
+            content: string;
+            /** Format: binary */
+            image?: string | null;
+            is_published?: boolean;
+            /** Format: date-time */
+            published_date?: string;
+        };
         LoginRequest: {
             email: string;
             password: string;
@@ -1525,6 +1591,18 @@ export interface components {
         MinimalLanguageRequest: {
             name: string;
             slug?: string;
+        };
+        MinimalLibraryNews: {
+            /** Format: uuid */
+            readonly id: string;
+            title: string;
+            subtitle?: string | null;
+            slug?: string;
+            /** Format: uri */
+            image?: string | null;
+            /** Format: date-time */
+            published_date?: string;
+            is_published?: boolean;
         };
         MinimalMaterialType: {
             readonly id: number;
@@ -1700,6 +1778,21 @@ export interface components {
             previous?: string | null;
             results: components["schemas"]["MinimalLanguage"][];
         };
+        PaginatedMinimalLibraryNewsList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["MinimalLibraryNews"][];
+        };
         PaginatedMinimalMaterialTypeList: {
             /** @example 123 */
             count: number;
@@ -1867,6 +1960,16 @@ export interface components {
         PatchedLanguageRequest: {
             name?: string;
             slug?: string;
+        };
+        PatchedLibraryNewsRequest: {
+            title?: string;
+            subtitle?: string | null;
+            content?: string;
+            /** Format: binary */
+            image?: string | null;
+            is_published?: boolean;
+            /** Format: date-time */
+            published_date?: string;
         };
         /** @description Serializer for the MaterialType model. */
         PatchedMaterialTypeRequest: {
@@ -3541,6 +3644,154 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["MaterialType"];
+                };
+            };
+        };
+    };
+    library_news_list: {
+        parameters: {
+            query?: {
+                /** @description Qué campo usar para ordenar los resultados. */
+                ordering?: string;
+                /** @description Un número de página dentro del conjunto de resultados paginado. */
+                page?: number;
+                /** @description Número de resultados a devolver por página. */
+                page_size?: number;
+                /** @description Un término de búsqueda. */
+                search?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedMinimalLibraryNewsList"];
+                };
+            };
+        };
+    };
+    library_news_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["LibraryNewsRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["LibraryNewsRequest"];
+                "application/json": components["schemas"]["LibraryNewsRequest"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LibraryNews"];
+                };
+            };
+        };
+    };
+    library_news_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LibraryNews"];
+                };
+            };
+        };
+    };
+    library_news_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["LibraryNewsRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["LibraryNewsRequest"];
+                "application/json": components["schemas"]["LibraryNewsRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LibraryNews"];
+                };
+            };
+        };
+    };
+    library_news_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    library_news_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "multipart/form-data": components["schemas"]["PatchedLibraryNewsRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedLibraryNewsRequest"];
+                "application/json": components["schemas"]["PatchedLibraryNewsRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LibraryNews"];
                 };
             };
         };

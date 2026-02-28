@@ -53,7 +53,8 @@
     --highlight-blue: #003366;
     --highlight-green: #16a34a;
     --highlight-purple: #9333ea;
-    --highlight-gold: #ffe23b;
+    --highlight-gold: #d9ab06;
+    /* Darkened amber for readable light mode text */
   }
 
   .dark {
