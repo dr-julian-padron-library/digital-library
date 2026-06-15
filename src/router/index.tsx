@@ -1,4 +1,11 @@
-import { createBrowserRouter, Navigate } from "react-router-dom";
+import { createBrowserRouter } from "react-router-dom";
+import DownPage from "@/pages/DownPage";
+
+/* =========================================================================
+   ORIGINAL ROUTES (Commented out temporarily due to project stoppage)
+   =========================================================================
+
+import { Navigate } from "react-router-dom";
 import { MainLayout } from "@/common/components/layout/MainLayout";
 import { ManagementLayout } from "@/common/components/layout/ManagementLayout";
 
@@ -118,4 +125,13 @@ export const router = createBrowserRouter([
         ]
     },
     { path: "*", element: <NotFound /> }
+]);
+========================================================================= */
+
+// New routing mapping all routes to the maintenance page:
+export const router = createBrowserRouter([
+  {
+    path: "*",
+    element: <DownPage />
+  }
 ]);
